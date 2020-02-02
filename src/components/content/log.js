@@ -171,7 +171,7 @@ class Log extends Component{
     this.interval = setInterval(() => {
       const {startDateRead, endDateRead, sortby, ascdsc, search, limit, page} = this.state 
       this.getData(startDateRead, endDateRead, sortby, ascdsc, search, limit, page)      
-    }, 2100);
+    }, 2000);
   }
 
   componentWillUnmount() {
