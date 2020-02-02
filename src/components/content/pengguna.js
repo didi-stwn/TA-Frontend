@@ -8,6 +8,7 @@ class Pengguna extends Component{
     this.state = {
       //show pengguna dan filter
       pageshow: "pengguna",
+      kodedevice: '',
 
       //Pengguna
       //read 
@@ -35,8 +36,8 @@ class Pengguna extends Component{
       oldnim:'',
       nimu:'',
       namau:'',
-      finger1u:'',
-      finger2u:'',
+      // finger1u:'',
+      // finger2u:'',
       
       //filter pengguna
       //read 
@@ -307,13 +308,109 @@ class Pengguna extends Component{
     this.getData(pageshow,sortbynow, ascdscnow, searchf, limitf, pagenow)    
   }
 
+  deleteDataFinger(a){
+    fetch(get.deletefinger, {
+      method: 'post',
+      headers :{
+        // "x-access-token" : sessionStorage.name,
+        "Content-Type" : "application/json"
+      },
+      body: JSON.stringify({
+        kodedevice: a,
+      })
+    })
+    .then(response => response.json())
+    .then(response => {
+      console.log(response)
+      //berhasil get data
+      if (response.status===1){
+
+      }
+      //tidak berhasil get data
+      else if (response.status===0){
+
+      }
+      //ga ada token
+      else {
+        sessionStorage.removeItem("name")
+        window.location.reload()
+      }
+    })
+  }
+
   getFinger1(){
-    this.setState({finger1:"asdasdasd"})
-    this.setState({finger1u:"asdasdasd"})
+    const {kodedevice} = this.state
+    this.deleteDataFinger(kodedevice)
+    this.setState({finger1:'-'})
+    this.interval = setInterval(() => {
+      fetch(get.readfinger+"/"+kodedevice, {
+        method: 'get',
+        headers :{
+          // "x-access-token" : sessionStorage.name,
+          "Content-Type" : "application/json"
+        }
+      })
+      .then(response => response.json())
+      .then(response => {
+        console.log(response)
+        //berhasil get data
+        if (response.status===1){
+          if (response.hasil.length!==0){
+            this.setState({finger1:response.hasil[0].template})
+            clearInterval(this.interval);
+          }
+          else {
+            this.setState({finger1:'-'})
+          }
+        }
+        //tidak berhasil get data
+        else if (response.status===0){
+          this.setState({finger1:'-'})
+        }
+        //ga ada token
+        else {
+          sessionStorage.removeItem("name")
+          window.location.reload()
+        }
+      })
+    }, 2000);
   }
   getFinger2(){
-    this.setState({finger2:"asdasdasd"})
-    this.setState({finger2u:"asdasdasd"})
+    const {kodedevice} = this.state
+    this.deleteDataFinger(kodedevice)
+    this.setState({finger2:'-'})
+    this.interval = setInterval(() => {
+      fetch(get.readfinger+"/"+kodedevice, {
+        method: 'get',
+        headers :{
+          // "x-access-token" : sessionStorage.name,
+          "Content-Type" : "application/json"
+        }
+      })
+      .then(response => response.json())
+      .then(response => {
+        console.log(response)
+        //berhasil get data
+        if (response.status===1){
+          if (response.hasil.length!==0){
+            this.setState({finger2:response.hasil[0].template})
+            clearInterval(this.interval);
+          }
+          else {
+            this.setState({finger2:'-'})
+          }
+        }
+        //tidak berhasil get data
+        else if (response.status===0){
+          this.setState({finger2:'-'})
+        }
+        //ga ada token
+        else {
+          sessionStorage.removeItem("name")
+          window.location.reload()
+        }
+      })
+    }, 2000);
   }
 
   handleSubmitDaftar(e){
@@ -398,7 +495,7 @@ class Pengguna extends Component{
 
   handleSubmitEdit(e){
     e.preventDefault();
-    const {oldnim,nimu,namau,finger1u,finger2u} = this.state;
+    const {oldnim,nimu,namau,finger1,finger2} = this.state;
     fetch(get.updatepengguna, {
       method: 'post',
       headers :{
@@ -409,8 +506,8 @@ class Pengguna extends Component{
         oldnim: oldnim,
         newnim: nimu,
         newnama: namau,
-        newfinger1: finger1u,
-        newfinger2: finger2u,
+        newfinger1: finger1,
+        newfinger2: finger2,
       })
     })
     .then(response => response.json())
@@ -578,8 +675,8 @@ class Pengguna extends Component{
     this.setState({oldnim:a})
     this.setState({nimu:b})
     this.setState({namau:c})
-    this.setState({finger1u:d})
-    this.setState({finger2u:e})
+    this.setState({finger1:d})
+    this.setState({finger2:e})
   }
   hideEdit(){
     this.setState({edit:false})
@@ -601,6 +698,21 @@ class Pengguna extends Component{
   }
   render(){
     const state = this.state
+    //data fingerprint
+    var showfinger1, showfinger2
+    if (state.finger1==='-'){
+      showfinger1 = "Waiting finger..."
+    }
+    else if ((state.finger1!=='-')&&(state.finger1!=='')){
+      showfinger1 = "Finger Detected."
+    }
+    if (state.finger2==='-'){
+      showfinger2 = "Waiting finger..."
+    }
+    else if ((state.finger2!=='-')&&(state.finger2!=='')){
+      showfinger2 = "Finger Detected."
+    }
+    
     //mengambil data fakultas dari database fakultas
     var fakultas=[]
     var checkfakultas = 0
@@ -687,7 +799,6 @@ class Pengguna extends Component{
       aksidata = "hide"
     }
     i=1;
-    console.log(this.state.namamatkulfilterc)
     return(
       <div>
           { state.daftar &&
@@ -729,23 +840,28 @@ class Pengguna extends Component{
                       
                 <div className="kotakinputpenggunanim">
                   <label><b>Nim</b> </label> <br></br>
-                  <input name="nimc" onChange={this.handleChange} className="inputformlogpintunim" type="text" placeholder="NIM" required ></input>
+                  <input name="nimc" onChange={this.handleChange} className="inputformlogpintunimc" type="text" placeholder="NIM" required ></input>
                 </div>
 
                 <div className="kotakinputpenggunanama">
                   <label><b>Nama</b> </label> <br></br>
-                  <input name="namac" onChange={this.handleChange} className="inputformlogpintunim" type="text" placeholder="Nama" required ></input>
+                  <input name="namac" onChange={this.handleChange} className="inputformlogpintunimc" type="text" placeholder="Nama" required ></input>
+                </div>
+
+                <div className="kotakinputpenggunadevice">
+                  <label><b>Kode Device</b> </label> <br></br>
+                  <input name="kodedevice" onChange={this.handleChange} className="inputformlogpintunimc" type="text" placeholder="Kode Device" required ></input>
                 </div>
 
                 <div className="kotakinputpenggunafinger1">
                   <label><b>Finger1</b> </label> <br></br>
-                  <input name="finger1" onChange={this.handleChange} className="inputformlogpintunim" type="text" placeholder="Finger 1" value={state.finger1} required ></input>
+                  <input onChange={this.handleChange} className="inputformlogpintunimc" type="text" placeholder="Finger 1" value={showfinger1 || ''} required ></input>
                   <button type="button" className="submitfinger1" onClick={() => this.getFinger1()}><i className="fa fa-bullseye"></i></button>
                 </div>
                   
                 <div className="kotakinputpenggunafinger2">
                   <label><b>Finger2</b> </label> <br></br>
-                  <input name="finger2" onChange={this.handleChange} className="inputformlogpintunim" type="text" placeholder="Finger 2" value={state.finger2} required ></input>
+                  <input onChange={this.handleChange} className="inputformlogpintunimc" type="text" placeholder="Finger 2" value={showfinger2 || ''} required ></input>
                   <button type="button" className="submitfinger2" onClick={() => this.getFinger2()}><i className="fa fa-bullseye"></i></button>
                 </div>
 
@@ -832,16 +948,21 @@ class Pengguna extends Component{
                   <label><b>Nama</b> </label> <br></br>
                   <input name="namau" onChange={this.handleChange} className="inputformlogpintunimu" type="text" placeholder="Nama" value={state.namau} required ></input>
                 </div>
+                
+                <div className="kotakinputpenggunadeviceu">
+                  <label><b>Kode Device</b> </label> <br></br>
+                  <input name="kodedevice" onChange={this.handleChange} className="inputformlogpintunimu" type="text" placeholder="Kode Device" required ></input>
+                </div>
 
                 <div className="kotakinputpenggunafinger1u">
                   <label><b>Finger1</b> </label> <br></br>
-                  <input name="finger1u" onChange={this.handleChange} className="inputformlogpintunimu" type="text" placeholder="Finger 1" value={state.finger1u} required ></input>
+                  <input onChange={this.handleChange} className="inputformlogpintunimu" type="text" placeholder="Finger 1" value={showfinger1 || ''} required ></input>
                   <button type="button" className="submitfinger1" onClick={() => this.getFinger1()}><i className="fa fa-bullseye"></i></button>
                 </div>
                   
                 <div className="kotakinputpenggunafinger2u">
                   <label><b>Finger2</b> </label> <br></br>
-                  <input name="finger2u" onChange={this.handleChange} className="inputformlogpintunimu" type="text" placeholder="Finger 2" value={state.finger2u} required ></input>
+                  <input onChange={this.handleChange} className="inputformlogpintunimu" type="text" placeholder="Finger 2" value={showfinger2 || ''} required ></input>
                   <button type="button" className="submitfinger2" onClick={() => this.getFinger2()}><i className="fa fa-bullseye"></i></button>
                 </div>
 
@@ -940,7 +1061,7 @@ class Pengguna extends Component{
                     <td>{isidata.finger2}</td> */}
                     <td>
                       <div>
-                        <button className="backgroundbiru" onClick={() => this.showEdit(isidata.nim,isidata.nim,isidata.nama,isidata.finger1,isidata.finger2)} >
+                        <button className="backgroundbiru" onClick={() => this.showEdit(isidata.nim,isidata.nim,isidata.nama,'','')} >
                           Edit
                         </button>
                           &nbsp;

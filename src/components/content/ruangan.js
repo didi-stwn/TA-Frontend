@@ -21,10 +21,12 @@ class Ruangan extends Component{
       daftar:false,
       edit:false,
       //create
+      kodedevicec:'',
       koderuanganc:'',
       alamatc:'',
       //edit
-      oldkoderuangan:'',
+      oldkodedevice:'',
+      newkoderuangan:'',
       newalamat:'',
       
       //Filter Ruangan
@@ -136,7 +138,7 @@ class Ruangan extends Component{
 
   handleSubmitDaftar(e){
     e.preventDefault();
-    const {pageshow,koderuanganc,alamatc} = this.state;
+    const {pageshow,kodedevicec,koderuanganc,alamatc} = this.state;
     const {harifilterc,jamfilterc,durasifilterc,koderuanganfilterc, kodematkulfilterc, kelasfilterc} = this.state;
     if (pageshow==="filterruangan"){      
       fetch(get.createfilterruangan, {
@@ -185,6 +187,7 @@ class Ruangan extends Component{
           "Content-Type" : "application/json"
         },
         body: JSON.stringify({
+          kodedevice: kodedevicec,
           koderuangan: koderuanganc,
           alamat: alamatc,
         })
@@ -215,7 +218,7 @@ class Ruangan extends Component{
 
   handleSubmitEdit(e){
     e.preventDefault();
-    const {oldkoderuangan, newalamat} = this.state;
+    const {oldkodedevice, newkoderuangan, newalamat} = this.state;
 
     fetch(get.updateruangan, {
       method: 'post',
@@ -224,7 +227,8 @@ class Ruangan extends Component{
         "Content-Type" : "application/json"
       },
       body: JSON.stringify({
-        oldkoderuangan: oldkoderuangan,
+        oldkodedevice: oldkodedevice,
+        newkoderuangan: newkoderuangan,
         newalamat: newalamat,
       })
     })
@@ -252,7 +256,7 @@ class Ruangan extends Component{
   }
 
   deletePengguna(a){
-    var yes = window.confirm("Apakah anda yakin ingin menghapus Ruangan: "+a+"?");
+    var yes = window.confirm("Apakah anda yakin ingin menghapus Kode Device: "+a+"?");
     if (yes === true){
       fetch(get.deleteruangan, {
         method: 'post',
@@ -261,7 +265,7 @@ class Ruangan extends Component{
           "Content-Type" : "application/json"
         },
         body: JSON.stringify({
-          koderuangan:a,
+          kodedevice:a,
         })
       })
       .then(response => response.json())
@@ -431,11 +435,12 @@ class Ruangan extends Component{
     this.setState({datasalah:false})
     this.setState({databenar:false})
   }  
-  showEdit(a,b){
+  showEdit(a,b,c){
     this.setState({edit:true})
     this.setState({daftar:false})
-    this.setState({oldkoderuangan:a})
-    this.setState({newalamat:b})
+    this.setState({oldkodedevice:a})
+    this.setState({newkoderuangan:b})
+    this.setState({newalamat:c})
   }
   hideEdit(){
     this.setState({edit:false})
@@ -627,12 +632,17 @@ class Ruangan extends Component{
                   <span className="textmerah">{state.pesan}</span>
                 }
                       
-                <div className="kotakinputfakultas">
+                <div className="kotakinputruangandevice">
+                  <label><b>Kode Device</b> </label> <br></br>
+                  <input name="kodedevicec" onChange={this.handleChange} className="inputformfakultas" type="text" placeholder="Kode Device" required ></input>
+                </div>
+
+                <div className="kotakinputruanganruangan">
                   <label><b>Kode Ruangan</b> </label> <br></br>
                   <input name="koderuanganc" onChange={this.handleChange} className="inputformfakultas" type="text" placeholder="Kode Ruangan" required ></input>
                 </div>
 
-                <div className="kotakinputjurusan">
+                <div className="kotakinputruanganalamat">
                   <label><b>Alamat</b> </label> <br></br>
                   <input name="alamatc" onChange={this.handleChange} className="inputformfakultas" type="text" placeholder="Alamat" required ></input>
                 </div>
@@ -722,7 +732,7 @@ class Ruangan extends Component{
                       
                 <div className="kotakinputfakultas">
                   <label><b>Kode Ruangan</b> </label> <br></br>
-                  <input onChange={this.handleChange} className="inputformfakultas" type="text" placeholder="Kode Ruangan" value={state.oldkoderuangan} required ></input>
+                  <input name="newkoderuangan" onChange={this.handleChange} className="inputformfakultas" type="text" placeholder="Kode Ruangan" value={state.newkoderuangan} required ></input>
                 </div>
 
                 <div className="kotakinputjurusan">
@@ -795,7 +805,8 @@ class Ruangan extends Component{
             <table className="tableruangan">
               <thead className="theadlog">
                 <tr>
-                  <th className="fakultas" onClick={() => this.filter(state.page, "koderuangan", state.ascdsc)}>Kode</th>
+                  <th className="koderuangan" onClick={() => this.filter(state.page, "kodedevice", state.ascdsc)}>Kode Device</th>
+                  <th className="koderuangan" onClick={() => this.filter(state.page, "koderuangan", state.ascdsc)}>Kode Ruangan</th>
                   <th className="jurusan" onClick={() => this.filter(state.page, "alamat", state.ascdsc)}>Alamat</th>
                   <th className="lastseen" onClick={() => this.filter(state.page, "lastseen", state.ascdsc)}>Terakhir Aktif</th>
                   <th className="status" onClick={() => this.filter(state.page, "lastseen", state.ascdsc)}>Status</th>
@@ -806,17 +817,18 @@ class Ruangan extends Component{
               <tbody className="tbodylog">
                 {state.data.map(isidata => (
                   <tr key={i++}>
+                    <td>{isidata.kodedevice}</td>
                     <td>{isidata.koderuangan}</td>
                     <td>{isidata.alamat}</td>
                     <td>{Waktu(isidata.lastseen)}</td>
                     <td>{Status(isidata.lastseen)}</td>
                     <td>
                       <div>
-                        <button className="backgroundbiru" onClick={() => this.showEdit(isidata.koderuangan,isidata.alamat)} >
+                        <button className="backgroundbiru" onClick={() => this.showEdit(isidata.kodedevice,isidata.koderuangan,isidata.alamat)} >
                           Edit
                         </button>
                           &nbsp;
-                        <button className="backgroundmerah" onClick={() => this.deletePengguna(isidata.koderuangan)}>
+                        <button className="backgroundmerah" onClick={() => this.deletePengguna(isidata.kodedevice)}>
                           Delete
                         </button>
                       </div>

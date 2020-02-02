@@ -477,11 +477,6 @@ class Laporan extends Component{
 
         return (
             <div>
-                <div className="kotakdata"> 
-                    <div>
-                        <span className="welcometoxirka"><b>Page Belum Dibuat</b></span>
-                    </div>
-                </div>
                 <div className="kotakfilter2"> 
                     <form className="kotakforminputlogpintu" onSubmit={this.handleSubmit}>
                         <div className="kotakinputlaporannim">
@@ -511,7 +506,7 @@ class Laporan extends Component{
                         </div>
 
                         
-                        <Pdf targetRef={ref} filename={"Xirka-"+nimuser}>
+                        <Pdf targetRef={ref} filename={"TA026-"+nimuser}>
                             {({ toPdf }) =>
                                 <a onClick={toPdf} style={{width:"100%",height:"100%"}}>
                                     <div className="kotakprintpdflaporan">
@@ -524,7 +519,7 @@ class Laporan extends Component{
                         </Pdf>
                            
                            
-                        <ExcelFile filename={"Xirka-"+nimuser} element={
+                        <ExcelFile filename={"TA026-"+nimuser} element={
                             <a>
                                 <div className="kotakprintxcllaporan">
                                     <div className="printformlaporan">
@@ -532,7 +527,7 @@ class Laporan extends Component{
                                     </div>
                                 </div>
                         </a>}>
-                            <ExcelSheet dataSet={dataXcl} name={"Xirka"+nimuser}/>
+                            <ExcelSheet dataSet={dataXcl} name={"TA026"+nimuser}/>
                         </ExcelFile>
                             
                     </form> 
@@ -546,10 +541,10 @@ class Laporan extends Component{
                                         <tbody>
                                             <tr>
                                                 <td style={{width:'15%'}}>
-                                                    <b>NIM/NIP</b>
+                                                    <b>NIM</b>
                                                 </td>
                                                 <td style={{width:'40%'}}>
-                                                    <b>&emsp;:&emsp;{nimuser}</b>
+                                                    <b>&emsp;:&emsp;13216108</b>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -557,15 +552,7 @@ class Laporan extends Component{
                                                     <b>Nama</b>
                                                 </td>
                                                 <td>
-                                                    <b>&emsp;:&emsp;{namauser}</b>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <b>Nama Ruangan</b>
-                                                </td>
-                                                <td>
-                                                    <b>&emsp;:&emsp;{ruanganuser}</b>
+                                                    <b>&emsp;:&emsp;Didi Setiawan</b>
                                                 </td>
                                             </tr>
                                             <tr><td>&emsp;</td></tr>
@@ -581,7 +568,7 @@ class Laporan extends Component{
                                                     <b>Periode</b>
                                                 </td>
                                                 <td>
-                                                    <b>&emsp;:&emsp;{Periodelaporan(startDate,endDate)}</b>
+                                                    <b>&emsp;:&emsp;1 Januari 2019 - 6 Juni 2019</b>
                                                 </td>
                                                 <td style={{width:'14%'}}>
                                                     <b>Tanggal Cetak</b>
@@ -590,8 +577,104 @@ class Laporan extends Component{
                                                     <b>:</b>
                                                 </td>
                                                 <td>
-                                                    <b>{sekarang(new Date())}</b>
+                                                    <b>9 Agustus 2019</b>
                                                 </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <table className="tabellaporan">
+                                        <thead>
+                                            <tr className="tabellaporantrhead">
+                                                <th className ="laporanno" > No </th>
+                                                <th className ="laporankeluar"> Kode Mata Kuliah </th>
+                                                <th className ="laporantotal"> Nama Mata Kuliah </th>
+                                                <th className ="laporanalfa"> Hadir </th>
+                                                <th className ="laporanizin"> Izin </th>
+                                                <th className ="laporansakit"> Sakit </th>
+                                                <th className ="laporansakit"> Alfa </th>
+                                                <th className ="laporanketerangan"> Persentase Kehadiran </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr className="tabellaporanbody">
+                                                <td className ="laporanno">1</td>
+                                                <td className ="laporankeluar">KU4041</td>                                                    
+                                                <td className ="laporantotal">Pengetahuan Luar</td>
+                                                <td className ="laporanalfa">10</td>
+                                                <td className ="laporanizin">2</td>
+                                                <td className ="laporansakit">2</td>
+                                                <td className ="laporansakit">2</td>
+                                                <td className ="laporanketerangan">60%</td>
+                                            </tr>
+                                            <tr className="tabellaporanbody">
+                                                <td className ="laporanno">1</td>
+                                                <td className ="laporankeluar">KU1234</td>                                                    
+                                                <td className ="laporantotal">Psikologi</td>
+                                                <td className ="laporanalfa">12</td>
+                                                <td className ="laporanizin">2</td>
+                                                <td className ="laporansakit">1</td>
+                                                <td className ="laporansakit">1</td>
+                                                <td className ="laporanketerangan">80%</td>
+                                            </tr>
+                                            <tr className="tabellaporanbody">
+                                                <td className ="laporanno">1</td>
+                                                <td className ="laporankeluar">EL2020</td>                                                    
+                                                <td className ="laporantotal">Pengantar Rangkaian</td>
+                                                <td className ="laporanalfa">12</td>
+                                                <td className ="laporanizin">2</td>
+                                                <td className ="laporansakit">1</td>
+                                                <td className ="laporansakit">1</td>
+                                                <td className ="laporanketerangan">80%</td>
+                                            </tr>
+                                            <tr className="tabellaporanbody">
+                                                <td className ="laporanno">1</td>
+                                                <td className ="laporankeluar">EL1200</td>                                                    
+                                                <td className ="laporantotal">Perancangan Desain</td>
+                                                <td className ="laporanalfa">6</td>
+                                                <td className ="laporanizin">8</td>
+                                                <td className ="laporansakit">0</td>
+                                                <td className ="laporansakit">0</td>
+                                                <td className ="laporanketerangan">40%</td>
+                                            </tr>
+                                            <tr className="tabellaporanbody">
+                                                <td className ="laporanno">1</td>
+                                                <td className ="laporankeluar">KU2322</td>                                                    
+                                                <td className ="laporantotal">Kuliah Umum</td>
+                                                <td className ="laporanalfa">12</td>
+                                                <td className ="laporanizin">2</td>
+                                                <td className ="laporansakit">1</td>
+                                                <td className ="laporansakit">1</td>
+                                                <td className ="laporanketerangan">80%</td>
+                                            </tr>
+                                            <tr className="tabellaporanbody">
+                                                <td className ="laporanno">1</td>
+                                                <td className ="laporankeluar">KU2233</td>                                                    
+                                                <td className ="laporantotal">Stadium Generale</td>
+                                                <td className ="laporanalfa">12</td>
+                                                <td className ="laporanizin">2</td>
+                                                <td className ="laporansakit">1</td>
+                                                <td className ="laporansakit">1</td>
+                                                <td className ="laporanketerangan">80%</td>
+                                            </tr>
+                                            <tr className="tabellaporanbody">
+                                                <td className ="laporanno">1</td>
+                                                <td className ="laporankeluar">EL4196</td>                                                    
+                                                <td className ="laporantotal">TA1</td>
+                                                <td className ="laporanalfa">14</td>
+                                                <td className ="laporanizin">0</td>
+                                                <td className ="laporansakit">0</td>
+                                                <td className ="laporansakit">0</td>
+                                                <td className ="laporanketerangan">100%</td>
+                                            </tr>
+                                            <tr className="tabellaporanbody">
+                                                <td className ="laporanno">1</td>
+                                                <td className ="laporankeluar">KU2121</td>                                                    
+                                                <td className ="laporantotal">Etika dan Agama Islam</td>
+                                                <td className ="laporanalfa">12</td>
+                                                <td className ="laporanizin">2</td>
+                                                <td className ="laporansakit">1</td>
+                                                <td className ="laporansakit">1</td>
+                                                <td className ="laporanketerangan">80%</td>
                                             </tr>
                                         </tbody>
                                     </table>

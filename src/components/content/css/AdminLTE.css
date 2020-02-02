@@ -2375,7 +2375,7 @@ a:focus {
 .textmerah{
   position: absolute;
   top: 5px;
-  color: rgb(0, 0, 100);
+  color: red;
 }
 
 .kotakinputruangantermid{
@@ -2492,15 +2492,7 @@ a:focus {
   margin-top: 0px
 }
 
-.kotakinputpenggunanim{
-  margin-left: 21%;
-  margin-top: -56px
-}
 
-.kotakinputpenggunanama{
-  margin-left: 42%;
-  margin-top: -56px
-}
 
 .kotakinputpenggunainstansi{
   margin-left: 63%;
@@ -3120,6 +3112,7 @@ a:focus {
   }
 }
 
+
 .daftar{
   background-color: rgb(0, 0, 100);
   width: 120px;
@@ -3130,6 +3123,101 @@ a:focus {
   font-size: 15px;
   color: white;
   border: 2px solid rgb(0, 0, 100);
+}
+
+.statistiknim{
+  position: absolute;
+  background-color: rgb(0, 0, 100);
+  width: 120px;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 8px;
+  height: 27px;
+  font-size: 15px;
+  color: white;
+  border: 2px solid rgb(0, 0, 100);
+}
+.statistikmatakuliah{
+  position: absolute;
+  margin-left: 150px;
+  background-color: rgb(0, 0, 100);
+  width: 120px;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 8px;
+  height: 27px;
+  font-size: 15px;
+  color: white;
+  border: 2px solid rgb(0, 0, 100);
+}
+.statistikruangan{
+  margin-left: 300px;
+  background-color: white;
+  width: 120px;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 8px;
+  height: 27px;
+  font-size: 15px;
+  color: rgb(0, 0, 100));
+  border: 2px solid rgb(0, 0, 100);
+}
+
+.statistiknim:hover, .statistikmatakuliah:hover, .statistikruangan:hover {
+  background-color: white;
+  color: rgb(0, 0, 100);
+  border: 2px solid rgb(0, 0, 100);
+}
+
+.filterdatastatistik{
+  margin: 0px;
+}
+.filtertanggalawalstatistik{
+  margin-top: -56px;
+  margin-left: 30%;
+}
+.filtertanggalakhirstatistik{
+  margin-top: -56px;
+  margin-left: 60%;
+}
+.filterstatistik{
+  margin-top: -45px;
+  margin-left: 90%;
+}
+@media(max-width:832px){
+  .filtertanggalawalstatistik{
+    margin-left: 50%;
+  }
+  .filtertanggalakhirstatistik{
+    margin-top: 20px;
+    margin-left: 0%;
+  }
+  .filterstatistik{
+    margin-top: -45px;
+    margin-left: 50%;
+  }
+}
+@media(max-width:767px){
+  .filterdatastatistik{
+    margin-top: 20px;
+  }
+  .filterstatistik{
+    margin-bottom: 20px;
+  }
+}
+@media(max-width:527px){
+  .filtertanggalawalstatistik{
+    margin-left: 0%;
+    margin-top: 20px;
+  }
+  .filtertanggalakhirstatistik{
+    margin-top: 20px;
+    margin-left: 0%;
+  }
+  .filterstatistik{
+    margin-top: 20px;
+    margin-left: 0%;
+  }
 }
 
 .daftar2{
@@ -3522,7 +3610,7 @@ a:focus {
 /* ///////////////////////////////////////////////////////////////////////////////////////// */
 .tablelog{
   width: 100%;
-  min-width: 880px;
+  min-width: 950px;
   border: 1px solid #ddd;
   padding: 10px;
 }
@@ -3558,7 +3646,7 @@ a:focus {
 
 .tableruangan{
   width: 100%;
-  min-width: 780px;
+  min-width: 900px;
   border: 1px solid #ddd;
   padding: 10px;
 }
@@ -3591,6 +3679,10 @@ a:focus {
 }
 .theadlog > tr > .ruangan{
   width: 130px;
+  cursor: pointer;
+}
+.theadlog > tr > .koderuangan{
+  width: 100px;
   cursor: pointer;
 }
 .theadlog > tr > .matkul{
@@ -3665,25 +3757,29 @@ a:focus {
   margin-top: 0px
 }
 .kotakinputlogpintunama{
-  margin-left: 12%;
+  margin-left: 20%;
   margin-top: -56px
 }
 .kotakinputlogpinturuangan{
-  margin-left: 24%;
+  margin-left: 40%;
   margin-top: -56px
 }
 .kotakinputlogpintumatkul{
-  margin-left: 36%;
+  margin-left: 60%;
   margin-top: -56px
+}
+.kotakinputlogpintukelas{
+  margin-left: 6%;
+  margin-top: 20px
 }
 
 .kotakinputlogpintucheckedtm{
-  margin-left: 48%;
+  margin-left: 26%;
   margin-top: -56px
 }
 
 .kotakinputlogpintustatus{
-  margin-left: 70%;
+  margin-left: 52%;
   margin-top: -54px
 }
 
@@ -3693,7 +3789,16 @@ a:focus {
   border-right: none;
   border-bottom: solid 1px rgb(0, 0, 100);
   font-size: 13px;
-  width: 100px;
+  width: 150px;
+}
+
+.inputformlogpintunimc{
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: solid 1px rgb(0, 0, 100);
+  font-size: 13px;
+  width: 150px;
 }
 
 .inputformlogpintucheckedtm{
@@ -3711,37 +3816,8 @@ a:focus {
   border-right: none;
   border-bottom: solid 1px rgb(0, 0, 100);
   font-size: 13px;
-  width: 100px;
+  width: 150px;
   background-color: white
-}
-
-@media (max-width:1260px){
-  .kotakinputlogpintunama{
-    margin-left: 20%;
-  }
-  .kotakinputlogpinturuangan{
-    margin-left: 40%;
-  }
-  .kotakinputlogpintumatkul{
-    margin-left: 60%;
-  }
-  
-  .kotakinputlogpintucheckedtm{
-    margin-left: 15%;
-    margin-top: 20px;
-  }
-  
-  .kotakinputlogpintustatus{
-    margin-left: 45%;
-  }
-
-  .inputformlogpintunim{
-    width: 150px;
-  }
-
-  .inputformlogpintustatus{
-    width: 150px;
-  }
 }
 
 @media (max-width:1109px){
@@ -3757,13 +3833,14 @@ a:focus {
     margin-left: 81%;
     margin-top: -56px;
   }
+  .kotakinputlogpintukelas{
+    margin-left: 10%;
+  }
   .kotakinputlogpintucheckedtm{
-    margin-left: 20%;
-    margin-top: 20px
+    margin-left: 38%;
   }
   .kotakinputlogpintustatus{
-    margin-left: 55%;
-    margin-top: -56px
+    margin-left: 71%;
   }
   .kotaksubmitpengguna2{
     display: block;
@@ -3795,6 +3872,11 @@ a:focus {
     margin-top: 20px
   }
   
+  .kotakinputlogpintukelas{
+    margin-left: 0%;
+    margin-top: 20px
+  }
+
   .kotakinputlogpintucheckedtm{
     margin-left: 0%;
     margin-top: 20px
@@ -3806,6 +3888,10 @@ a:focus {
   }
 
   .inputformlogpintunim{
+    width: 100%;  
+  }
+
+  .inputformlogpintunimc{
     width: 100%;  
   }
   
@@ -3954,23 +4040,27 @@ a:focus {
   margin-top: 0px
 }
 .kotakinputpenggunajurusan{
-  margin-left: 12%;
+  margin-left: 20%;
   margin-top: -56px
 }
 .kotakinputpenggunanim{
-  margin-left: 29%;
+  margin-left: 45%;
   margin-top: -58px
 }
 .kotakinputpenggunanama{
-  margin-left: 41%;
+  margin-left: 70%;
   margin-top: -56px
 }
+.kotakinputpenggunadevice{
+  margin-left: 10%;
+  margin-top: 20px
+}
 .kotakinputpenggunafinger1{
-  margin-left: 53%;
+  margin-left: 32%;
   margin-top: -57px
 }
 .kotakinputpenggunafinger2{
-  margin-left: 68%;
+  margin-left: 60%;
   margin-top: -58px
 }
 .kotakinputkodematkul{
@@ -4034,14 +4124,16 @@ a:focus {
     margin-left: 54%;
   }
   .kotakinputpenggunanama{
-    margin-left: 0%;
-    margin-top: 20px
+    margin-left: 78%;
+  }
+  .kotakinputpenggunadevice{
+    margin-left: 5%;
   }
   .kotakinputpenggunafinger1{
-    margin-left: 27%;
+    margin-left: 30%;
   }
   .kotakinputpenggunafinger2{
-    margin-left: 54%;
+    margin-left: 57%;
   }
   .kotakinputkodematkul{
     margin-left: 54%;
@@ -4067,7 +4159,7 @@ a:focus {
     margin-left: 0%;
     margin-top: 20px;
   }
-  .kotakinputpenggunajurusan, .kotakinputpenggunanim, .kotakinputpenggunanama, .kotakinputpenggunafinger1, .kotakinputpenggunafinger2, .kotakinputkodematkul, .kotakinputnamamatkul, .kotakinputkelas{
+  .kotakinputpenggunajurusan, .kotakinputpenggunanim, .kotakinputpenggunanama, .kotakinputpenggunadevice, .kotakinputpenggunafinger1, .kotakinputpenggunafinger2, .kotakinputkodematkul, .kotakinputnamamatkul, .kotakinputkelas{
     margin-left: 0%;
     margin-top: 20px;
   }
@@ -4101,16 +4193,20 @@ a:focus {
   margin-top: 0px
 }
 .kotakinputpenggunanamau{
-  margin-left: 20%;
+  margin-left: 30%;
+  margin-top: -56px
+}
+.kotakinputpenggunadeviceu{
+  margin-left: 60%;
   margin-top: -56px
 }
 .kotakinputpenggunafinger1u{
-  margin-left: 40%;
-  margin-top: -57px
+  margin-left: 15%;
+  margin-top: 20px
 }
 .kotakinputpenggunafinger2u{
-  margin-left: 62%;
-  margin-top: -58px
+  margin-left: 45%;
+  margin-top: -57px
 }
 .inputformlogpintunimu{
   border-top: none;
@@ -4147,10 +4243,24 @@ a:focus {
   }
 }
 
+.kotakinputruangandevice{
+  margin-left: 0%;
+  margin-top: 0px
+}
+.kotakinputruanganruangan{
+  margin-left: 28%;
+  margin-top: -56px
+}
+.kotakinputruanganalamat{
+  margin-left: 56%;
+  margin-top: -56px
+}
+
 .kotakinputfakultas{
   margin-left: 0%;
   margin-top: 0px
 }
+
 .kotakinputjurusan{
   margin-left: 40%;
   margin-top: -56px
@@ -4162,7 +4272,25 @@ a:focus {
   border-right: none;
   border-bottom: solid 1px rgb(0, 0, 100);
   font-size: 13px;
-  width: 200px;
+  width: 180px;
+}
+
+@media (max-width:987px){
+  .kotakinputruangandevice{
+    margin-left: 0%;
+    margin-top: 0px
+  }
+  .kotakinputruanganruangan{
+    margin-left: 0%;
+    margin-top: 20px
+  }
+  .kotakinputruanganalamat{
+    margin-left: 0%;
+    margin-top: 20px
+  }
+  .inputformfakultas{
+    width: 100%;
+  }
 }
 
 .daftarfakultas{
@@ -4751,6 +4879,17 @@ a:focus {
 .backgroundmerah:hover{
   border: solid 1px red;
   color: red;
+  background-color: white;
+}
+.backgroundkuning{
+  border-radius: 5px;
+  border: solid 1px yellow;
+  color: white;
+  background-color: yellow;
+}
+.backgroundkuning:hover{
+  border: solid 1px yellow;
+  color: yellow;
   background-color: white;
 }
 .backgroundhijau{

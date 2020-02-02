@@ -9,6 +9,11 @@ const s ={
     createlog: url+"/log/create",
     deletelog: url+"/log/delete",
 
+    //fingerprint
+    readfinger: url+"/fingerprint/read",
+    createfinger: url+"/fingerprint/create",
+    deletefinger: url+"/fingerprint/delete",
+
     //pengguna
     readpengguna: url+"/pengguna/read",
     createpengguna: url+"/pengguna/create",

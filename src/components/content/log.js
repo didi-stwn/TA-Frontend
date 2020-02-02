@@ -25,6 +25,7 @@ class Log extends Component{
       namac:'',
       koderuanganc:'',
       kodematkulc:'',
+      kelasc:'',
       statusc:'Hadir',
 
       //delete
@@ -44,8 +45,6 @@ class Log extends Component{
   }
 
   getData(startDateRead, endDateRead, sortby, ascdsc, search, limit, page){
-    console.log(startDateRead)
-    console.log(endDateRead)
     if ((startDateRead==null)&&(endDateRead==null)){
       var awal = null
       var akhir = null
@@ -165,10 +164,18 @@ class Log extends Component{
       this.setState({namac:''})
     }
   }
-  
+
   componentDidMount(){
-    const {startDateRead, endDateRead, sortby, ascdsc, search, limit, page} = this.state 
-    this.getData(startDateRead, endDateRead, sortby, ascdsc, search, limit, page)
+    // const {startDateRead, endDateRead, sortby, ascdsc, search, limit, page} = this.state 
+    // this.getData(startDateRead, endDateRead, sortby, ascdsc, search, limit, page)
+    this.interval = setInterval(() => {
+      const {startDateRead, endDateRead, sortby, ascdsc, search, limit, page} = this.state 
+      this.getData(startDateRead, endDateRead, sortby, ascdsc, search, limit, page)      
+    }, 2000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval);  
   }
 
   filter(pagenow, sortbynow, ascdscnow){
@@ -199,7 +206,7 @@ class Log extends Component{
 
   handleSubmitDaftar(e){
     e.preventDefault();
-    const {waktuc,nimc,namac,koderuanganc,kodematkulc,statusc} = this.state;
+    const {waktuc,nimc,namac,koderuanganc,kodematkulc, kelasc ,statusc} = this.state;
     var time = waktuc.replace("T"," ")
     fetch(get.createlog, {
       method: 'post',
@@ -213,6 +220,7 @@ class Log extends Component{
         nim: nimc,
         koderuangan: koderuanganc,
         kodematkul: kodematkulc,
+        kelas: kelasc,
         status: statusc,
       })
     })
@@ -279,9 +287,8 @@ class Log extends Component{
   }  
 
   render(){
-    const {namac, datakosong, startDateRead, endDateRead, rowCount, limit, page, daftar, databenar, pesan, datasalah, data, search, sortby, ascdsc} = this.state
-    
-    //fungsi parsing waktu
+    const {namac, datakosong, rowCount, limit, page, daftar, databenar, pesan, datasalah, data, sortby, ascdsc} = this.state
+
     function waktu(t){
       var tahun,bulan,tanggal,jam,menit,tgl,j,m,date,d,detik;
       date = new Date (t)
@@ -390,6 +397,11 @@ class Log extends Component{
                   <input name="kodematkulc" onChange={this.handleChange} className="inputformlogpintunim" type="text" placeholder="Kode Matkul" required ></input>
                 </div>
 
+                <div className="kotakinputlogpintukelas">
+                  <label><b>Kelas</b> </label> <br></br>
+                  <input name="kelasc" onChange={this.handleChange} className="inputformlogpintunim" type="text" placeholder="kelas" required ></input>
+                </div>                
+
                 <div className="kotakinputlogpintucheckedtm">
                   <label> <b>Waktu dan Tanggal</b>  </label> <br></br>
                   <input name="waktuc" onChange={this.handleChange} className="inputformlogpintucheckedtm" type="datetime-local" required></input>
@@ -486,6 +498,7 @@ class Log extends Component{
                   <th className="nama" onClick={() => this.filter(page, "nama", ascdsc)}>Nama</th>
                   <th className="ruangan" onClick={() => this.filter(page, "koderuangan", ascdsc)}>Kode Ruangan</th>
                   <th className="matkul" onClick={() => this.filter(page, "kodematkul", ascdsc)}>Kode Mata Kuliah</th>
+                  <th className="kelas" onClick={() => this.filter(page, "kelas", ascdsc)}>Kelas</th>
                   <th className="status" onClick={() => this.filter(page, "status", ascdsc)}>Status</th>
                 </tr>
               </thead>
@@ -498,6 +511,7 @@ class Log extends Component{
                     <td>{isidata.nama}</td>
                     <td>{isidata.koderuangan}</td>
                     <td>{isidata.kodematkul}</td>
+                    <td>{isidata.kelas}</td>
                     <td>{isidata.status}</td>
                   </tr>
                 ))}
