@@ -2,7 +2,8 @@ import React, {Component} from 'react';
 import {Route,withRouter,Link} from "react-router-dom";
 import { AnimatedSwitch } from 'react-router-transition';
 import Log from './content/log';
-import Pengguna from './content/pengguna';
+import Pengguna from './content/mahasiswa';
+import Dosen from './content/dosen';
 import Ruangan from './content/ruangan';
 import Matakuliah from './content/matakuliah';
 import Fakultas from './content/fakultas';
@@ -28,7 +29,8 @@ class Content extends Component {
               <Route exact path="/" component={Home} />
               <Route path="/statistik" render={ () => <Statistik/> } />
               <Route path="/log" render={ () => <Log/> } />
-              <Route path="/pengguna" render={ () => <Pengguna/> } />
+              <Route path="/mahasiswa" render={ () => <Pengguna/> } />
+              <Route path="/dosen" render={ () => <Dosen/> } />
               <Route path="/ruangan" render={ () => <Ruangan/> } />
               <Route path="/matakuliah" render={ () => <Matakuliah/> } />
               <Route path="/fakultas" render={ () => <Fakultas/> } />

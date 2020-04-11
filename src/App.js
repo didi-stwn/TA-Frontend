@@ -15,7 +15,6 @@ import "mdbreact/dist/css/mdb.css";
 
 class App extends Component {
     render(){     
-
       //fungsi refresh token
       function refreshToken(){
           fetch(get.refreshtoken, {

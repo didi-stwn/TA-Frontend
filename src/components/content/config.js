@@ -1,58 +1,71 @@
 const url = "http://localhost:3000"
-const s ={
+const s = {
     //gettoken
-    login: url+"/login",
-    refreshtoken: url+"/refresh",
+    login: url + "/login",
+    refreshtoken: url + "/refresh",
 
     //log
-    readlog: url+"/log/read",
-    createlog: url+"/log/create",
-    deletelog: url+"/log/delete",
+    readlog: url + "/log/read",
+    createlog: url + "/log/create",
+    deletelog: url + "/log/delete",
 
     //fingerprint
-    readfinger: url+"/fingerprint/read",
-    createfinger: url+"/fingerprint/create",
-    deletefinger: url+"/fingerprint/delete",
+    checkdevice: url + "/fingerprint/check_device",
+    readfinger: url + "/fingerprint/read",
+    createfinger: url + "/fingerprint/create",
+    deletefinger: url + "/fingerprint/delete",
 
     //pengguna
-    readpengguna: url+"/pengguna/read",
-    createpengguna: url+"/pengguna/create",
-    updatepengguna: url+"/pengguna/update",
-    deletepengguna: url+"/pengguna/delete",
-    
+    readpengguna: url + "/pengguna/read",
+    createpengguna: url + "/pengguna/create",
+    updatepengguna: url + "/pengguna/update",
+    deletepengguna: url + "/pengguna/delete",
+
     //filterpengguna
-    readfilterpengguna: url+"/filterpengguna/read",
-    createfilterpengguna: url+"/filterpengguna/create",
-    deletefilterpengguna: url+"/filterpengguna/delete",
-    
+    readfilterpengguna: url + "/filterpengguna/read",
+    createfilterpengguna: url + "/filterpengguna/create",
+    deletefilterpengguna: url + "/filterpengguna/delete",
+
+    //dosen
+    readdosen: url + "/dosen/read",
+    createdosen: url + "/dosen/create",
+    updatedosen: url + "/dosen/update",
+    deletedosen: url + "/dosen/delete",
+
+    //filterdosen
+    readfilterdosen: url + "/filterdosen/read",
+    createfilterdosen: url + "/filterdosen/create",
+    deletefilterdosen: url + "/filterdosen/delete",
+
     //ruangan
-    readruangan: url+"/ruangan/read",
-    createruangan: url+"/ruangan/create",
-    updateruangan: url+"/ruangan/update",
-    deleteruangan: url+"/ruangan/delete",
-    
+    readruangan: url + "/ruangan/read",
+    createruangan: url + "/ruangan/create",
+    updateruangan: url + "/ruangan/update",
+    updatedeviceruangan: url + "/ruangan/update_device",
+    deleteruangan: url + "/ruangan/delete",
+
     //filterruangan
-    readfilterruangan: url+"/filterruangan/read",
-    createfilterruangan: url+"/filterruangan/create",
-    deletefilterruangan: url+"/filterruangan/delete",
-    
+    readfilterruangan: url + "/filterruangan/read",
+    createfilterruangan: url + "/filterruangan/create",
+    deletefilterruangan: url + "/filterruangan/delete",
+
     //fakultasjurusan
-    readfakultasjurusan: url+"/fakultasjurusan/read",
-    createfakultasjurusan: url+"/fakultasjurusan/create",
-    updatefakultasjurusan: url+"/fakultasjurusan/update",
-    deletefakultasjurusan: url+"/fakultasjurusan/delete",
-    
+    readfakultasjurusan: url + "/fakultasjurusan/read",
+    createfakultasjurusan: url + "/fakultasjurusan/create",
+    updatefakultasjurusan: url + "/fakultasjurusan/update",
+    deletefakultasjurusan: url + "/fakultasjurusan/delete",
+
     //matkul
-    readmatkul: url+"/matkul/read",
-    creatematkul: url+"/matkul/create",
-    updatematkul: url+"/matkul/update",
-    deletematkul: url+"/matkul/delete",
-    
+    readmatkul: url + "/matkul/read",
+    creatematkul: url + "/matkul/create",
+    updatematkul: url + "/matkul/update",
+    deletematkul: url + "/matkul/delete",
+
     //device
-    readdevice: url+"/device/read",
-    createdevice: url+"/device/create",
-    updatedevice: url+"/device/update",
-    deletedevice: url+"/device/delete"
+    readdevice: url + "/device/read",
+    createdevice: url + "/device/create",
+    updatedevice: url + "/device/update",
+    deletedevice: url + "/device/delete"
 }
 
-module.exports=s
+module.exports = s

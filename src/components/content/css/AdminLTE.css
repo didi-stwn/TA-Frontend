@@ -539,10 +539,10 @@ a:focus {
 }
 
 .backgroundlogin{
-  position: absolute;
+  position: fixed;
   background-image: url(./../img/gedungitb.jpeg);
-  background-size: 100%;
-  min-height: 100vh;
+  background-size: cover;
+  height: 100%;
   width: 100%;
   background-position: center;
   background-repeat: no-repeat;
@@ -562,10 +562,10 @@ a:focus {
   background-color: rgb(0,0,0); /* Fallback color */
   background-color: rgba(0,0,0, 0.6); 
   width: 330px;
+  height: auto;
   margin-left: 50%;
   position: relative;
   left: -165px;
-  top: 100px;
   border-radius: 40px;
 }
 
@@ -2814,6 +2814,10 @@ a:focus {
   padding-top: 50px;
 }
 
+.paddingtop100px{
+  padding-top: 100px;
+}
+
 @media (max-width:767px){
   .paddingtop30px{
     padding-top: 0px;
@@ -3610,7 +3614,7 @@ a:focus {
 /* ///////////////////////////////////////////////////////////////////////////////////////// */
 .tablelog{
   width: 100%;
-  min-width: 950px;
+  min-width: 1060px;
   border: 1px solid #ddd;
   padding: 10px;
 }
@@ -3646,7 +3650,7 @@ a:focus {
 
 .tableruangan{
   width: 100%;
-  min-width: 900px;
+  min-width: 1000px;
   border: 1px solid #ddd;
   padding: 10px;
 }
@@ -3694,7 +3698,7 @@ a:focus {
   cursor: pointer;
 }
 .theadlog > tr > .lastseen{
-  width: 120px;
+  width: 200px;
   cursor: pointer;
 }
 .theadlog > tr > .fakultas{
@@ -3707,6 +3711,10 @@ a:focus {
 }
 .theadlog > tr > .kodematkul{
   width: 80px;
+  cursor: pointer;
+}
+.theadlog > tr > .alamat{
+  width: 200px;
   cursor: pointer;
 }
 .theadlog > tr > .namamatkul{
@@ -3727,6 +3735,10 @@ a:focus {
 }
 .theadlog > tr > .keterangan{
   width: 170px;
+  cursor: pointer;
+}
+.theadlog > tr > .keteranganruangan{
+  width: 250px;
   cursor: pointer;
 }
 .theadlog > tr > .keteranganhari{
@@ -3769,19 +3781,25 @@ a:focus {
   margin-top: -56px
 }
 .kotakinputlogpintukelas{
-  margin-left: 6%;
+  margin-left: 0%;
   margin-top: 20px
 }
 
 .kotakinputlogpintucheckedtm{
-  margin-left: 26%;
+  margin-left: 20%;
   margin-top: -56px
 }
 
 .kotakinputlogpintustatus{
-  margin-left: 52%;
+  margin-left: 40%;
   margin-top: -54px
 }
+
+.kotakinputlogpintuketerangan{
+  margin-left: 60%;
+  margin-top: -54px
+}
+
 
 .inputformlogpintunim{
   border-top: none;
@@ -3807,7 +3825,7 @@ a:focus {
   border-right: none;
   border-bottom: solid 1px rgb(0, 0, 100);
   font-size: 13px;
-  width: 195px;
+  width: 160px;
 }
 
 .inputformlogpintustatus{
@@ -3834,13 +3852,16 @@ a:focus {
     margin-top: -56px;
   }
   .kotakinputlogpintukelas{
-    margin-left: 10%;
+    margin-left: 0%;
   }
   .kotakinputlogpintucheckedtm{
-    margin-left: 38%;
+    margin-left: 27%;
   }
   .kotakinputlogpintustatus{
-    margin-left: 71%;
+    margin-left: 54%;
+  }
+  .kotakinputlogpintuketerangan{
+    margin-left: 81%;
   }
   .kotaksubmitpengguna2{
     display: block;
@@ -3883,6 +3904,10 @@ a:focus {
   }
 
   .kotakinputlogpintustatus{
+    margin-left: 0%;
+    margin-top: 20px
+  }
+  .kotakinputlogpintuketerangan{
     margin-left: 0%;
     margin-top: 20px
   }
@@ -4059,12 +4084,23 @@ a:focus {
   margin-left: 32%;
   margin-top: -57px
 }
+.pesanfinger1{
+  font-size: 10px;
+  position: absolute;
+  margin-top: 28px;
+  font-weight: 400;
+  color: red;
+}
 .kotakinputpenggunafinger2{
   margin-left: 60%;
   margin-top: -58px
 }
+.kotakinputmatkuljurusan{
+  margin-left: 16%;
+  margin-top: -56px
+}
 .kotakinputkodematkul{
-  margin-left: 30%;
+  margin-left: 32%;
   margin-top: -58px
 }
 .kotakinputnamamatkul{
@@ -4072,7 +4108,7 @@ a:focus {
   margin-top: -56px
 }
 .kotakinputkelas{
-  margin-left: 67%;
+  margin-left: 64%;
   margin-top: -56px
 }
 .submitfinger1{
@@ -4135,6 +4171,10 @@ a:focus {
   .kotakinputpenggunafinger2{
     margin-left: 57%;
   }
+  .kotakinputmatkuljurusan{
+    margin-left: 27%;
+    margin-top: -56px
+  }
   .kotakinputkodematkul{
     margin-left: 54%;
   }
@@ -4159,7 +4199,7 @@ a:focus {
     margin-left: 0%;
     margin-top: 20px;
   }
-  .kotakinputpenggunajurusan, .kotakinputpenggunanim, .kotakinputpenggunanama, .kotakinputpenggunadevice, .kotakinputpenggunafinger1, .kotakinputpenggunafinger2, .kotakinputkodematkul, .kotakinputnamamatkul, .kotakinputkelas{
+  .kotakinputmatkuljurusan, .kotakinputpenggunajurusan, .kotakinputpenggunanim, .kotakinputpenggunanama, .kotakinputpenggunadevice, .kotakinputpenggunafinger1, .kotakinputpenggunafinger2, .kotakinputkodematkul, .kotakinputnamamatkul, .kotakinputkelas{
     margin-left: 0%;
     margin-top: 20px;
   }
@@ -6418,10 +6458,6 @@ table.text-center th {
  */
 
 /* login */
-
-.login {
-  height: auto;
-}
 
 .login-logo,
 .register-logo {

@@ -1,56 +1,91 @@
-import React,{Component} from 'react';
-import {withRouter} from 'react-router-dom'
-import Chart from 'react-google-charts';
+import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
+import { Pie } from 'react-chartjs-2';
 
-class Statistik extends Component{
-    render(){
+class Statistik extends Component {
+    render() {
+        const Xvalue = ['Tidak Hadir', 'Hadir', 'Izin', 'Sakit']
+        const Yvalue = [30, 500, 100, 20]
+        const data = {
+            labels: Xvalue,
+            datasets: [
+                {
+                    data: Yvalue,
+                    backgroundColor: [
+                        'rgba(255,0,0,1)',
+                        'blue',
+                        'yellow',
+                        'green'
+                    ],
+                },
+            ],
+        };
+        const options = {
+            maintainAspectRatio: false,
+            responsive: false,
+            legend: {
+                position: 'right',
+                labels: {
+                    boxWidth: 10
+                }
+            },
+            title: {
+                display: true,
+                text: 'Kehadiran pada Mata Kuliah EL3000'
+            }
+        }
         return (
-        <div>
             <div>
                 <div>
-                    <a>
-                        <div className="statistiknim">
-                            <span><b>NIM</b></span>
-                        </div>
-                    </a>
+                    <div>
+                        <a>
+                            <div className="statistiknim">
+                                <span><b>NIM</b></span>
+                            </div>
+                        </a>
+                    </div>
+                    <div>
+                        <a>
+                            <div className="statistikmatakuliah">
+                                <span><b>Mata Kuliah</b></span>
+                            </div>
+                        </a>
+                    </div>
+                    <div>
+                        <a>
+                            <div className="statistikruangan">
+                                <span><b>Ruangan</b></span>
+                            </div>
+                        </a>
+                    </div>
                 </div>
+                <div className="paddingtop30px"></div>
+
                 <div>
-                    <a>
-                        <div className="statistikmatakuliah">
-                            <span><b>Mata Kuliah</b></span>
-                        </div>
-                    </a>
+                    <div className="filterdatastatistik">
+                        <label><b>Ruangan</b> </label> <br></br>
+                        <input name="startDateRead" onChange={this.handleChange} className="inputfiltertanggalawallog" type="text" required ></input>
+                    </div>
+                    <div className="filtertanggalawalstatistik">
+                        <label><b>Tanggal Awal</b> </label> <br></br>
+                        <input name="startDateRead" onChange={this.handleChange} className="inputfiltertanggalawallog" type="date" required ></input>
+                    </div>
+                    <div className="filtertanggalakhirstatistik">
+                        <label><b>Tanggal Akhir</b> </label> <br></br>
+                        <input name="endDateRead" onChange={this.handleChange} className="inputfiltertanggalawallog" type="date" required ></input>
+                    </div>
+                    <div className="filterstatistik">
+                        <input className="submitfiltertanggallog" type="submit" value="Filter" onClick={() => this.filterTanggal()}></input>
+                    </div>
                 </div>
-                <div>
-                    <a>
-                        <div className="statistikruangan">
-                            <span><b>Ruangan</b></span>
-                        </div>
-                    </a>
-                </div>
-            </div>
-            <div className="paddingtop30px"></div>
-            
-            <div>
-                <div className="filterdatastatistik">
-                    <label><b>Ruangan</b> </label> <br></br>
-                    <input name="startDateRead" onChange={this.handleChange} className="inputfiltertanggalawallog" type="text" required ></input>
-                </div>
-                <div className="filtertanggalawalstatistik">
-                    <label><b>Tanggal Awal</b> </label> <br></br>
-                    <input name="startDateRead" onChange={this.handleChange} className="inputfiltertanggalawallog" type="date" required ></input>
-                </div>
-                <div className="filtertanggalakhirstatistik">
-                    <label><b>Tanggal Akhir</b> </label> <br></br>
-                    <input name="endDateRead" onChange={this.handleChange} className="inputfiltertanggalawallog" type="date" required ></input>
-                </div>
-                <div className="filterstatistik">
-                    <input className="submitfiltertanggallog" type="submit" value="Filter" onClick={() => this.filterTanggal()}></input>
-                </div>
-            </div>
-            <div className="paddingtop30px"></div>
-            <div className="kotakdata"> 
-                <div className="texttengah" style={{width:'100%'}}>
+                <div className="paddingtop30px"></div>
+                <div className="kotakdata">
+                    <Pie
+                        data={data}
+                        width={200}
+                        options={options}
+                    />
+                    {/* <div className="texttengah" style={{width:'100%'}}>
                     <Chart
                     width={'600px'}
                     height={'250px'}
@@ -189,8 +224,8 @@ class Statistik extends Component{
                         rootProps={{ 'data-testid': '7' }}
                         />
                     </div>
-                </div>
-                {/* <span>Kehadiran Mahasiswa dari 1 Januari 2019 - 6 Juni 2019</span>
+                </div> */}
+                    {/* <span>Kehadiran Mahasiswa dari 1 Januari 2019 - 6 Juni 2019</span>
                 <table className="tablelog">
                     <thead className="theadlog">
                         <tr>
@@ -287,10 +322,10 @@ class Statistik extends Component{
                         </tr> 
                     </tbody>
                 </table> */}
+                </div>
             </div>
-        </div>
         )
-    } 
+    }
 }
 
 export default withRouter(Statistik);

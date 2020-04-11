@@ -6,7 +6,8 @@ class SideBar extends Component {
     render(){
         var statistik=false
         var log=false
-        var pengguna=false
+        var mahasiswa=false
+        var dosen=false
         var ruangan=false
         var matakuliah=false
         var fakultas=false
@@ -19,8 +20,8 @@ class SideBar extends Component {
         else if (window.location.pathname==="/log"){
             log=true
         }
-        else if (window.location.pathname==="/pengguna"){
-            pengguna=true
+        else if (window.location.pathname==="/mahasiswa"){
+            mahasiswa=true
         }
         else if (window.location.pathname==="/ruangan"){
             ruangan=true
@@ -36,6 +37,9 @@ class SideBar extends Component {
         }
         else if (window.location.pathname==="/bantuan"){
             bantuan=true
+        }
+        else if (window.location.pathname==="/dosen"){
+            dosen=true
         }
         return (
             <div className="main-sidebar">
@@ -93,17 +97,34 @@ class SideBar extends Component {
                                 </li>
                                 <li>
                                     {
-                                        pengguna &&
-                                        <Link to="/pengguna" className="dipilih">
+                                        mahasiswa &&
+                                        <Link to="/mahasiswa" className="dipilih">
                                             <i className="fa fa-users"></i> 
-                                            <span>Pengguna</span>
+                                            <span>Mahasiswa</span>
                                         </Link>
                                     }
                                     {
-                                        (pengguna===false)&&
-                                        <Link to="/pengguna">
+                                        (mahasiswa===false)&&
+                                        <Link to="/mahasiswa">
                                             <i className="fa fa-users"></i> 
-                                            <span>Pengguna</span>
+                                            <span>Mahasiswa</span>
+                                        </Link>
+                                    }
+                                    
+                                </li>
+                                <li>
+                                    {
+                                        dosen &&
+                                        <Link to="/dosen" className="dipilih">
+                                            <i className="fa fa-user"></i> 
+                                            <span>Dosen</span>
+                                        </Link>
+                                    }
+                                    {
+                                        (dosen===false)&&
+                                        <Link to="/dosen">
+                                            <i className="fa fa-user"></i> 
+                                            <span>Dosen</span>
                                         </Link>
                                     }
                                     

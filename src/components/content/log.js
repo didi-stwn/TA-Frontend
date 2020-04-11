@@ -1,79 +1,80 @@
-import React,{Component} from 'react';
-import {withRouter} from 'react-router-dom';
+import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 import get from './config';
 
-class Log extends Component{
+class Log extends Component {
   constructor(props) {
     super(props);
     this.state = {
       //read
-      sortby:'waktu',
-      ascdsc:'desc',
-      search:'',
+      sortby: 'waktu',
+      ascdsc: 'desc',
+      search: '',
       limit: 10,
       page: 1,
       startDateRead: null,
       endDateRead: null,
-      rowCount:0,
+      rowCount: 0,
       data: [],
       datakosong: false,
-      daftar:false,
+      daftar: false,
 
       //create
-      waktuc:'',
-      nimc:'',
-      namac:'',
-      koderuanganc:'',
-      kodematkulc:'',
-      kelasc:'',
-      statusc:'Hadir',
+      waktuc: '',
+      nimc: '',
+      namac: '',
+      koderuanganc: '',
+      kodematkulc: '',
+      kelasc: '',
+      statusc: 'Mahasiswa',
+      keteranganc: 'Hadir',
 
       //delete
-      startDateDelete:'',
-      endDateDelete:'',
-      
+      startDateDelete: '',
+      endDateDelete: '',
+
       //status add
-      pesan:'',
+      pesan: '',
       datasalah: false,
       databenar: false,
     };
     this.handleFilter = this.handleFilter.bind(this);
     this.filterName = this.filterName.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    this.handleSubmitDaftar = this.handleSubmitDaftar.bind(this);  
-    this.handleSubmitDelete = this.handleSubmitDelete.bind(this);  
+    this.handleSubmitDaftar = this.handleSubmitDaftar.bind(this);
+    this.handleSubmitDelete = this.handleSubmitDelete.bind(this);
   }
 
-  getData(startDateRead, endDateRead, sortby, ascdsc, search, limit, page){
-    if ((startDateRead==null)&&(endDateRead==null)){
+  getData(startDateRead, endDateRead, sortby, ascdsc, search, limit, page) {
+    if ((startDateRead == null) && (endDateRead == null)) {
       var awal = null
       var akhir = null
     }
-    else if ((startDateRead!=null)&&(endDateRead==null)){
-      awal = startDateRead.replace("T"," ")+''
+    else if ((startDateRead != null) && (endDateRead == null)) {
+      awal = startDateRead.replace("T", " ") + ''
       akhir = null
     }
-    else if ((startDateRead==null)&&(endDateRead!=null)){
-      akhir = endDateRead.replace("T"," ")+''
+    else if ((startDateRead == null) && (endDateRead != null)) {
+      akhir = endDateRead.replace("T", " ") + ''
       awal = null
     }
     else {
-      awal = startDateRead.replace("T"," ")+''
-      akhir = endDateRead.replace("T"," ")+''
+      awal = startDateRead.replace("T", " ") + ''
+      akhir = endDateRead.replace("T", " ") + ''
     }
-    if (awal==""){
+    if (awal == "") {
       awal = null
-      this.setState({startDateRead:null})
+      this.setState({ startDateRead: null })
     }
-    if (akhir==""){
+    if (akhir == "") {
       akhir = null
-      this.setState({endDateRead:null})
+      this.setState({ endDateRead: null })
     }
     fetch(get.readlog, {
       method: 'post',
-      headers :{
-        "x-access-token" : sessionStorage.name,
-        "Content-Type" : "application/json"
+      headers: {
+        "x-access-token": sessionStorage.name,
+        "Content-Type": "application/json"
       },
       body: JSON.stringify({
         startDate: awal,
@@ -85,35 +86,35 @@ class Log extends Component{
         page: page,
       })
     })
-    .then(response => response.json())
-    .then(response => {
-      //berhasil dapet data
-      if ((response.status===1)&&(response.count!==0)){
-        this.setState({data:response.hasil})
-        this.setState({rowCount:response.count})
-        this.setState({datakosong:false})
-      }
-      else if ((response.status===1)&&(response.count===0)){
-        this.setState({datakosong:true})
-        this.setState({rowCount:response.count})
-      }
-      //ga dapet token
-      else if ((response.status!==1)&&(response.status!==0)){
-        sessionStorage.removeItem("name")
-        window.location.reload()
-      }
-    })
+      .then(response => response.json())
+      .then(response => {
+        //berhasil dapet data
+        if ((response.status === 1) && (response.count !== 0)) {
+          this.setState({ data: response.hasil })
+          this.setState({ rowCount: response.count })
+          this.setState({ datakosong: false })
+        }
+        else if ((response.status === 1) && (response.count === 0)) {
+          this.setState({ datakosong: true })
+          this.setState({ rowCount: response.count })
+        }
+        //ga dapet token
+        else if ((response.status !== 1) && (response.status !== 0)) {
+          sessionStorage.removeItem("name")
+          window.location.reload()
+        }
+      })
   }
-  
+
   handleFilter(e) {
-    const {startDateRead, endDateRead, sortby, ascdsc, search, limit, page} = this.state 
+    const { startDateRead, endDateRead, sortby, ascdsc, search, limit, page } = this.state
     const { name, value } = e.target;
     this.setState({ [name]: value });
-    if (name=="search"){
+    if (name == "search") {
       var searching = value
       var max = limit
     }
-    else if (name=="limit"){
+    else if (name == "limit") {
       searching = search
       max = value
     }
@@ -125,16 +126,16 @@ class Log extends Component{
     this.setState({ [name]: value });
   }
 
-  filterName(e){
+  filterName(e) {
     const { name, value } = e.target;
     this.setState({ [name]: value });
     var lengthnama = value.length;
-    if (lengthnama===8){
+    if (lengthnama === 8) {
       fetch(get.readpengguna, {
         method: 'post',
-        headers :{
-          "x-access-token" : sessionStorage.name,
-          "Content-Type" : "application/json"
+        headers: {
+          "x-access-token": sessionStorage.name,
+          "Content-Type": "application/json"
         },
         body: JSON.stringify({
           sortby: "nim",
@@ -144,75 +145,75 @@ class Log extends Component{
           page: "1",
         })
       })
-      .then(response => response.json())
-      .then(response => {
-        //berhasil dapet data
-        if ((response.status===1)&&(response.count==1)){
-          this.setState({namac:response.hasil[0].nama})
-        }
-        else if ((response.status===1)&&(response.count!=1)){
-          this.setState({namac:''})
-        }
-        //ga dapet token
-        else if ((response.status!==1)&&(response.status!==0)){
-          sessionStorage.removeItem("name")
-          window.location.reload()
-        }
-      })
+        .then(response => response.json())
+        .then(response => {
+          //berhasil dapet data
+          if ((response.status === 1) && (response.count == 1)) {
+            this.setState({ namac: response.hasil[0].nama })
+          }
+          else if ((response.status === 1) && (response.count != 1)) {
+            this.setState({ namac: '' })
+          }
+          //ga dapet token
+          else if ((response.status !== 1) && (response.status !== 0)) {
+            sessionStorage.removeItem("name")
+            window.location.reload()
+          }
+        })
     }
-    else{
-      this.setState({namac:''})
+    else {
+      this.setState({ namac: '' })
     }
   }
 
-  componentDidMount(){
+  componentDidMount() {
     // const {startDateRead, endDateRead, sortby, ascdsc, search, limit, page} = this.state 
     // this.getData(startDateRead, endDateRead, sortby, ascdsc, search, limit, page)
     this.interval = setInterval(() => {
-      const {startDateRead, endDateRead, sortby, ascdsc, search, limit, page} = this.state 
-      this.getData(startDateRead, endDateRead, sortby, ascdsc, search, limit, page)      
+      const { startDateRead, endDateRead, sortby, ascdsc, search, limit, page } = this.state
+      this.getData(startDateRead, endDateRead, sortby, ascdsc, search, limit, page)
     }, 2000);
   }
 
   componentWillUnmount() {
-    clearInterval(this.interval);  
+    clearInterval(this.interval);
   }
 
-  filter(pagenow, sortbynow, ascdscnow){
-    const {startDateRead, endDateRead, sortby, ascdsc, search, limit, page} = this.state 
-    if (pagenow==page){
-      if(sortbynow==sortby){
-        if(ascdscnow=="asc"){
-          ascdscnow="desc"
+  filter(pagenow, sortbynow, ascdscnow) {
+    const { startDateRead, endDateRead, sortby, ascdsc, search, limit, page } = this.state
+    if (pagenow == page) {
+      if (sortbynow == sortby) {
+        if (ascdscnow == "asc") {
+          ascdscnow = "desc"
         }
-        else if(ascdscnow=="desc"){
-          ascdscnow="asc"
+        else if (ascdscnow == "desc") {
+          ascdscnow = "asc"
         }
       }
-      else{
-        ascdscnow="asc"
+      else {
+        ascdscnow = "asc"
       }
     }
-    this.setState({page:pagenow})
-    this.setState({sortby:sortbynow})
-    this.setState({ascdsc:ascdscnow})
-    this.getData(startDateRead, endDateRead, sortbynow, ascdscnow, search, limit, pagenow)    
+    this.setState({ page: pagenow })
+    this.setState({ sortby: sortbynow })
+    this.setState({ ascdsc: ascdscnow })
+    this.getData(startDateRead, endDateRead, sortbynow, ascdscnow, search, limit, pagenow)
   }
 
-  filterTanggal(){
-    const{startDateRead, endDateRead, sortby, ascdsc, search, limit, page}=this.state
+  filterTanggal() {
+    const { startDateRead, endDateRead, sortby, ascdsc, search, limit, page } = this.state
     this.getData(startDateRead, endDateRead, sortby, ascdsc, search, limit, page)
   }
 
-  handleSubmitDaftar(e){
+  handleSubmitDaftar(e) {
     e.preventDefault();
-    const {waktuc,nimc,namac,koderuanganc,kodematkulc, kelasc ,statusc} = this.state;
-    var time = waktuc.replace("T"," ")
+    const { waktuc, nimc, namac, koderuanganc, kodematkulc, kelasc, statusc, keteranganc } = this.state;
+    var time = waktuc.replace("T", " ")
     fetch(get.createlog, {
       method: 'post',
-      headers :{
-        "x-access-token" : sessionStorage.name,
-        "Content-Type" : "application/json"
+      headers: {
+        "x-access-token": sessionStorage.name,
+        "Content-Type": "application/json"
       },
       body: JSON.stringify({
         waktu: time,
@@ -222,121 +223,123 @@ class Log extends Component{
         kodematkul: kodematkulc,
         kelas: kelasc,
         status: statusc,
+        keterangan: keteranganc
       })
     })
-    .then(response => response.json())
-    .then(response => {
-      //berhasil add data
-      if (response.status===1){
-        this.setState({databenar:true})
-        this.setState({datasalah:false})
-        this.setState({pesan:response.pesan})
-        setTimeout(this.componentDidMount(),1000)
-      }
-      //tidak berhasil add data
-      else if (response.status===0){
-        this.setState({databenar:false})
-        this.setState({datasalah:true})
-        this.setState({pesan:response.pesan})
-      }
-      //ga ada token
-      else {
-        sessionStorage.removeItem("name")
-        window.location.reload()
-      }
-    })
+      .then(response => response.json())
+      .then(response => {
+        //berhasil add data
+        if (response.status === 1) {
+          this.setState({ databenar: true })
+          this.setState({ datasalah: false })
+          this.setState({ pesan: response.pesan })
+          setTimeout(this.componentDidMount(), 1000)
+        }
+        //tidak berhasil add data
+        else if (response.status === 0) {
+          this.setState({ databenar: false })
+          this.setState({ datasalah: true })
+          this.setState({ pesan: response.pesan })
+        }
+        //ga ada token
+        else {
+          sessionStorage.removeItem("name")
+          window.location.reload()
+        }
+      })
   }
 
-  handleSubmitDelete(e){
+  handleSubmitDelete(e) {
     e.preventDefault();
-    const {startDateDelete, endDateDelete}=this.state
+    const { startDateDelete, endDateDelete } = this.state
     var tanggalawal = new Date(startDateDelete).toLocaleDateString()
     var tanggalakhir = new Date(endDateDelete).toLocaleDateString()
-    var yes = window.confirm("Apakah anda yakin ingin menghapus dari tanggal: "+ tanggalawal +" hingga tangga: "+tanggalakhir+"?");
-    if (yes === true){
-      var awal = startDateDelete.replace("T"," ")
-      var akhir = endDateDelete.replace("T"," ")
+    var yes = window.confirm("Apakah anda yakin ingin menghapus dari tanggal: " + tanggalawal + " hingga tangga: " + tanggalakhir + "?");
+    if (yes === true) {
+      var awal = startDateDelete.replace("T", " ")
+      var akhir = endDateDelete.replace("T", " ")
       fetch(get.deletelog, {
         method: 'post',
-        headers :{
-          "Authorization" : sessionStorage.name,
-          "Content-Type" : "application/json"
+        headers: {
+          "Authorization": sessionStorage.name,
+          "Content-Type": "application/json"
         },
         body: JSON.stringify({
           startDate: awal,
           endDate: akhir
         })
       })
-      .then(response => response.json())
-      .then(response =>{
-        // window.alert(response.pesan)
-        setTimeout(this.componentDidMount(),1000)
-      })
+        .then(response => response.json())
+        .then(response => {
+          // window.alert(response.pesan)
+          setTimeout(this.componentDidMount(), 1000)
+        })
     }
   }
 
-  showDaftar(){
-    this.setState({daftar:true})
+  showDaftar() {
+    this.setState({ daftar: true })
   }
-  hideDaftar(){
-    this.setState({daftar:false})
-    this.setState({datasalah:false})
-    this.setState({databenar:false})
-    this.setState({namac:''})
-    this.setState({statusc:'Hadir'})
-  }  
+  hideDaftar() {
+    this.setState({ daftar: false })
+    this.setState({ datasalah: false })
+    this.setState({ databenar: false })
+    this.setState({ namac: '' })
+    this.setState({ statusc: 'Hadir' })
+    this.setState({ keteranganc: 'Mahasiswa' })
+  }
 
-  render(){
-    const {namac, datakosong, rowCount, limit, page, daftar, databenar, pesan, datasalah, data, sortby, ascdsc} = this.state
+  render() {
+    const { namac, datakosong, rowCount, limit, page, daftar, databenar, pesan, datasalah, data, sortby, ascdsc } = this.state
 
-    function waktu(t){
-      var tahun,bulan,tanggal,jam,menit,tgl,j,m,date,d,detik;
-      date = new Date (t)
+    function waktu(t) {
+      var tahun, bulan, tanggal, jam, menit, tgl, j, m, date, d, detik;
+      date = new Date(t)
       tahun = String(date.getFullYear())
-      var months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sept","Oct","Nov","Dec"];
+      var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
       bulan = months[(date.getMonth())]
       tgl = date.getDate()
-      if (tgl <=9){
-        tanggal = "0"+String(tgl)
+      if (tgl <= 9) {
+        tanggal = "0" + String(tgl)
       }
       else {
         tanggal = String(tgl)
       }
       j = date.getHours()
-      if (j<=9){
-        jam = "0"+String(j)
+      if (j <= 9) {
+        jam = "0" + String(j)
       }
       else {
         jam = String(j)
       }
       m = date.getMinutes()
-      if (m<=9){
-        menit = "0"+String(m)
+      if (m <= 9) {
+        menit = "0" + String(m)
       }
       else {
         menit = String(m)
       }
       d = date.getSeconds()
-      if (d<=9){
-        detik = "0"+String(d)
+      if (d <= 9) {
+        detik = "0" + String(d)
       }
       else {
         detik = String(d)
       }
-      return bulan+" "+tanggal+", "+tahun+" "+jam+":"+menit+":"+detik
-    } 
+      return bulan + " " + tanggal + ", " + tahun + " " + jam + ":" + menit + ":" + detik
+    }
 
     //setting tombol berikutnya and sebelumnya
-    var maxPage=parseInt(rowCount/limit);
-    if ((rowCount%limit)!==0){
-      maxPage = maxPage+1
+    var maxPage = parseInt(rowCount / limit);
+    if ((rowCount % limit) !== 0) {
+      maxPage = maxPage + 1
     }
     var showNext = false;
     var showPrevious = false;
     // deteksi page pertama
-    if (page===1){
+    if (page === 1) {
       showPrevious = false;
-      if (page===maxPage){
+      if (page === maxPage) {
         showNext = false;
       }
       else {
@@ -344,7 +347,7 @@ class Log extends Component{
       }
     }
     // deteksi page terakhir
-    else if (page===maxPage){
+    else if (page === maxPage) {
       showPrevious = true;
       showNext = false;
     }
@@ -355,22 +358,22 @@ class Log extends Component{
     }
 
     var aksidata
-    if (daftar===true){
+    if (daftar === true) {
       aksidata = "show"
     }
     else {
       aksidata = "hide"
     }
-    var i=1;
-    return(
+    var i = 1;
+    return (
       <div>
         {
           daftar &&
           <div>
-            <div className="kotakfilter2"> 
+            <div className="kotakfilter2">
               <form className="kotakforminputlogpintu" onSubmit={this.handleSubmitDaftar}>
                 {
-                  databenar && 
+                  databenar &&
                   <span className="texthijau">{pesan}</span>
                 }
                 {
@@ -386,7 +389,7 @@ class Log extends Component{
                   <label> <b>Nama</b> </label> <br></br>
                   <input onChange={this.handleChange} className="inputformlogpintunim" type="text" placeholder="Nama" defaultValue={namac} required ></input>
                 </div>
-                      
+
                 <div className="kotakinputlogpinturuangan">
                   <label><b>Ruangan</b> </label> <br></br>
                   <input name="koderuanganc" onChange={this.handleChange} className="inputformlogpintunim" type="text" placeholder="Ruangan" required ></input>
@@ -400,16 +403,24 @@ class Log extends Component{
                 <div className="kotakinputlogpintukelas">
                   <label><b>Kelas</b> </label> <br></br>
                   <input name="kelasc" onChange={this.handleChange} className="inputformlogpintunim" type="text" placeholder="kelas" required ></input>
-                </div>                
+                </div>
 
                 <div className="kotakinputlogpintucheckedtm">
                   <label> <b>Waktu dan Tanggal</b>  </label> <br></br>
                   <input name="waktuc" onChange={this.handleChange} className="inputformlogpintucheckedtm" type="datetime-local" required></input>
-                </div> 
-                      
+                </div>
+
                 <div className="kotakinputlogpintustatus">
                   <label> <b>Status</b> </label> <br></br>
                   <select name="statusc" onChange={this.handleChange} className="inputformlogpintustatus" required>
+                    <option value="Mahasiswa"> Mahasiswa</option>
+                    <option value="Dosen"> Dosen </option>
+                  </select>
+                </div>
+
+                <div className="kotakinputlogpintuketerangan">
+                  <label> <b>Keterangan</b> </label> <br></br>
+                  <select name="keteranganc" onChange={this.handleChange} className="inputformlogpintustatus" required>
                     <option value="Hadir"> Hadir</option>
                     <option value="Izin"> Izin </option>
                     <option value="Sakit"> Sakit </option>
@@ -423,23 +434,23 @@ class Log extends Component{
                 <div className="kotakcancelpengguna2">
                   <a onClick={() => this.hideDaftar()}> <span className="cancelformpengguna">Cancel</span></a>
                 </div>
-              </form> 
+              </form>
             </div>
           </div>
         }
-        { (daftar===false)&& 
-        <div>
-          <div className="kotakdaftarruangan">
-            <a onClick={() => this.showDaftar()}>
-              <div className="daftar">
-                <i className="fa fa-plus"></i> 
-                <span><b>Log</b></span>
-              </div>
-            </a>
-          </div>
+        {(daftar === false) &&
           <div>
-            <div className="filtertanggallogpintu">
-              <div className="filtertanggalawallog">
+            <div className="kotakdaftarruangan">
+              <a onClick={() => this.showDaftar()}>
+                <div className="daftar">
+                  <i className="fa fa-plus"></i>
+                  <span><b>Log</b></span>
+                </div>
+              </a>
+            </div>
+            <div>
+              <div className="filtertanggallogpintu">
+                <div className="filtertanggalawallog">
                   <label><b>Tanggal Awal</b> </label> <br></br>
                   <input name="startDateRead" onChange={this.handleChange} className="inputfiltertanggalawallog" type="datetime-local" required ></input>
                 </div>
@@ -473,12 +484,12 @@ class Log extends Component{
           <div className="tampilkanpage">
             <b>Tampilkan&nbsp;&nbsp;</b>
             <select name="limit" onChange={this.handleFilter} className="inputfilterpagelogpintu" required>
-                <option value={10}> 10 </option>
-                <option value={20}> 20 </option>
-                <option value={30}> 30 </option>
-                <option value={40}> 40 </option>
-                <option value={50}> 50 </option>
-                <option value={100}> 100 </option>
+              <option value={10}> 10 </option>
+              <option value={20}> 20 </option>
+              <option value={30}> 30 </option>
+              <option value={40}> 40 </option>
+              <option value={50}> 50 </option>
+              <option value={100}> 100 </option>
             </select>
             <b> &nbsp; dari &nbsp;</b>
             <b>{rowCount}</b>
@@ -500,51 +511,53 @@ class Log extends Component{
                   <th className="matkul" onClick={() => this.filter(page, "kodematkul", ascdsc)}>Kode Mata Kuliah</th>
                   <th className="kelas" onClick={() => this.filter(page, "kelas", ascdsc)}>Kelas</th>
                   <th className="status" onClick={() => this.filter(page, "status", ascdsc)}>Status</th>
+                  <th className="status" onClick={() => this.filter(page, "keterangan", ascdsc)}>Keterangan</th>
                 </tr>
               </thead>
-              {(datakosong === false)&&
-              <tbody className="tbodylog">
-                {data.map(isidata => (
-                  <tr key={i++}>
-                    <td>{waktu(isidata.waktu)}</td>
-                    <td>{isidata.nim}</td>
-                    <td>{isidata.nama}</td>
-                    <td>{isidata.koderuangan}</td>
-                    <td>{isidata.kodematkul}</td>
-                    <td>{isidata.kelas}</td>
-                    <td>{isidata.status}</td>
-                  </tr>
-                ))}
-              </tbody>}
-              {(datakosong===true) && 
-              <tbody className="tbodylog">
+              {(datakosong === false) &&
+                <tbody className="tbodylog">
+                  {data.map(isidata => (
+                    <tr key={i++}>
+                      <td>{waktu(isidata.waktu)}</td>
+                      <td>{isidata.nim}</td>
+                      <td>{isidata.nama}</td>
+                      <td>{isidata.koderuangan}</td>
+                      <td>{isidata.kodematkul}</td>
+                      <td>{isidata.kelas}</td>
+                      <td>{isidata.status}</td>
+                      <td>{isidata.keterangan}</td>
+                    </tr>
+                  ))}
+                </tbody>}
+              {(datakosong === true) &&
+                <tbody className="tbodylog">
                   <tr>
-                    <td colSpan="6">Data tidak ditemukan</td>
+                    <td colSpan="8">Data tidak ditemukan</td>
                   </tr>
-              </tbody>}
+                </tbody>}
             </table>
-          </div> 
+          </div>
           <div className="marginbottom20px"></div>
           <div className="pagedata">
-            { showPrevious&& 
-              <button className="pagesebelumnya" onClick={() => this.filter((page-1),sortby,ascdsc)}>≪ Sebelumnya</button>
+            {showPrevious &&
+              <button className="pagesebelumnya" onClick={() => this.filter((page - 1), sortby, ascdsc)}>≪ Sebelumnya</button>
             }
-            { (showPrevious===false)&& 
+            {(showPrevious === false) &&
               <button className="pagesebelumnyanone">≪ Sebelumnya</button>
             }
             {
-              showNext&&
-              <button className="pageberikutnya" onClick={() => this.filter((page+1),sortby,ascdsc)}>Berikutnya ≫</button>
+              showNext &&
+              <button className="pageberikutnya" onClick={() => this.filter((page + 1), sortby, ascdsc)}>Berikutnya ≫</button>
             }
             {
-              (showNext===false)&&
+              (showNext === false) &&
               <button className="pageberikutnyanone">Berikutnya ≫</button>
             }
           </div>
         </div>
       </div>
     )
-  } 
+  }
 }
 
 export default withRouter(Log);

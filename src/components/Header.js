@@ -8,53 +8,52 @@ class Header extends Component {
         window.location.reload()
     }
     render(){
-        function Statistik(){
-            return(<span><b>Statistik</b></span>)
+        function NameHeader(){
+            if (window.location.pathname==="/statistik"){
+                return(<span><b>Statistik</b></span>)
+            }
+            else if (window.location.pathname==="/log"){
+                return(<span><b>Log</b></span>)
+            }
+            else if (window.location.pathname==="/mahasiswa"){
+                return(<span><b>Mahasiswa</b></span>)
+            }
+            else if (window.location.pathname==="/dosen"){
+                return(<span><b>Dosen</b></span>)
+            }
+            else if (window.location.pathname==="/ruangan"){
+                return(<span><b>Ruangan</b></span>)
+            }
+            else if (window.location.pathname==="/matakuliah"){
+                return(<span><b>Mata Kuliah</b></span>)
+            }
+            else if (window.location.pathname==="/fakultas"){
+                return(<span><b>Fakultas</b></span>)
+            }
+            else if (window.location.pathname==="/laporan"){
+                return(<span><b>Laporan</b></span>)
+            }
+            else if (window.location.pathname==="/bantuan"){
+                return(<span><b>Bantuan</b></span>)
+            }
+            else if (window.location.pathname==="/"){
+                return(<span><b>Home</b></span>)
+            }
+            else {
+                return(<span><b>NOT FOUND</b></span>)
+            }
         }
-        function Log(){
-            return(<span><b>Log</b></span>)
-        }
-        function Pengguna(){
-            return(<span><b>Pengguna</b></span>)
-        }
-        function Ruangan(){
-            return(<span><b>Ruangan</b></span>)
-        }
-        function Matakuliah(){
-            return(<span><b>Mata kuliah</b></span>)
-        }
-        function Fakultas(){
-            return(<span><b>Fakultas</b></span>)
-        }
-        function Laporan(){
-            return(<span><b>Laporan</b></span>)
-        }
-        function Bantuan(){
-            return(<span><b>Bantuan</b></span>)
-        }
-        function Home(){
-            return(<span><b>Home</b></span>)
-        }
+        
         return (
             <header className="main-header">
                 <Link to="/" className="logo">
                     <span className="logo-mini"><b>ITB</b></span>
                     <span className="logo-lg"><span>Institut Teknologi Bandung</span></span>
                 </Link>
-                <nav className="navbar navbar-static-top">
+                <div className="navbar navbar-static-top">
                     <a className="sidebar-toggle" data-toggle="push-menu" role="button"></a>
                     <span className="judulhalaman">
-                        <Switch>
-                            <Route path="/statistik" component={Statistik} />
-                            <Route path="/log" component={Log} />
-                            <Route path="/pengguna" component={Pengguna} />
-                            <Route path="/ruangan" component={Ruangan} />
-                            <Route path="/matakuliah" component={Matakuliah} />
-                            <Route path="/fakultas" component={Fakultas} />
-                            <Route path="/laporan" component={Laporan} />
-                            <Route path="/bantuan" component={Bantuan} />
-                            <Route exact path="/" component={Home} />
-                        </Switch>
+                        {NameHeader()}
                         <span>
                             <a onClick={this.isLogout}>
                                 <div className="kotaklogout">
@@ -64,8 +63,7 @@ class Header extends Component {
                             </a>
                        </span>
                     </span>
-                    
-                </nav>
+                </div>
             </header>
         )
     }
