@@ -57,7 +57,6 @@ export default class Login extends React.Component {
         })
             .then(response => response.json())
             .then(response => {
-                console.log(response)
                 if (response.status === 0) {
                     this.setState({ gagal: true })
                     this.setState({ pesan: '*username or password is incorrect' })
@@ -78,7 +77,6 @@ export default class Login extends React.Component {
         const { isLogin } = this.state
         document.title = "Login"
         const { gagal } = this.state;
-        console.log(gagal)
         return (
             <div className="login">
                 <div className="backgroundlogin"></div>

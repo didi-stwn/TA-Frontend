@@ -110,6 +110,11 @@ class Laporan extends Component {
                 }
             })
 
+            .catch(error => {
+                sessionStorage.removeItem("name")
+                window.location.reload()
+              })
+
         function getDateArray(start, end) {
             var hasil = [];
             var startdatee = new Date(start);

@@ -14,7 +14,7 @@ class Fakultas extends Component {
       page: 1,
       rowCount: 0,
       data: [],
-      datakosong: false,
+      datakosong: true,
       daftar: false,
       edit: false,
 
@@ -70,6 +70,10 @@ class Fakultas extends Component {
           sessionStorage.removeItem("name")
           window.location.reload()
         }
+      })
+      .catch(error => {
+        sessionStorage.removeItem("name")
+        window.location.reload()
       })
   }
 
@@ -155,6 +159,10 @@ class Fakultas extends Component {
           window.location.reload()
         }
       })
+      .catch(error => {
+        sessionStorage.removeItem("name")
+        window.location.reload()
+      })
   }
 
   handleSubmitEdit(e) {
@@ -193,6 +201,10 @@ class Fakultas extends Component {
           window.location.reload()
         }
       })
+      .catch(error => {
+        sessionStorage.removeItem("name")
+        window.location.reload()
+      })
   }
 
   deletePengguna(a, b) {
@@ -212,6 +224,10 @@ class Fakultas extends Component {
         .then(response => response.json())
         .then(response => {
           setTimeout(this.componentDidMount(), 1000)
+        })
+        .catch(error => {
+          sessionStorage.removeItem("name")
+          window.location.reload()
         })
     }
   }

@@ -4333,6 +4333,67 @@ a:focus {
   }
 }
 
+.backmatkul{
+  background-color: rgb(0, 0, 100);
+  width: 100px;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 8px;
+  height: 27px;
+  font-size: 15px;
+  color: white;
+  border: 2px solid rgb(0, 0, 100);
+}
+.backmatkul:hover{
+  background-color: white;
+  color: rgb(0, 0, 100);
+  border: 2px solid rgb(0, 0, 100);
+}
+.daftarmatkul{
+  background-color: rgb(0, 0, 100);
+  width: 200px;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 8px;
+  height: 27px;
+  font-size: 15px;
+  color: white;
+  border: 2px solid rgb(0, 0, 100);
+}
+.daftarmatkul:hover{
+  background-color: white;
+  color: rgb(0, 0, 100);
+  border: 2px solid rgb(0, 0, 100);
+}
+
+.kotakbackmatkul{
+  margin: 0px;
+}
+.kotakdaftarmatkul{
+  margin-top: -27px;
+  margin-left: 120px;
+  margin-bottom: 20px;
+}
+
+@media(max-width:767px){
+  .kotakbackmatkul{
+    margin-top: 50px;
+    margin-left: 0px;
+  }
+  .kotakdaftarmatkul{
+    margin-top: -27px;
+  }
+}
+@media(max-width:360px){
+  .kotakdaftarmatkul{
+    margin-top: 20px;
+    margin-left: 0px;
+  }
+  .daftarmatkul{
+    width: 100%
+  }
+}
+
 .daftarfakultas{
   background-color: rgb(0, 0, 100);
   width: 200px;
@@ -4489,6 +4550,50 @@ a:focus {
   color: rgb(0, 0, 100);
   border: 2px solid rgb(0, 0, 100);
 }
+.inputcreatestatuspenggunamatkul{
+  margin-top: 0px;
+  margin-left: 0%;
+}
+.inputcreatenimpenggunamatkul{
+  margin-top: -58px;
+  margin-left: 28%;
+}
+.inputcreatenamapenggunamatkul{
+  margin-top: -56px;
+  margin-left: 56%;
+}
+.inputcreatepenggunamatkul{
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: solid 1px rgb(0, 0, 100);
+  font-size: 13px;
+  width: 180px;
+  background-color: white
+}
+
+@media(max-width:988px){
+  .inputcreatenimpenggunamatkul{
+    margin-left: 34%;
+  }
+  .inputcreatenamapenggunamatkul{
+    margin-left: 68%;
+  }
+}
+
+@media(max-width:861px){
+  .inputcreatepenggunamatkul{
+    width: 100%;
+  }
+  .inputcreatenimpenggunamatkul{
+    margin-top: 20px;
+    margin-left: 0%;
+  }
+  .inputcreatenamapenggunamatkul{
+    margin-top: 20px;
+    margin-left: 0%;
+  }
+}
 
 .inputfilterruangan{
   border-top: none;
@@ -4617,7 +4722,95 @@ a:focus {
   width: 120px;
   margin-bottom: 30px;
 }
+.kotakmenumatkul{
+  margin: 0px;
+  margin-bottom: 20px;
+}
+.kotakmenumatkulpengguna{
+  position: absolute;
+  margin-top: -47px;
+  margin-left: 190px;
+}
+.kotakmenumatkulruangan{
+  position: absolute;
+  margin-top: -47px;
+  margin-left: 380px;
+}
 
+.menumatkuldipilih{
+  background-color: white;
+  width: 170px;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 8px;
+  height: 27px;
+  font-size: 15px;
+  color: rgb(0, 0, 100);
+  border: 2px solid rgb(0, 0, 100);
+}
+
+.menumatkultidakdipilih{
+  background-color: rgb(0, 0, 100);
+  width: 170px;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 8px;
+  height: 27px;
+  font-size: 15px;
+  color: white;
+  border: 2px solid rgb(0, 0, 100);
+}
+.menumatkultidakdipilih:hover{
+  background-color: white;
+  color: rgb(0, 0, 100);
+  border: 2px solid rgb(0, 0, 100);
+}
+
+@media(max-width:767px){
+  .kotakmenumatkul{
+    margin-top: 50px;
+    margin-bottom: -30px;
+  }
+  .kotakmenumatkulpengguna{
+    margin-top: 3px;
+  }
+  .kotakmenumatkulruangan{
+    margin-top: 3px;
+  }
+}
+@media(max-width:600px){
+  .kotakmenumatkul{
+    margin-bottom: 70px;
+  }
+  .kotakmenumatkulpengguna{
+    margin-top: -97px;
+  }
+  .kotakmenumatkulruangan{
+    margin-top: -53px;
+    margin-left: 0px;
+  }
+}
+@media(max-width:390px){
+  .kotakmenumatkul{
+    margin-bottom: 10px;
+  }
+  .kotakmenumatkulpengguna{
+    position: relative;
+    margin-left: 0px;
+    margin-top: 13px;
+  }
+  .kotakmenumatkulruangan{
+    position: relative;
+    margin-top: 13px;
+    margin-bottom: -20px;
+  }
+  .menumatkuldipilih{
+    width: 100%;
+  }
+  .menumatkultidakdipilih{
+    width: 100%;
+  }
+}
 .kotakdaftarruangan2{
   height: auto;
   width: 120px;
@@ -4677,6 +4870,44 @@ a:focus {
   .kotakdaftarruangan{
     margin-top: 50px;
   }
+}
+.texttebal{
+  font-weight: bold;
+  color: rgb(0, 0, 100);
+  font-size: 15px;
+  margin-right: 10px;
+}
+
+.inputpenggunamatkul{
+  border: none;
+  border-bottom: solid 1px rgb(0, 0, 100);
+  background-color: transparent;
+  width: 90px;
+  color: rgb(0, 0, 100);
+  margin-right: 20px;
+  font-size: 13px;
+}
+.buttonpenggunamatkul{
+  background-color: rgb(0, 0, 100);
+  width: 50px;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 8px;
+  height: 27px;
+  font-size: 15px;
+  color: white;
+  border: 2px solid rgb(0, 0, 100);
+}
+.buttonpenggunamatkul:hover{
+  background-color: white;
+  color: rgb(0, 0, 100);
+  border: 2px solid rgb(0, 0, 100);
+}
+.kotakpenggunamatakuliah{
+  margin-top: 30vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .cariidruangan{
   max-width: 50px;

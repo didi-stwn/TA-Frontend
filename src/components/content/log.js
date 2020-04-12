@@ -16,7 +16,7 @@ class Log extends Component {
       endDateRead: null,
       rowCount: 0,
       data: [],
-      datakosong: false,
+      datakosong: true,
       daftar: false,
 
       //create
@@ -104,17 +104,21 @@ class Log extends Component {
           window.location.reload()
         }
       })
+      .catch(error => {
+        sessionStorage.removeItem("name")
+        window.location.reload()
+      })
   }
 
   handleFilter(e) {
     const { startDateRead, endDateRead, sortby, ascdsc, search, limit, page } = this.state
     const { name, value } = e.target;
     this.setState({ [name]: value });
-    if (name == "search") {
+    if (name === "search") {
       var searching = value
       var max = limit
     }
-    else if (name == "limit") {
+    else if (name === "limit") {
       searching = search
       max = value
     }
@@ -159,6 +163,10 @@ class Log extends Component {
             sessionStorage.removeItem("name")
             window.location.reload()
           }
+        })
+        .catch(error => {
+          sessionStorage.removeItem("name")
+          window.location.reload()
         })
     }
     else {
@@ -247,6 +255,10 @@ class Log extends Component {
           window.location.reload()
         }
       })
+      .catch(error => {
+        sessionStorage.removeItem("name")
+        window.location.reload()
+      })
   }
 
   handleSubmitDelete(e) {
@@ -273,6 +285,10 @@ class Log extends Component {
         .then(response => {
           // window.alert(response.pesan)
           setTimeout(this.componentDidMount(), 1000)
+        })
+        .catch(error => {
+          sessionStorage.removeItem("name")
+          window.location.reload()
         })
     }
   }

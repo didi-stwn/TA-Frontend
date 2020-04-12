@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import get from './config';
 import { stat } from 'fs';
 
-class Pengguna extends Component {
+class Mahasiswa extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -23,7 +23,7 @@ class Pengguna extends Component {
       jurusan: [],
       jurusankosong: true,
       data: [],
-      datakosong: false,
+      datakosong: true,
       daftar: false,
       edit: false,
       //create
@@ -108,6 +108,10 @@ class Pengguna extends Component {
             window.location.reload()
           }
         })
+        .catch(error => {
+          sessionStorage.removeItem("name")
+          window.location.reload()
+        })
     }
     else if (pageshow === "filterpengguna") {
       fetch(get.readfilterpengguna, {
@@ -143,6 +147,10 @@ class Pengguna extends Component {
             window.location.reload()
           }
         })
+        .catch(error => {
+          sessionStorage.removeItem("name")
+          window.location.reload()
+        })
     }
   }
 
@@ -172,6 +180,10 @@ class Pengguna extends Component {
           sessionStorage.removeItem("name")
           window.location.reload()
         }
+      })
+      .catch(error => {
+        sessionStorage.removeItem("name")
+        window.location.reload()
       })
   }
 
@@ -209,6 +221,10 @@ class Pengguna extends Component {
             sessionStorage.removeItem("name")
             window.location.reload()
           }
+        })
+        .catch(error => {
+          sessionStorage.removeItem("name")
+          window.location.reload()
         })
     }
   }
@@ -342,6 +358,10 @@ class Pengguna extends Component {
           window.location.reload()
         }
       })
+      .catch(error => {
+        sessionStorage.removeItem("name")
+        window.location.reload()
+      })
   }
 
   getFinger1() {
@@ -362,6 +382,7 @@ class Pengguna extends Component {
             this.deleteDataFinger(kodedevice)
             this.setState({ finger1: '-' })
             this.setState({ pesandevice: false })
+            this.setState({ pesandevicenotfound: false })
 
             this.interval = setInterval(() => {
               fetch(get.readfinger + "/" + kodedevice, {
@@ -395,6 +416,10 @@ class Pengguna extends Component {
                     window.location.reload()
                   }
                 })
+                .catch(error => {
+                  sessionStorage.removeItem("name")
+                  window.location.reload()
+                })
             }, 2000);
           }
           //tidak berhasil get data
@@ -408,6 +433,10 @@ class Pengguna extends Component {
             window.location.reload()
           }
         })
+        .catch(error => {
+          sessionStorage.removeItem("name")
+          window.location.reload()
+        })
     }
     else {
       this.setState({ pesandevice: true })
@@ -416,8 +445,8 @@ class Pengguna extends Component {
   }
 
   getFinger2() {
-    const { kodedevice } = this.state
-    if (kodedevice !== '') {
+    const { kodedevice, finger1 } = this.state
+    if ((kodedevice !== '') && ((finger1 !== '') && (finger1 !== '-'))) {
       fetch(get.checkdevice + "/" + kodedevice, {
         method: 'get',
         headers: {
@@ -433,6 +462,7 @@ class Pengguna extends Component {
             this.deleteDataFinger(kodedevice)
             this.setState({ finger2: '-' })
             this.setState({ pesandevice: false })
+            this.setState({ pesandevicenotfound: false })
 
             this.interval = setInterval(() => {
               fetch(get.readfinger + "/" + kodedevice, {
@@ -466,6 +496,10 @@ class Pengguna extends Component {
                     window.location.reload()
                   }
                 })
+                .catch(error => {
+                  sessionStorage.removeItem("name")
+                  window.location.reload()
+                })
             }, 2000);
           }
           //tidak berhasil get data
@@ -479,10 +513,10 @@ class Pengguna extends Component {
             window.location.reload()
           }
         })
-    }
-    else {
-      this.setState({ pesandevice: true })
-      this.setState({ pesandevicenotfound: false })
+        .catch(error => {
+          sessionStorage.removeItem("name")
+          window.location.reload()
+        })
     }
   }
 
@@ -527,6 +561,10 @@ class Pengguna extends Component {
             window.location.reload()
           }
         })
+        .catch(error => {
+          sessionStorage.removeItem("name")
+          window.location.reload()
+        })
     }
     else if (pageshow === 'filterpengguna') {
       fetch(get.createfilterpengguna, {
@@ -562,6 +600,10 @@ class Pengguna extends Component {
             sessionStorage.removeItem("name")
             window.location.reload()
           }
+        })
+        .catch(error => {
+          sessionStorage.removeItem("name")
+          window.location.reload()
         })
     }
   }
@@ -604,6 +646,10 @@ class Pengguna extends Component {
           window.location.reload()
         }
       })
+      .catch(error => {
+        sessionStorage.removeItem("name")
+        window.location.reload()
+      })
   }
 
   deletePengguna(a) {
@@ -622,6 +668,10 @@ class Pengguna extends Component {
         .then(response => response.json())
         .then(response => {
           setTimeout(this.componentDidMount(), 1000)
+        })
+        .catch(error => {
+          sessionStorage.removeItem("name")
+          window.location.reload()
         })
     }
   }
@@ -646,6 +696,10 @@ class Pengguna extends Component {
         .then(response => {
           console.log(response)
           setTimeout(this.componentDidMount(), 1000)
+        })
+        .catch(error => {
+          sessionStorage.removeItem("name")
+          window.location.reload()
         })
     }
   }
@@ -680,6 +734,10 @@ class Pengguna extends Component {
           sessionStorage.removeItem("name")
           window.location.reload()
         }
+      })
+      .catch(error => {
+        sessionStorage.removeItem("name")
+        window.location.reload()
       })
   }
 
@@ -717,6 +775,10 @@ class Pengguna extends Component {
             window.location.reload()
           }
         })
+        .catch(error => {
+          sessionStorage.removeItem("name")
+          window.location.reload()
+        })
     }
     else {
       this.setState({ namamatkulfilterc: '' })
@@ -733,6 +795,13 @@ class Pengguna extends Component {
     this.setState({ databenar: false })
     this.setState({ finger1: '' })
     this.setState({ finger2: '' })
+    this.setState({ kodedevice: '' })
+    this.setState({ pesandevice: false })
+    this.setState({ pesandevicenotfound: false })
+    this.setState({ pesanfinger1: false })
+    this.setState({ pesanfinger2: false })
+    this.componentWillUnmount()
+
   }
   showDaftarFilter() {
     this.setState({ daftarfilter: true })
@@ -741,6 +810,7 @@ class Pengguna extends Component {
     this.setState({ daftarfilter: false })
     this.setState({ datasalah: false })
     this.setState({ databenar: false })
+    this.setState({ namamatkulfilterc: '' })
   }
   showEdit(a, b, c, d, e) {
     this.setState({ edit: true })
@@ -768,6 +838,9 @@ class Pengguna extends Component {
     const { sortby, ascdsc, search, limit, page } = this.state
     this.setState({ pageshow: a })
     this.getData(a, sortby, ascdsc, search, limit, page)
+  }
+  componentWillUnmount() {
+    clearInterval(this.interval);
   }
   render() {
     const state = this.state
@@ -991,7 +1064,7 @@ class Pengguna extends Component {
 
                 <div className="kotakinputfilterpenggunanamamatkul">
                   <label><b>Nama Matakuliah</b> </label> <br></br>
-                  <input value={state.namamatkulfilterc} onChange={this.handleChange} className="inputformlogpintujurusan" type="text" placeholder="Kode Matkul..." required ></input>
+                  <input value={state.namamatkulfilterc} onChange={this.handleChange} className="inputformlogpintujurusan" type="text" placeholder="Nama Matkul..." required ></input>
                 </div>
 
                 <div className="kotakinputfilterpenggunakelas">
@@ -1269,4 +1342,4 @@ class Pengguna extends Component {
   }
 }
 
-export default withRouter(Pengguna);
+export default withRouter(Mahasiswa);

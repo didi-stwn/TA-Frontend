@@ -56,6 +56,8 @@ const s = {
     deletefakultasjurusan: url + "/fakultasjurusan/delete",
 
     //matkul
+    readpenggunamatkul: url + "/matkul/read/pengguna",
+    readruanganmatkul: url + "/matkul/read/ruangan",
     readmatkul: url + "/matkul/read",
     creatematkul: url + "/matkul/create",
     updatematkul: url + "/matkul/update",

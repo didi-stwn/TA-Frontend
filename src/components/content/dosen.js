@@ -23,7 +23,7 @@ class Dosen extends Component {
             jurusan: [],
             jurusankosong: true,
             data: [],
-            datakosong: false,
+            datakosong: true,
             daftar: false,
             edit: false,
             //create
@@ -108,6 +108,10 @@ class Dosen extends Component {
                         window.location.reload()
                     }
                 })
+                .catch(error => {
+                    sessionStorage.removeItem("name")
+                    window.location.reload()
+                  })
         }
         else if (pageshow === "filterdosen") {
             fetch(get.readfilterdosen, {
@@ -143,6 +147,10 @@ class Dosen extends Component {
                         window.location.reload()
                     }
                 })
+                .catch(error => {
+                    sessionStorage.removeItem("name")
+                    window.location.reload()
+                  })
         }
     }
 
@@ -173,6 +181,10 @@ class Dosen extends Component {
                     window.location.reload()
                 }
             })
+            .catch(error => {
+                sessionStorage.removeItem("name")
+                window.location.reload()
+              })
     }
 
     getJurusan(e) {
@@ -210,6 +222,10 @@ class Dosen extends Component {
                         window.location.reload()
                     }
                 })
+                .catch(error => {
+                    sessionStorage.removeItem("name")
+                    window.location.reload()
+                  })
         }
     }
 
@@ -342,150 +358,168 @@ class Dosen extends Component {
                     window.location.reload()
                 }
             })
+            .catch(error => {
+                sessionStorage.removeItem("name")
+                window.location.reload()
+              })
     }
 
     getFinger1() {
         const { kodedevice } = this.state
-        // if (kodedevice !== '') {
-        //     fetch(get.checkdevice + "/" + kodedevice, {
-        //         method: 'get',
-        //         headers: {
-        //             // "x-access-token" : sessionStorage.name,
-        //             "Content-Type": "application/json"
-        //         }
-        //     })
-        //         .then(response => response.json())
-        //         .then(response => {
-        //             //berhasil get data
-        //             if (response.status === 1) {
-        //                 this.setState({ pesanfinger1: true })
-        //                 this.deleteDataFinger(kodedevice)
-        //                 this.setState({ finger1: '-' })
-        //                 this.setState({ pesandevice: false })
+        if (kodedevice !== '') {
+            fetch(get.checkdevice + "/" + kodedevice, {
+                method: 'get',
+                headers: {
+                    // "x-access-token" : sessionStorage.name,
+                    "Content-Type": "application/json"
+                }
+            })
+                .then(response => response.json())
+                .then(response => {
+                    //berhasil get data
+                    if (response.status === 1) {
+                        this.setState({ pesanfinger1: true })
+                        this.deleteDataFinger(kodedevice)
+                        this.setState({ finger1: '-' })
+                        this.setState({ pesandevice: false })
+                        this.setState({ pesandevicenotfound: false })
 
-        //                 this.interval = setInterval(() => {
-        //                     fetch(get.readfinger + "/" + kodedevice, {
-        //                         method: 'get',
-        //                         headers: {
-        //                             // "x-access-token" : sessionStorage.name,
-        //                             "Content-Type": "application/json"
-        //                         }
-        //                     })
-        //                         .then(response => response.json())
-        //                         .then(response => {
-        //                             console.log(response)
-        //                             //berhasil get data
-        //                             if (response.status === 1) {
-        //                                 if (response.hasil.length !== 0) {
-        //                                     this.setState({ finger1: response.hasil[0].template })
-        //                                     this.setState({ pesanfinger1: false })
-        //                                     clearInterval(this.interval);
-        //                                 }
-        //                                 else {
-        //                                     this.setState({ finger1: '-' })
-        //                                 }
-        //                             }
-        //                             //tidak berhasil get data
-        //                             else if (response.status === 0) {
-        //                                 this.setState({ finger1: '-' })
-        //                             }
-        //                             //ga ada token
-        //                             else {
-        //                                 sessionStorage.removeItem("name")
-        //                                 window.location.reload()
-        //                             }
-        //                         })
-        //                 }, 2000);
-        //             }
-        //             //tidak berhasil get data
-        //             else if (response.status === 0) {
-        //                 this.setState({ pesandevice: false })
-        //                 this.setState({ pesandevicenotfound: true })
-        //             }
-        //             //ga ada token
-        //             else {
-        //                 sessionStorage.removeItem("name")
-        //                 window.location.reload()
-        //             }
-        //         })
-        // }
-        // else {
-        //     this.setState({ pesandevice: true })
-        //     this.setState({ pesandevicenotfound: false })
-        // }
-        this.setState({ finger1: '-' })
+                        this.interval = setInterval(() => {
+                            fetch(get.readfinger + "/" + kodedevice, {
+                                method: 'get',
+                                headers: {
+                                    // "x-access-token" : sessionStorage.name,
+                                    "Content-Type": "application/json"
+                                }
+                            })
+                                .then(response => response.json())
+                                .then(response => {
+                                    console.log(response)
+                                    //berhasil get data
+                                    if (response.status === 1) {
+                                        if (response.hasil.length !== 0) {
+                                            this.setState({ finger1: response.hasil[0].template })
+                                            this.setState({ pesanfinger1: false })
+                                            clearInterval(this.interval);
+                                        }
+                                        else {
+                                            this.setState({ finger1: '-' })
+                                        }
+                                    }
+                                    //tidak berhasil get data
+                                    else if (response.status === 0) {
+                                        this.setState({ finger1: '-' })
+                                    }
+                                    //ga ada token
+                                    else {
+                                        sessionStorage.removeItem("name")
+                                        window.location.reload()
+                                    }
+                                })
+                                .catch(error => {
+                                    sessionStorage.removeItem("name")
+                                    window.location.reload()
+                                  })
+                        }, 2000);
+                    }
+                    //tidak berhasil get data
+                    else if (response.status === 0) {
+                        this.setState({ pesandevice: false })
+                        this.setState({ pesandevicenotfound: true })
+                    }
+                    //ga ada token
+                    else {
+                        sessionStorage.removeItem("name")
+                        window.location.reload()
+                    }
+                })
+                .catch(error => {
+                    sessionStorage.removeItem("name")
+                    window.location.reload()
+                  })
+        }
+        else {
+            this.setState({ pesandevice: true })
+            this.setState({ pesandevicenotfound: false })
+        }
+        // this.setState({ finger1: '-' })
     }
 
     getFinger2() {
-        const { kodedevice } = this.state
-        // if (kodedevice !== '') {
-        //     fetch(get.checkdevice + "/" + kodedevice, {
-        //         method: 'get',
-        //         headers: {
-        //             // "x-access-token" : sessionStorage.name,
-        //             "Content-Type": "application/json"
-        //         }
-        //     })
-        //         .then(response => response.json())
-        //         .then(response => {
-        //             //berhasil get data
-        //             if (response.status === 1) {
-        //                 this.setState({ pesanfinger2: true })
-        //                 this.deleteDataFinger(kodedevice)
-        //                 this.setState({ finger2: '-' })
-        //                 this.setState({ pesandevice: false })
+        const { kodedevice, finger1 } = this.state
+        if ((kodedevice !== '') && ((finger1!=='') && (finger1!=='-'))) {
+            fetch(get.checkdevice + "/" + kodedevice, {
+                method: 'get',
+                headers: {
+                    // "x-access-token" : sessionStorage.name,
+                    "Content-Type": "application/json"
+                }
+            })
+                .then(response => response.json())
+                .then(response => {
+                    //berhasil get data
+                    if (response.status === 1) {
+                        this.setState({ pesanfinger2: true })
+                        this.deleteDataFinger(kodedevice)
+                        this.setState({ finger2: '-' })
+                        this.setState({ pesandevice: false })
+                        this.setState({ pesandevicenotfound: false })
 
-        //                 this.interval = setInterval(() => {
-        //                     fetch(get.readfinger + "/" + kodedevice, {
-        //                         method: 'get',
-        //                         headers: {
-        //                             // "x-access-token" : sessionStorage.name,
-        //                             "Content-Type": "application/json"
-        //                         }
-        //                     })
-        //                         .then(response => response.json())
-        //                         .then(response => {
-        //                             console.log(response)
-        //                             //berhasil get data
-        //                             if (response.status === 1) {
-        //                                 if (response.hasil.length !== 0) {
-        //                                     this.setState({ finger2: response.hasil[0].template })
-        //                                     this.setState({ pesanfinger2: false })
-        //                                     clearInterval(this.interval);
-        //                                 }
-        //                                 else {
-        //                                     this.setState({ finger2: '-' })
-        //                                 }
-        //                             }
-        //                             //tidak berhasil get data
-        //                             else if (response.status === 0) {
-        //                                 this.setState({ finger2: '-' })
-        //                             }
-        //                             //ga ada token
-        //                             else {
-        //                                 sessionStorage.removeItem("name")
-        //                                 window.location.reload()
-        //                             }
-        //                         })
-        //                 }, 2000);
-        //             }
-        //             //tidak berhasil get data
-        //             else if (response.status === 0) {
-        //                 this.setState({ pesandevice: false })
-        //                 this.setState({ pesandevicenotfound: true })
-        //             }
-        //             //ga ada token
-        //             else {
-        //                 sessionStorage.removeItem("name")
-        //                 window.location.reload()
-        //             }
-        //         })
-        // }
-        // else {
-        //     this.setState({ pesandevice: true })
-        //     this.setState({ pesandevicenotfound: false })
-        // }
-        this.setState({ finger2: '-' })
+                        this.interval = setInterval(() => {
+                            fetch(get.readfinger + "/" + kodedevice, {
+                                method: 'get',
+                                headers: {
+                                    // "x-access-token" : sessionStorage.name,
+                                    "Content-Type": "application/json"
+                                }
+                            })
+                                .then(response => response.json())
+                                .then(response => {
+                                    console.log(response)
+                                    //berhasil get data
+                                    if (response.status === 1) {
+                                        if (response.hasil.length !== 0) {
+                                            this.setState({ finger2: response.hasil[0].template })
+                                            this.setState({ pesanfinger2: false })
+                                            clearInterval(this.interval);
+                                        }
+                                        else {
+                                            this.setState({ finger2: '-' })
+                                        }
+                                    }
+                                    //tidak berhasil get data
+                                    else if (response.status === 0) {
+                                        this.setState({ finger2: '-' })
+                                    }
+                                    //ga ada token
+                                    else {
+                                        sessionStorage.removeItem("name")
+                                        window.location.reload()
+                                    }
+                                })
+                                .catch(error => {
+                                    sessionStorage.removeItem("name")
+                                    window.location.reload()
+                                  })
+                        }, 2000);
+                    }
+                    //tidak berhasil get data
+                    else if (response.status === 0) {
+                        this.setState({ pesandevice: false })
+                        this.setState({ pesandevicenotfound: true })
+                    }
+                    //ga ada token
+                    else {
+                        sessionStorage.removeItem("name")
+                        window.location.reload()
+                    }
+                })
+                .catch(error => {
+                    sessionStorage.removeItem("name")
+                    window.location.reload()
+                  })
+        }
+        // this.setState({ finger2: '-' })
     }
 
     handleSubmitDaftar(e) {
@@ -529,6 +563,10 @@ class Dosen extends Component {
                         window.location.reload()
                     }
                 })
+                .catch(error => {
+                    sessionStorage.removeItem("name")
+                    window.location.reload()
+                  })
         }
         else if (pageshow === "filterdosen") {
             fetch(get.createfilterdosen, {
@@ -565,6 +603,10 @@ class Dosen extends Component {
                         window.location.reload()
                     }
                 })
+                .catch(error => {
+                    sessionStorage.removeItem("name")
+                    window.location.reload()
+                  })
         }
     }
 
@@ -606,6 +648,10 @@ class Dosen extends Component {
                     window.location.reload()
                 }
             })
+            .catch(error => {
+                sessionStorage.removeItem("name")
+                window.location.reload()
+              })
     }
 
     deletePengguna(a) {
@@ -625,6 +671,10 @@ class Dosen extends Component {
                 .then(response => {
                     setTimeout(this.componentDidMount(), 1000)
                 })
+                .catch(error => {
+                    sessionStorage.removeItem("name")
+                    window.location.reload()
+                  })
         }
     }
 
@@ -649,6 +699,10 @@ class Dosen extends Component {
                     console.log(response)
                     setTimeout(this.componentDidMount(), 1000)
                 })
+                .catch(error => {
+                    sessionStorage.removeItem("name")
+                    window.location.reload()
+                  })
         }
     }
 
@@ -683,6 +737,10 @@ class Dosen extends Component {
                     window.location.reload()
                 }
             })
+            .catch(error => {
+                sessionStorage.removeItem("name")
+                window.location.reload()
+              })
     }
 
     getNameMatkulFilter(e) {
@@ -719,6 +777,10 @@ class Dosen extends Component {
                         window.location.reload()
                     }
                 })
+                .catch(error => {
+                    sessionStorage.removeItem("name")
+                    window.location.reload()
+                  })
         }
         else {
             this.setState({ namamatkulfilterc: '' })
@@ -735,6 +797,12 @@ class Dosen extends Component {
         this.setState({ databenar: false })
         this.setState({ finger1: '' })
         this.setState({ finger2: '' })
+        this.setState({ kodedevice: '' })
+        this.setState({ pesandevice: false })
+        this.setState({ pesandevicenotfound: false })
+        this.setState({ pesanfinger1: false })
+        this.setState({ pesanfinger2: false })
+        this.componentWillUnmount()
     }
     showDaftarFilter() {
         this.setState({ daftarfilter: true })
@@ -743,6 +811,7 @@ class Dosen extends Component {
         this.setState({ daftarfilter: false })
         this.setState({ datasalah: false })
         this.setState({ databenar: false })
+        this.setState({ namamatkulfilterc: '' })
     }
     showEdit(a, b, c, d, e) {
         this.setState({ edit: true })
@@ -770,6 +839,9 @@ class Dosen extends Component {
         const { sortby, ascdsc, search, limit, page } = this.state
         this.setState({ pageshow: a })
         this.getData(a, sortby, ascdsc, search, limit, page)
+    }
+    componentWillUnmount() {
+      clearInterval(this.interval);
     }
     render() {
         const state = this.state

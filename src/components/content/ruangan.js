@@ -17,7 +17,7 @@ class Ruangan extends Component {
       page: 1,
       rowCount: 0,
       data: [],
-      datakosong: false,
+      datakosong: true,
       daftar: false,
       edit: false,
       //create
@@ -31,7 +31,7 @@ class Ruangan extends Component {
 
       //Filter Ruangan
       //read
-      hari: [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21],
+      jam_masuk: [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21],
       datafilterruangan: [],
       daftarfilter: false,
       //create
@@ -88,6 +88,10 @@ class Ruangan extends Component {
           sessionStorage.removeItem("name")
           window.location.reload()
         }
+      })
+      .catch(error => {
+        sessionStorage.removeItem("name")
+        window.location.reload()
       })
   }
 
@@ -179,6 +183,10 @@ class Ruangan extends Component {
             window.location.reload()
           }
         })
+        .catch(error => {
+          sessionStorage.removeItem("name")
+          window.location.reload()
+        })
     }
     else if (pageshow === "ruangan") {
       fetch(get.createruangan, {
@@ -213,6 +221,10 @@ class Ruangan extends Component {
             sessionStorage.removeItem("name")
             window.location.reload()
           }
+        })
+        .catch(error => {
+          sessionStorage.removeItem("name")
+          window.location.reload()
         })
     }
   }
@@ -254,6 +266,10 @@ class Ruangan extends Component {
           window.location.reload()
         }
       })
+      .catch(error => {
+        sessionStorage.removeItem("name")
+        window.location.reload()
+      })
   }
 
   deletePengguna(a) {
@@ -272,6 +288,10 @@ class Ruangan extends Component {
         .then(response => response.json())
         .then(response => {
           setTimeout(this.componentDidMount(), 1000)
+        })
+        .catch(error => {
+          sessionStorage.removeItem("name")
+          window.location.reload()
         })
     }
   }
@@ -294,6 +314,10 @@ class Ruangan extends Component {
         .then(response => {
           setTimeout(this.componentDidMount(), 1000)
         })
+        .catch(error => {
+          sessionStorage.removeItem("name")
+          window.location.reload()
+        })
     }
   }
 
@@ -308,7 +332,6 @@ class Ruangan extends Component {
     })
       .then(response => response.json())
       .then(response => {
-        console.log(response)
         //berhasil dapet data
         if ((response.status === 1) && (response.count !== 0)) {
           this.setState({ datafilterruangan: response.hasil })
@@ -326,6 +349,10 @@ class Ruangan extends Component {
           sessionStorage.removeItem("name")
           window.location.reload()
         }
+      })
+      .catch(error => {
+        sessionStorage.removeItem("name")
+        window.location.reload()
       })
   }
 
@@ -385,6 +412,10 @@ class Ruangan extends Component {
         .then(response => {
           setTimeout(this.getDataFilterRuangan(), 1000)
         })
+        .catch(error => {
+          sessionStorage.removeItem("name")
+          window.location.reload()
+        })
     }
   }
 
@@ -421,6 +452,10 @@ class Ruangan extends Component {
             sessionStorage.removeItem("name")
             window.location.reload()
           }
+        })
+        .catch(error => {
+          sessionStorage.removeItem("name")
+          window.location.reload()
         })
     }
     else {
@@ -477,7 +512,7 @@ class Ruangan extends Component {
         if (b[k].hari === hari) {
           if (b[k].jam === a) {
             c = (<div>
-              <span>{b[k].kodematkul}</span>
+              <span style={{fontWeight:'1000'}}>{b[k].kodematkul}</span>
               <br></br>
               <span>{b[k].namamatkul}</span>
               <br></br>
@@ -491,7 +526,7 @@ class Ruangan extends Component {
           }
           else if ((b[k].jam === a - 1) && (b[k].durasi === 2)) {
             c = (<div>
-              <span>{b[k].kodematkul}</span>
+              <span style={{fontWeight:'1000'}}>{b[k].kodematkul}</span>
               <br></br>
               <span>{b[k].namamatkul}</span>
               <br></br>
@@ -929,8 +964,8 @@ class Ruangan extends Component {
                 </thead>
                 <tbody className="tbodylog">
                   {state.datafilterkosong === false &&
-                    state.hari.map(isidata => (
-                      <tr key={isidata} className="tabletinggi">
+                    state.jam_masuk.map(isidata => (
+                      <tr key={i++} className="tabletinggi">
                         <td className="tablewarnamerah">{jam(isidata, isidata + 1)}</td>
                         <td>{this.getDataMatkulHari(isidata, state.datafilterruangan, 1)}</td>
                         <td>{this.getDataMatkulHari(isidata, state.datafilterruangan, 2)}</td>

@@ -26,14 +26,18 @@ class App extends Component {
           })
           .then (response =>response.json())  
           .then (response =>{ 
-          if (response.status===0){
+            if (response.status===0){
+              sessionStorage.removeItem("name")
+              window.location.reload()
+            }
+            else{
+              sessionStorage.setItem("name",response.token)
+            }
+          })
+          .catch(error => {
             sessionStorage.removeItem("name")
             window.location.reload()
-          }
-          else{
-            sessionStorage.setItem("name",response.token)
-          }
-        })
+          })
       }
 
       // kalau token ga ada

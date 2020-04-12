@@ -17,7 +17,7 @@ class Matakuliah extends Component {
       jurusan: [],
       jurusankosong: true,
       data: [],
-      datakosong: false,
+      datakosong: true,
       daftar: false,
       edit: false,
 
@@ -79,6 +79,10 @@ class Matakuliah extends Component {
           window.location.reload()
         }
       })
+      .catch(error => {
+        sessionStorage.removeItem("name")
+        window.location.reload()
+      })
   }
 
   getFakultas() {
@@ -107,6 +111,10 @@ class Matakuliah extends Component {
           sessionStorage.removeItem("name")
           window.location.reload()
         }
+      })
+      .catch(error => {
+        sessionStorage.removeItem("name")
+        window.location.reload()
       })
   }
 
@@ -144,6 +152,10 @@ class Matakuliah extends Component {
             sessionStorage.removeItem("name")
             window.location.reload()
           }
+        })
+        .catch(error => {
+          sessionStorage.removeItem("name")
+          window.location.reload()
         })
     }
   }
@@ -234,6 +246,10 @@ class Matakuliah extends Component {
           window.location.reload()
         }
       })
+      .catch(error => {
+        sessionStorage.removeItem("name")
+        window.location.reload()
+      })
   }
 
   handleSubmitEdit(e) {
@@ -273,6 +289,10 @@ class Matakuliah extends Component {
           window.location.reload()
         }
       })
+      .catch(error => {
+        sessionStorage.removeItem("name")
+        window.location.reload()
+      })
   }
 
   deletePengguna(a, b, c) {
@@ -293,6 +313,10 @@ class Matakuliah extends Component {
         .then(response => response.json())
         .then(response => {
           setTimeout(this.componentDidMount(), 1000)
+        })
+        .catch(error => {
+          sessionStorage.removeItem("name")
+          window.location.reload()
         })
     }
   }
