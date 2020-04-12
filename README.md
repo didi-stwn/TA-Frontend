@@ -6,12 +6,12 @@ pilih direktori untuk tempat penyimpanan file
 lalu klik kanan dan buka terminal dengan klik "Open in Terminal"
 lalu ketik 
 
-`git clone https://github.com/didi-stwn/Xirka-ServerBaru.git`
+`git clone https://github.com/didi-stwn/TA-Frontend.git`
 
 lalu terminal akan secara otomatis mendownload file yang ada di GitHub
 setelah file selesai diClone, masuk ke direktori folder yang baru di download 
 
-`cd Xirka-ServerBaru`
+`cd TA-Frontend`
 
 atau close terminal lalu buka folder `Xirka-ServerBaru` yang berhasil dibuat tadi
 
@@ -47,13 +47,13 @@ kemudian hapus isi file `ods.js` atau buat file document baru bernama `ods.js` s
 
 kemudian balik ke direktori 
 
-`./Xirka-ServerBaru`
+`./TA-Frontend`
 
 lalu ketik 
 
 `npm start`
 
-lalu tunggu beberapa saat dan buka browser lalu buka buka localhost:8080 atau ip berdasarkan PCnya
+lalu tunggu beberapa saat dan buka browser lalu buka buka localhost:1234 atau ip berdasarkan PCnya
 
 
 
