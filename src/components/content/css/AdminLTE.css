@@ -4367,12 +4367,14 @@ a:focus {
 }
 
 .kotakbackmatkul{
+  max-width: 100px;
   margin: 0px;
 }
 .kotakdaftarmatkul{
   margin-top: -27px;
   margin-left: 120px;
   margin-bottom: 20px;
+  max-width: 200px;
 }
 
 @media(max-width:767px){
@@ -4716,6 +4718,62 @@ a:focus {
 .kotakcanceldevice{
   margin-top: -30px;
   float: right;
+}
+
+.kotakdaftarmatkulruanganhari{
+  margin-top: 0px;
+  margin-left: 0px
+}
+.kotakdaftarmatkulruanganjam{
+  margin-top: -56px;
+  margin-left: 17%;
+}
+.kotakdaftarmatkulruangandurasi{
+  margin-top: -54px;
+  margin-left: 34%;
+}
+.kotakdaftarmatkulruangankoderuangan{
+  margin-top: -58px;
+  margin-left: 51%;
+}
+.kotakdaftarmatkulruanganalamat{
+  margin-top: -56px;
+  margin-left: 68%;
+}
+
+@media(max-width:1225px){
+  .kotakdaftarmatkulruanganjam{
+    margin-left: 30%;
+  }
+  .kotakdaftarmatkulruangandurasi{
+    margin-left: 60%;
+  }
+  .kotakdaftarmatkulruangankoderuangan{
+    margin-top: 20px;
+    margin-left: 20%;
+  }
+  .kotakdaftarmatkulruanganalamat{
+    margin-top: -56px;
+    margin-left: 50%;
+  }
+}
+@media(max-width:988px){
+  .kotakdaftarmatkulruanganjam{
+    margin-top: 20px;
+    margin-left: 0%;
+  }
+  .kotakdaftarmatkulruangandurasi{
+    margin-top: 20px;
+    margin-left: 0%;
+  }
+  .kotakdaftarmatkulruangankoderuangan{
+    margin-top: 20px;
+    margin-left: 0%;
+  }
+  .kotakdaftarmatkulruanganalamat{
+    margin-top: 20px;
+    margin-left: 0%;
+  }
 }
 
 .kotakdaftarruangan{

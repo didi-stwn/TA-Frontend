@@ -23,7 +23,7 @@ class Filter_Matkul_Ruangan extends Component {
             durasic: '',
             koderuanganc: '',
             namamatkulc: '',
-            alamatc:'',
+            alamatc: '',
 
             //status add
             pesan: '',
@@ -104,7 +104,8 @@ class Filter_Matkul_Ruangan extends Component {
                 durasi: durasic,
                 koderuangan: koderuanganc,
                 kodematkul: kodematkul,
-                kelas: kelas
+                kelas: kelas,
+                filter: 'kodematkul'
             })
         })
             .then(response => response.json())
@@ -214,25 +215,13 @@ class Filter_Matkul_Ruangan extends Component {
         if (b.length > 0) {
             for (var k = 0; k < b.length; k++) {
                 if (b[k].hari === hari) {
-                    if (b[k].jam === a) {
+                    if ((b[k].jam + b[k].durasi - 1 >= a) && (a >= b[k].jam)) {
                         out = (<div>
-                            <span style={{fontWeight:'1000'}}>{b[k].koderuangan}</span>
+                            <span style={{ fontWeight: '1000' }}>{b[k].koderuangan}</span>
                             <br></br>
                             <span>{b[k].alamat}</span>
                             <br></br>
-                            <button className="backgroundmerah" onClick={() => { this.deleteData(hari, a, b[k].koderuangan, kodematkul, kelas) }}>
-                                Hapus
-                            </button>
-                        </div>)
-                        break
-                    }
-                    else if ((b[k].jam === a - 1) && (b[k].durasi === 2)) {
-                        out = (<div>
-                            <span style={{fontWeight:'1000'}}>{b[k].koderuangan}</span>
-                            <br></br>
-                            <span>{b[k].alamat}</span>
-                            <br></br>
-                            <button className="backgroundmerah" onClick={() => { this.deleteData(hari, (a - 1), b[k].koderuangan, kodematkul, kelas) }}>
+                            <button className="backgroundmerah" onClick={() => { this.deleteData(hari, b[k].jam, b[k].koderuangan, kodematkul, kelas) }}>
                                 Hapus
                             </button>
                         </div>)
@@ -307,8 +296,8 @@ class Filter_Matkul_Ruangan extends Component {
                     window.location.reload()
                 })
         }
-        else{
-            this.setState({alamatc:''})
+        else {
+            this.setState({ alamatc: '' })
         }
     }
 
@@ -367,7 +356,7 @@ class Filter_Matkul_Ruangan extends Component {
             daftar: false,
             datasalah: false,
             databenar: false,
-            alamatc:''
+            alamatc: ''
         })
     }
 
@@ -423,33 +412,43 @@ class Filter_Matkul_Ruangan extends Component {
                                         <span className="textmerah">{state.pesan}</span>
                                     }
 
-                                    <div className="kotakinputfilterruanganhari">
+                                    <div className="kotakdaftarmatkulruanganhari">
                                         <label><b>Hari</b> </label> <br></br>
-                                        <input onChange={this.handleChange} className="inputfilterruangan" type="text" value={this.getHari(state.haric)} required ></input>
+                                        <input onChange={this.handleChange} className="inputformlogpintujurusan" type="text" value={this.getHari(state.haric)} required ></input>
                                     </div>
 
-                                    <div className="kotakinputfilterruanganjam">
+                                    <div className="kotakdaftarmatkulruanganjam">
                                         <label><b>Jam</b> </label> <br></br>
-                                        <input onChange={this.handleChange} className="inputfilterruangan" type="text" value={this.getJam(state.jamc)} required ></input>
+                                        <input onChange={this.handleChange} className="inputformlogpintujurusan" type="text" value={this.getJam(state.jamc)} required ></input>
                                     </div>
 
-                                    <div className="kotakinputfilterruangandurasi">
+                                    <div className="kotakdaftarmatkulruangandurasi">
                                         <label><b>Durasi</b> </label> <br></br>
-                                        <select name="durasic" onChange={this.handleChange} className="inputfilterruangan" required>
+                                        <select name="durasic" onChange={this.handleChange} className="inputformlogpintujurusan" required>
                                             <option> </option>
                                             <option key={i++} value={1}>1 Jam</option>
                                             <option key={i++} value={2}>2 Jam</option>
+                                            <option key={i++} value={3}>3 Jam</option>
+                                            <option key={i++} value={4}>4 Jam</option>
+                                            <option key={i++} value={5}>5 Jam</option>
+                                            <option key={i++} value={6}>6 Jam</option>
+                                            <option key={i++} value={7}>7 Jam</option>
+                                            <option key={i++} value={8}>8 Jam</option>
+                                            <option key={i++} value={9}>9 Jam</option>
+                                            <option key={i++} value={10}>10 Jam</option>
+                                            <option key={i++} value={11}>11 Jam</option>
+                                            <option key={i++} value={12}>12 Jam</option>
                                         </select>
                                     </div>
 
-                                    <div className="kotakinputfilterruangankodematkul">
+                                    <div className="kotakdaftarmatkulruangankoderuangan">
                                         <label><b>Kode Ruangan</b> </label> <br></br>
-                                        <input name="koderuanganc" onChange={this.getAlamatFilter} className="inputfilterruangan" type="text" placeholder="Kode Ruangan..." required ></input>
+                                        <input name="koderuanganc" onChange={this.getAlamatFilter} className="inputformlogpintujurusan" type="text" placeholder="Kode Ruangan..." required ></input>
                                     </div>
 
-                                    <div className="kotakinputfilterruangannamamatkul">
+                                    <div className="kotakdaftarmatkulruanganalamat">
                                         <label><b>Alamat</b> </label> <br></br>
-                                        <input value={state.alamatc} onChange={this.handleChange} className="inputfilterruangan" type="text" placeholder="Alamat..." required ></input>
+                                        <input value={state.alamatc} onChange={this.handleChange} className="inputformlogpintujurusan" type="text" placeholder="Alamat..." required ></input>
                                     </div>
 
                                     <div className="kotaksubmitpenggunadaftar">

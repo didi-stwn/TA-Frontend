@@ -159,6 +159,7 @@ class Ruangan extends Component {
           koderuangan: koderuanganfilterc,
           kodematkul: kodematkulfilterc,
           kelas: kelasfilterc,
+          filter: 'koderuangan'
         })
       })
         .then(response => response.json())
@@ -510,7 +511,7 @@ class Ruangan extends Component {
     if (b.length > 0) {
       for (var k = 0; k < b.length; k++) {
         if (b[k].hari === hari) {
-          if (b[k].jam === a) {
+          if ((b[k].jam + b[k].durasi - 1 >= a)&&(a>=b[k].jam)) {
             c = (<div>
               <span style={{fontWeight:'1000'}}>{b[k].kodematkul}</span>
               <br></br>
@@ -518,21 +519,7 @@ class Ruangan extends Component {
               <br></br>
               <span>{b[k].kelas}</span>
               <br></br>
-              <button className="backgroundmerah" onClick={() => { this.deleteFilterRuangan(hari, a, b[k].koderuangan, b[k].kodematkul, b[k].kelas) }}>
-                Hapus
-              </button>
-            </div>)
-            break
-          }
-          else if ((b[k].jam === a - 1) && (b[k].durasi === 2)) {
-            c = (<div>
-              <span style={{fontWeight:'1000'}}>{b[k].kodematkul}</span>
-              <br></br>
-              <span>{b[k].namamatkul}</span>
-              <br></br>
-              <span>{b[k].kelas}</span>
-              <br></br>
-              <button className="backgroundmerah" onClick={() => { this.deleteFilterRuangan(hari, (a - 1), b[k].koderuangan, b[k].kodematkul, b[k].kelas) }}>
+              <button className="backgroundmerah" onClick={() => { this.deleteFilterRuangan(hari, b[k].jam, b[k].koderuangan, b[k].kodematkul, b[k].kelas) }}>
                 Hapus
               </button>
             </div>)
@@ -763,6 +750,16 @@ class Ruangan extends Component {
                     <option> </option>
                     <option key={i++} value={1}>1 Jam</option>
                     <option key={i++} value={2}>2 Jam</option>
+                    <option key={i++} value={3}>3 Jam</option>
+                    <option key={i++} value={4}>4 Jam</option>
+                    <option key={i++} value={5}>5 Jam</option>
+                    <option key={i++} value={6}>6 Jam</option>
+                    <option key={i++} value={7}>7 Jam</option>
+                    <option key={i++} value={8}>8 Jam</option>
+                    <option key={i++} value={9}>9 Jam</option>
+                    <option key={i++} value={10}>10 Jam</option>
+                    <option key={i++} value={11}>11 Jam</option>
+                    <option key={i++} value={12}>12 Jam</option>
                   </select>
                 </div>
 
