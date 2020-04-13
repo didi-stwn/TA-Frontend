@@ -26,7 +26,7 @@ class Log extends Component {
       koderuanganc: '',
       kodematkulc: '',
       kelasc: '',
-      statusc: 'Mahasiswa',
+      statusc: '',
       keteranganc: 'Hadir',
 
       //delete
@@ -131,10 +131,50 @@ class Log extends Component {
   }
 
   filterName(e) {
+    const { statusc } = this.state;
     const { name, value } = e.target;
     this.setState({ [name]: value });
-    var lengthnama = value.length;
-    if (lengthnama === 8) {
+    var lengthnama;
+
+    lengthnama = value.length;
+
+    if ((statusc === 'Dosen') && (lengthnama === 18)) {
+      fetch(get.readdosen, {
+        method: 'post',
+        headers: {
+          "x-access-token": sessionStorage.name,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          sortby: "nip",
+          ascdsc: "asc",
+          search: value,
+          limit: "1",
+          page: "1",
+        })
+      })
+        .then(response => response.json())
+        .then(response => {
+          //berhasil dapet data
+          if ((response.status === 1) && (response.count == 1)) {
+            this.setState({ namac: response.hasil[0].nama })
+          }
+          else if ((response.status === 1) && (response.count != 1)) {
+            this.setState({ namac: '' })
+          }
+          //ga dapet token
+          else if ((response.status !== 1) && (response.status !== 0)) {
+            sessionStorage.removeItem("name")
+            window.location.reload()
+          }
+        })
+        .catch(error => {
+          sessionStorage.removeItem("name")
+          window.location.reload()
+        })
+    }
+
+    else if (((statusc === 'Mahasiswa') || (statusc === 'Asisten')) && (lengthnama === 8)) {
       fetch(get.readpengguna, {
         method: 'post',
         headers: {
@@ -169,13 +209,14 @@ class Log extends Component {
           window.location.reload()
         })
     }
+
     else {
       this.setState({ namac: '' })
     }
   }
 
   componentDidMount() {
-    // const {startDateRead, endDateRead, sortby, ascdsc, search, limit, page} = this.state 
+    // const { startDateRead, endDateRead, sortby, ascdsc, search, limit, page } = this.state
     // this.getData(startDateRead, endDateRead, sortby, ascdsc, search, limit, page)
     this.interval = setInterval(() => {
       const { startDateRead, endDateRead, sortby, ascdsc, search, limit, page } = this.state
@@ -396,42 +437,46 @@ class Log extends Component {
                   datasalah &&
                   <span className="textmerah">{pesan}</span>
                 }
+
+
                 <div className="kotakinputlogpintunim">
+                  <label> <b>Status</b> </label> <br></br>
+                  <select name="statusc" onChange={this.handleChange} className="inputformlogpintustatus" required>
+                    <option> </option>
+                    <option value="Dosen"> Dosen </option>
+                    <option value="Asisten"> Asisten </option>
+                    <option value="Mahasiswa"> Mahasiswa </option>
+                  </select>
+                </div>
+
+                <div className="kotakinputlogpintunama">
                   <label> <b>NIM</b> </label> <br></br>
                   <input name="nimc" onChange={this.filterName} className="inputformlogpintunim" type="text" placeholder="NIM" required ></input>
                 </div>
 
-                <div className="kotakinputlogpintunama">
+                <div className="kotakinputlogpinturuangan">
                   <label> <b>Nama</b> </label> <br></br>
-                  <input onChange={this.handleChange} className="inputformlogpintunim" type="text" placeholder="Nama" defaultValue={namac} required ></input>
+                  <input className="inputformlogpintunim" type="text" placeholder="Nama" defaultValue={namac || ''} required ></input>
                 </div>
 
-                <div className="kotakinputlogpinturuangan">
+                <div className="kotakinputlogpintumatkul">
                   <label><b>Ruangan</b> </label> <br></br>
                   <input name="koderuanganc" onChange={this.handleChange} className="inputformlogpintunim" type="text" placeholder="Ruangan" required ></input>
                 </div>
 
-                <div className="kotakinputlogpintumatkul">
+                <div className="kotakinputlogpintukelas">
                   <label><b>Mata Kuliah</b> </label> <br></br>
                   <input name="kodematkulc" onChange={this.handleChange} className="inputformlogpintunim" type="text" placeholder="Kode Matkul" required ></input>
                 </div>
 
-                <div className="kotakinputlogpintukelas">
+                <div className="kotakinputlogpintucheckedtm">
                   <label><b>Kelas</b> </label> <br></br>
                   <input name="kelasc" onChange={this.handleChange} className="inputformlogpintunim" type="text" placeholder="kelas" required ></input>
                 </div>
 
-                <div className="kotakinputlogpintucheckedtm">
+                <div className="kotakinputlogpintustatus">
                   <label> <b>Waktu dan Tanggal</b>  </label> <br></br>
                   <input name="waktuc" onChange={this.handleChange} className="inputformlogpintucheckedtm" type="datetime-local" required></input>
-                </div>
-
-                <div className="kotakinputlogpintustatus">
-                  <label> <b>Status</b> </label> <br></br>
-                  <select name="statusc" onChange={this.handleChange} className="inputformlogpintustatus" required>
-                    <option value="Mahasiswa"> Mahasiswa</option>
-                    <option value="Dosen"> Dosen </option>
-                  </select>
                 </div>
 
                 <div className="kotakinputlogpintuketerangan">

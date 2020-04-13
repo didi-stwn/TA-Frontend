@@ -584,7 +584,7 @@ class Filter_Matkul_Pengguna extends Component {
                                     <tr>
                                         <th className="fakultas" style={{ cursor: "default" }}>Fakultas</th>
                                         <th className="jurusan" style={{ cursor: "default" }}>Jurusan</th>
-                                        <th className="nim" style={{ cursor: "default" }}>NIM</th>
+                                        <th className="nim" style={{ cursor: "default" }}>NIM/NIP</th>
                                         <th className="nama" style={{ cursor: "default" }}>Nama</th>
                                         <th className="nim" style={{ cursor: "default" }}>Status</th>
                                         <th className="nim" style={{ cursor: "default" }}>Keterangan</th>
