@@ -829,7 +829,7 @@ class Dosen extends Component {
     }
     showFilterPengguna(a, b) {
         const { sortbyfilter, ascdscfilter, searchfilter, limitfilter, pagefilter } = this.state
-        if (b.length === 18) {
+        if (b.length >= 8) {
             this.setState({ pageshow: a })
             this.getData(a, sortbyfilter, ascdscfilter, searchfilter, limitfilter, pagefilter)
             this.getNameFilter()
@@ -1201,7 +1201,7 @@ class Dosen extends Component {
                                     <tr>
                                         <th className="fakultas" onClick={() => this.filter(state.page, "fakultas", state.ascdsc)}>Fakultas</th>
                                         <th className="jurusan" onClick={() => this.filter(state.page, "jurusan", state.ascdsc)}>Jurusan</th>
-                                        <th className="nip" onClick={() => this.filter(state.page, "nip", state.ascdsc)}>NIP</th>
+                                        <th className="nim" onClick={() => this.filter(state.page, "nip", state.ascdsc)}>NIP</th>
                                         <th className="nama" onClick={() => this.filter(state.page, "nama", state.ascdsc)}>Nama</th>
                                         {/* <th className="finger1" onClick={() => this.filter(state.page, "finger1", state.ascdsc)}>Finger1</th>
                   <th className="finger2" onClick={() => this.filter(state.page, "finger2", state.ascdsc)}>Finger2</th> */}

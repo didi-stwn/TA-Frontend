@@ -7,7 +7,7 @@ import Dosen from './content/dosen';
 import Ruangan from './content/ruangan';
 import MenuMatkul from './content/menumatkul';
 import Fakultas from './content/fakultas';
-import Laporan from './content/laporan';
+import MenuLaporan from './content/menulaporan';
 import Bantuan from './content/bantuan';
 import Home from './content/home';
 import Statistik from './content/statistik';
@@ -34,7 +34,7 @@ class Content extends Component {
               <Route path="/ruangan" render={ () => <Ruangan/> } />
               <Route path="/matakuliah" render={ () => <MenuMatkul/> } />
               <Route path="/fakultas" render={ () => <Fakultas/> } />
-              <Route path="/laporan" render={ () => <Laporan/> } />
+              <Route path="/laporan" render={ () => <MenuLaporan/> } />
               <Route path="/bantuan" render={ () => <Bantuan/> } />
               <Route render={()=>
                 <div className="box-footer">

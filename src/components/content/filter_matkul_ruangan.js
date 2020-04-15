@@ -105,7 +105,6 @@ class Filter_Matkul_Ruangan extends Component {
                 koderuangan: koderuanganc,
                 kodematkul: kodematkul,
                 kelas: kelas,
-                filter: 'kodematkul'
             })
         })
             .then(response => response.json())
@@ -524,7 +523,7 @@ class Filter_Matkul_Ruangan extends Component {
                                                 <td>{this.getDataMatkulHari(isidata, state.data, 7)}</td>
                                             </tr>
                                         ))}
-                                    {state.datafilterkosong === true &&
+                                    {state.datakosong === true &&
                                         <tr key={i++} className="tabletinggi">
                                             <td colSpan="8">Ruangan tidak ditemukan</td>
                                         </tr>

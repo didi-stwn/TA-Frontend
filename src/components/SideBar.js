@@ -84,14 +84,14 @@ class SideBar extends Component {
                                         (log) &&
                                         <Link to="/log" className="dipilih" >
                                             <i className="fa fa-check-square"></i>
-                                            <span>Log Kehadiran</span>
+                                            <span>Riwayat Kehadiran</span>
                                         </Link>
                                     }
                                     {
                                         (log===false) &&
                                         <Link to="/log">
                                             <i className="fa fa-check-square"></i>
-                                            <span>Log Kehadiran</span>
+                                            <span>Riwayat Kehadiran</span>
                                         </Link>
                                     }
                                 </li>

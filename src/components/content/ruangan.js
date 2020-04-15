@@ -72,7 +72,6 @@ class Ruangan extends Component {
     })
       .then(response => response.json())
       .then(response => {
-        console.log(response)
         //berhasil dapet data
         if ((response.status === 1) && (response.count !== 0)) {
           this.setState({ data: response.hasil })
@@ -159,7 +158,6 @@ class Ruangan extends Component {
           koderuangan: koderuanganfilterc,
           kodematkul: kodematkulfilterc,
           kelas: kelasfilterc,
-          filter: 'koderuangan'
         })
       })
         .then(response => response.json())
@@ -770,7 +768,7 @@ class Ruangan extends Component {
 
                 <div className="kotakinputfilterruangannamamatkul">
                   <label><b>Nama Matakuliah</b> </label> <br></br>
-                  <input defaultValue={state.namamatkulfilterc} onChange={this.handleChange} className="inputfilterruangan" type="text" placeholder="Nama Matkul..." required ></input>
+                  <input value={state.namamatkulfilterc} className="inputfilterruangan" type="text" placeholder="Nama Matkul..." required ></input>
                 </div>
 
                 <div className="kotakinputfilterruangankelas">

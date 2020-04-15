@@ -70,6 +70,7 @@ class Log extends Component {
       akhir = null
       this.setState({ endDateRead: null })
     }
+    
     fetch(get.readlog, {
       method: 'post',
       headers: {
@@ -96,6 +97,7 @@ class Log extends Component {
         }
         else if ((response.status === 1) && (response.count === 0)) {
           this.setState({ datakosong: true })
+          this.setState({ data: [] })
           this.setState({ rowCount: response.count })
         }
         //ga dapet token
@@ -138,7 +140,7 @@ class Log extends Component {
 
     lengthnama = value.length;
 
-    if ((statusc === 'Dosen') && (lengthnama === 18)) {
+    if ((statusc === 'Dosen') && (lengthnama >= 8)) {
       fetch(get.readdosen, {
         method: 'post',
         headers: {
@@ -456,7 +458,7 @@ class Log extends Component {
 
                 <div className="kotakinputlogpinturuangan">
                   <label> <b>Nama</b> </label> <br></br>
-                  <input className="inputformlogpintunim" type="text" placeholder="Nama" defaultValue={namac || ''} required ></input>
+                  <input className="inputformlogpintunim" type="text" placeholder="Nama" value={namac || ''} required ></input>
                 </div>
 
                 <div className="kotakinputlogpintumatkul">

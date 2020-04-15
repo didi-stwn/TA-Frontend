@@ -3330,13 +3330,18 @@ a:focus {
   margin-top: 0px
 }
 
+.kotakinputlaporannama{
+  margin-left: 20%;
+  margin-top: -56px
+}
+
 .kotakinputlaporanstart{
-  margin-left: 27%;
+  margin-left: 40%;
   margin-top: -56px
 }
 
 .kotakinputlaporanend{
-  margin-left: 52%;
+  margin-left: 60%;
   margin-top: -56px
 }
 
@@ -3346,20 +3351,7 @@ a:focus {
   border-right: none;
   border-bottom: solid 1px rgb(0, 0, 100);
   font-size: 13px;
-}
-.inputformlaporanstart{
-  border-top: none;
-  border-left: none;
-  border-right: none;
-  border-bottom: solid 1px rgb(0, 0, 100);
-  font-size: 13px;
-}
-.inputformlaporanend{
-  border-top: none;
-  border-left: none;
-  border-right: none;
-  border-bottom: solid 1px rgb(0, 0, 100);
-  font-size: 13px;
+  width: 130px;
 }
 
 .kotaksubmitlaporan{
@@ -3412,20 +3404,21 @@ a:focus {
   width: auto
 }
 
-@media (max-width:1150px){
-  .kotakinputlaporannim{
-    margin-left: 0%;
-    margin-top: 0px
+@media (max-width:1133px){
+  .kotakinputlaporannama{
+    margin-left: 25%;
   }
-  
+
   .kotakinputlaporanstart{
-    margin-left: 37%;
-    margin-top: -56px
+    margin-left: 50%;
   }
 
   .kotakinputlaporanend{
-    margin-left: 72%;
-    margin-top: -56px
+    margin-left: 75%;
+  }
+
+  .inputformlaporannim{
+    width: 150px;
   }
 
   .kotaksubmitlaporan{
@@ -3455,8 +3448,9 @@ a:focus {
   }
 }
 
-@media (max-width:822px){
-  .kotakinputlaporannim{
+@media (max-width:942px){
+  .kotakinputlaporannama{
+    margin-top: 20px;
     margin-left: 0%;
   }
 
@@ -3471,14 +3465,6 @@ a:focus {
   }
 
   .inputformlaporannim{
-    width: 100%;  
-  }
-  
-  .inputformlaporanstart{
-    width: 100%;  
-  }
-  
-  .inputformlaporanend{
     width: 100%;  
   }
 }
@@ -3581,6 +3567,21 @@ a:focus {
   width: 16%;
   height: 10px;
   border: solid 1px black;
+}
+
+.kehadiranaman{
+  height: 10px;
+  border: solid 1px black;
+  width: 5%;
+  background-color: white;
+}
+
+.kehadiranbermasalah{
+  height: 10px;
+  border: solid 1px black;
+  width: 5%;
+  color: white;
+  background-color: red;
 }
 
 .kotakdaftar{

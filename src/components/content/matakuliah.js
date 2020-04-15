@@ -344,34 +344,34 @@ class Matakuliah extends Component {
     this.setState({ databenar: false })
   }
   render() {
-    const { jurusankosong, semuafakultas, jurusan, oldkodematkul, newnamamatkul, newkelas, datakosong, rowCount, limit, page, daftar, edit, databenar, pesan, datasalah, data, sortby, ascdsc } = this.state
+    const state = this.state
 
     //get fakultas dan jurusan
     var fakultas = []
     var checkfakultas = 0
-    for (var i = 0; i < semuafakultas.length; i++) {
+    for (var i = 0; i < state.semuafakultas.length; i++) {
       for (var j = 0; j < fakultas.length; j++) {
-        if (semuafakultas[i].fakultas === fakultas[j]) {
+        if (state.semuafakultas[i].fakultas === fakultas[j]) {
           checkfakultas++
         }
       }
       if (checkfakultas === 0) {
-        fakultas.push(semuafakultas[i].fakultas)
+        fakultas.push(state.semuafakultas[i].fakultas)
       }
       checkfakultas = 0;
     }
 
     //setting tombol berikutnya and sebelumnya
-    var maxPage = parseInt(rowCount / limit);
-    if ((rowCount % limit) !== 0) {
+    var maxPage = parseInt(state.rowCount / state.limit);
+    if ((state.rowCount % state.limit) !== 0) {
       maxPage = maxPage + 1
     }
     var showNext = false;
     var showPrevious = false;
     // deteksi page pertama
-    if (page === 1) {
+    if (state.page === 1) {
       showPrevious = false;
-      if (page === maxPage) {
+      if (state.page === maxPage) {
         showNext = false;
       }
       else {
@@ -379,7 +379,7 @@ class Matakuliah extends Component {
       }
     }
     // deteksi page terakhir
-    else if (page === maxPage) {
+    else if (state.page === maxPage) {
       showPrevious = true;
       showNext = false;
     }
@@ -390,29 +390,71 @@ class Matakuliah extends Component {
     }
 
     var aksidata
-    if (daftar === true) {
+    if (state.daftar === true) {
       aksidata = "show"
     }
-    else if (edit === true) {
+    else if (state.edit === true) {
       aksidata = "show"
     }
     else {
       aksidata = "hide"
     }
     i = 1;
+    // var sort_fakultas, sort_jurusan, sort_kelas, sort_kodematkul, sort_namamatkul, jenis
+    // if (state.ascdsc === "asc"){
+    //   jenis = "fa-caret-up"
+    // }
+    // else {
+    //   jenis = "fa-caret-down"
+    // }
+    // if (state.sortby === "fakultas") {
+    //   sort_fakultas = "fa " + jenis
+    //   sort_jurusan = "fa fa-sort"
+    //   sort_kelas = "fa fa-sort"
+    //   sort_kodematkul = "fa fa-sort"
+    //   sort_namamatkul = "fa fa-sort"
+    // }
+    // else if (state.sortby === "jurusan") {
+    //   sort_fakultas = "fa fa-sort"
+    //   sort_jurusan = "fa " + jenis
+    //   sort_kelas = "fa fa-sort"
+    //   sort_kodematkul = "fa fa-sort"
+    //   sort_namamatkul = "fa fa-sort"
+    // }
+    // else if (state.sortby === "kelas") {
+    //   sort_fakultas = "fa fa-sort"
+    //   sort_jurusan = "fa fa-sort"
+    //   sort_kelas = "fa " + jenis
+    //   sort_kodematkul = "fa fa-sort"
+    //   sort_namamatkul = "fa fa-sort"
+    // }
+    // else if (state.sortby === "kodematkul") {
+    //   sort_fakultas = "fa fa-sort"
+    //   sort_jurusan = "fa fa-sort"
+    //   sort_kelas = "fa fa-sort"
+    //   sort_kodematkul = "fa " + jenis
+    //   sort_namamatkul = "fa fa-sort"
+    // }
+    // else if (state.sortby === "namamatkul") {
+    //   sort_fakultas = "fa fa-sort"
+    //   sort_jurusan = "fa fa-sort"
+    //   sort_kelas = "fa fa-sort"
+    //   sort_kodematkul = "fa fa-sort"
+    //   sort_namamatkul = "fa " + jenis
+    // }  &nbsp; <i className={sort_kelas}></i>
     return (
       <div>
-        {daftar &&
+        {state.daftar &&
           <div>
             <div className="kotakfilter2">
               <form className="kotakforminputlogpintu" onSubmit={this.handleSubmitDaftar}>
                 {
-                  databenar &&
-                  <span className="texthijau">{pesan}</span>
+                  state.databenar &&
+                  <span className="texthijau">{state.pesan}</span>
                 }
                 {
-                  datasalah &&
-                  <span className="textmerah">{pesan}</span>
+                  state.datasalah &&
+                  <span className="textmerah">{state.pesan}</span>
                 }
 
                 <div className="kotakinputpenggunafakultas">
@@ -428,13 +470,13 @@ class Matakuliah extends Component {
                 <div className="kotakinputmatkuljurusan">
                   <label> <b>Jurusan</b> </label> <br></br>
                   <select name="jurusanc" onChange={this.handleChange} className="inputformlogpintujurusan" required>
-                    {jurusankosong &&
+                    {state.jurusankosong &&
                       <option> </option>
                     }
-                    {(jurusankosong === false) &&
+                    {(state.jurusankosong === false) &&
                       <option> </option>
                     }
-                    {(jurusankosong === false) && jurusan.map(isidata => (
+                    {(state.jurusankosong === false) && state.jurusan.map(isidata => (
                       <option key={i++} value={isidata.jurusan}>{isidata.jurusan}</option>
                     ))}
                   </select>
@@ -467,32 +509,32 @@ class Matakuliah extends Component {
           </div>
         }
         {
-          edit &&
+          state.edit &&
           <div>
             <div className="kotakfilter2">
               <form className="kotakforminputlogpintu" onSubmit={this.handleSubmitEdit}>
                 {
-                  databenar &&
-                  <span className="texthijau">{pesan}</span>
+                  state.databenar &&
+                  <span className="texthijau">{state.pesan}</span>
                 }
                 {
-                  datasalah &&
-                  <span className="textmerah">{pesan}</span>
+                  state.datasalah &&
+                  <span className="textmerah">{state.pesan}</span>
                 }
 
                 <div className="kotakinputkodematkuledit">
                   <label><b>Kode Mata Kuliah</b> </label> <br></br>
-                  <input onChange={this.handleChange} className="inputformeditmatkul" type="text" placeholder="Kode" value={oldkodematkul} required ></input>
+                  <input onChange={this.handleChange} className="inputformeditmatkul" type="text" placeholder="Kode" value={state.oldkodematkul} required ></input>
                 </div>
 
                 <div className="kotakinputnamamatkuledit">
                   <label><b>Nama Mata Kuliah</b> </label> <br></br>
-                  <input name="newnamamatkul" onChange={this.handleChange} className="inputformeditmatkul" type="text" placeholder="Nama" value={newnamamatkul} required ></input>
+                  <input name="newnamamatkul" onChange={this.handleChange} className="inputformeditmatkul" type="text" placeholder="Nama" value={state.newnamamatkul} required ></input>
                 </div>
 
                 <div className="kotakinputkelasedit">
                   <label><b>Kelas</b> </label> <br></br>
-                  <input name="newkelas" onChange={this.handleChange} className="inputformeditmatkul" type="text" placeholder="Kelas" value={newkelas} required ></input>
+                  <input name="newkelas" onChange={this.handleChange} className="inputformeditmatkul" type="text" placeholder="Kelas" value={state.newkelas} required ></input>
                 </div>
 
                 <div className="kotaksubmitpenggunadaftar">
@@ -506,7 +548,7 @@ class Matakuliah extends Component {
             </div>
           </div>
         }
-        {(daftar === false) && (edit === false) &&
+        {(state.daftar === false) && (state.edit === false) &&
           <div className="kotakdaftarruangan">
             <a onClick={() => this.showDaftar()}>
               <div className="daftarfakultas">
@@ -528,7 +570,7 @@ class Matakuliah extends Component {
               <option value={100}> 100 </option>
             </select>
             <b> &nbsp; dari &nbsp;</b>
-            <b>{rowCount}</b>
+            <b>{state.rowCount}</b>
             <b>&nbsp;Data</b>
           </div>
           <div className="filtersearchlogpintu">
@@ -540,17 +582,17 @@ class Matakuliah extends Component {
             <table className="tablematkul">
               <thead className="theadlog">
                 <tr>
-                  <th className="fakultas" onClick={() => this.filter(page, "fakultas", ascdsc)}>Fakultas</th>
-                  <th className="jurusan" onClick={() => this.filter(page, "jurusan", ascdsc)}>Jurusan</th>
-                  <th className="kodematkul" onClick={() => this.filter(page, "kodematkul", ascdsc)}>Kode Matakuliah</th>
-                  <th className="namamatkul" onClick={() => this.filter(page, "namamatkul", ascdsc)}>Nama MataKuliah</th>
-                  <th className="kelas" onClick={() => this.filter(page, "kelas", ascdsc)}>Kelas</th>
+                  <th className="fakultas" onClick={() => this.filter(state.page, "fakultas", state.ascdsc)}>Fakultas</th>
+                  <th className="jurusan" onClick={() => this.filter(state.page, "jurusan", state.ascdsc)}>Jurusan</th>
+                  <th className="kodematkul" onClick={() => this.filter(state.page, "kodematkul", state.ascdsc)}>Kode Matakuliah</th>
+                  <th className="namamatkul" onClick={() => this.filter(state.page, "namamatkul", state.ascdsc)}>Nama MataKuliah</th>
+                  <th className="kelas" onClick={() => this.filter(state.page, "kelas", state.ascdsc)}>Kelas</th>
                   <th className="keterangan">Keterangan</th>
                 </tr>
               </thead>
-              {(datakosong === false) &&
+              {(state.datakosong === false) &&
                 <tbody className="tbodylog">
-                  {data.map(isidata => (
+                  {state.data.map(isidata => (
                     <tr key={i++}>
                       <td>{isidata.fakultas}</td>
                       <td>{isidata.jurusan}</td>
@@ -571,7 +613,7 @@ class Matakuliah extends Component {
                     </tr>
                   ))}
                 </tbody>}
-              {(datakosong === true) &&
+              {(state.datakosong === true) &&
                 <tbody className="tbodylog">
                   <tr>
                     <td colSpan="7">Data tidak ditemukan</td>
@@ -582,14 +624,14 @@ class Matakuliah extends Component {
           <div className="marginbottom20px"></div>
           <div className="pagedata">
             {showPrevious &&
-              <button className="pagesebelumnya" onClick={() => this.filter((page - 1), sortby, ascdsc)}>≪ Sebelumnya</button>
+              <button className="pagesebelumnya" onClick={() => this.filter((state.page - 1), state.sortby, state.ascdsc)}>≪ Sebelumnya</button>
             }
             {(showPrevious === false) &&
               <button className="pagesebelumnyanone">≪ Sebelumnya</button>
             }
             {
               showNext &&
-              <button className="pageberikutnya" onClick={() => this.filter((page + 1), sortby, ascdsc)}>Berikutnya ≫</button>
+              <button className="pageberikutnya" onClick={() => this.filter((state.page + 1), state.sortby, state.ascdsc)}>Berikutnya ≫</button>
             }
             {
               (showNext === false) &&

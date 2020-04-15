@@ -103,7 +103,7 @@ class Fakultas extends Component {
   }
 
   filter(pagenow, sortbynow, ascdscnow) {
-    const { sortby, ascdsc, search, limit, page } = this.state
+    const { sortby, search, limit, page } = this.state
     if (pagenow == page) {
       if (sortbynow == sortby) {
         if (ascdscnow == "asc") {
@@ -254,19 +254,19 @@ class Fakultas extends Component {
     this.setState({ databenar: false })
   }
   render() {
-    const { oldfakultas, newjurusan, datakosong, rowCount, limit, page, daftar, edit, databenar, pesan, datasalah, data, sortby, ascdsc } = this.state
+    const state = this.state
 
     //setting tombol berikutnya and sebelumnya
-    var maxPage = parseInt(rowCount / limit);
-    if ((rowCount % limit) !== 0) {
+    var maxPage = parseInt(state.rowCount / state.limit);
+    if ((state.rowCount % state.limit) !== 0) {
       maxPage = maxPage + 1
     }
     var showNext = false;
     var showPrevious = false;
     // deteksi page pertama
-    if (page === 1) {
+    if (state.page === 1) {
       showPrevious = false;
-      if (page === maxPage) {
+      if ((state.page === maxPage) || (maxPage === 0)) {
         showNext = false;
       }
       else {
@@ -274,7 +274,7 @@ class Fakultas extends Component {
       }
     }
     // deteksi page terakhir
-    else if (page === maxPage) {
+    else if ((state.page === maxPage) || (maxPage === 0)) {
       showPrevious = true;
       showNext = false;
     }
@@ -285,29 +285,30 @@ class Fakultas extends Component {
     }
 
     var aksidata
-    if (daftar === true) {
+    if (state.daftar === true) {
       aksidata = "show"
     }
-    else if (edit === true) {
+    else if (state.edit === true) {
       aksidata = "show"
     }
     else {
       aksidata = "hide"
     }
     var i = 1;
+
     return (
       <div>
-        {daftar &&
+        {state.daftar &&
           <div>
             <div className="kotakfilter2">
               <form className="kotakforminputlogpintu" onSubmit={this.handleSubmitDaftar}>
                 {
-                  databenar &&
-                  <span className="texthijau">{pesan}</span>
+                  state.databenar &&
+                  <span className="texthijau">{state.pesan}</span>
                 }
                 {
-                  datasalah &&
-                  <span className="textmerah">{pesan}</span>
+                  state.datasalah &&
+                  <span className="textmerah">{state.pesan}</span>
                 }
 
                 <div className="kotakinputfakultas">
@@ -332,27 +333,27 @@ class Fakultas extends Component {
           </div>
         }
         {
-          edit &&
+          state.edit &&
           <div>
             <div className="kotakfilter2">
               <form className="kotakforminputlogpintu" onSubmit={this.handleSubmitEdit}>
                 {
-                  databenar &&
-                  <span className="texthijau">{pesan}</span>
+                  state.databenar &&
+                  <span className="texthijau">{state.pesan}</span>
                 }
                 {
-                  datasalah &&
-                  <span className="textmerah">{pesan}</span>
+                  state.datasalah &&
+                  <span className="textmerah">{state.pesan}</span>
                 }
 
                 <div className="kotakinputfakultas">
                   <label><b>Fakultas</b> </label> <br></br>
-                  <input onChange={this.handleChange} className="inputformfakultas" type="text" placeholder="Fakultas" value={oldfakultas} required ></input>
+                  <input onChange={this.handleChange} className="inputformfakultas" type="text" placeholder="Fakultas" value={state.oldfakultas} required ></input>
                 </div>
 
                 <div className="kotakinputjurusan">
                   <label><b>Jurusan</b> </label> <br></br>
-                  <input name="newjurusan" onChange={this.handleChange} className="inputformfakultas" type="text" placeholder="Jurusan" value={newjurusan} required ></input>
+                  <input name="newjurusan" onChange={this.handleChange} className="inputformfakultas" type="text" placeholder="Jurusan" value={state.newjurusan} required ></input>
                 </div>
 
                 <div className="kotaksubmitpenggunadaftar">
@@ -366,7 +367,7 @@ class Fakultas extends Component {
             </div>
           </div>
         }
-        {(daftar === false) && (edit === false) &&
+        {(state.daftar === false) && (state.edit === false) &&
           <div className="kotakdaftarruangan">
             <a onClick={() => this.showDaftar()}>
               <div className="daftarfakultas">
@@ -388,7 +389,7 @@ class Fakultas extends Component {
               <option value={100}> 100 </option>
             </select>
             <b> &nbsp; dari &nbsp;</b>
-            <b>{rowCount}</b>
+            <b>{state.rowCount}</b>
             <b>&nbsp;Data</b>
           </div>
           <div className="filtersearchlogpintu">
@@ -400,14 +401,14 @@ class Fakultas extends Component {
             <table className="tablefakultas">
               <thead className="theadlog">
                 <tr>
-                  <th className="fakultas" onClick={() => this.filter(page, "fakultas", ascdsc)}>Fakultas</th>
-                  <th className="jurusan" onClick={() => this.filter(page, "jurusan", ascdsc)}>Jurusan</th>
+                  <th className="fakultas" onClick={() => this.filter(state.page, "fakultas", state.ascdsc)}>Fakultas</th>
+                  <th className="jurusan" onClick={() => this.filter(state.page, "jurusan", state.ascdsc)}>Jurusan</th>
                   <th className="keterangan">Keterangan</th>
                 </tr>
               </thead>
-              {(datakosong === false) &&
+              {(state.datakosong === false) &&
                 <tbody className="tbodylog">
-                  {data.map(isidata => (
+                  {state.data.map(isidata => (
                     <tr key={i++}>
                       <td>{isidata.fakultas}</td>
                       <td>{isidata.jurusan}</td>
@@ -425,7 +426,7 @@ class Fakultas extends Component {
                     </tr>
                   ))}
                 </tbody>}
-              {(datakosong === true) &&
+              {(state.datakosong === true) &&
                 <tbody className="tbodylog">
                   <tr>
                     <td colSpan="7">Data tidak ditemukan</td>
@@ -436,14 +437,14 @@ class Fakultas extends Component {
           <div className="marginbottom20px"></div>
           <div className="pagedata">
             {showPrevious &&
-              <button className="pagesebelumnya" onClick={() => this.filter((page - 1), sortby, ascdsc)}>≪ Sebelumnya</button>
+              <button className="pagesebelumnya" onClick={() => this.filter((state.page - 1), state.sortby, state.ascdsc)}>≪ Sebelumnya</button>
             }
             {(showPrevious === false) &&
               <button className="pagesebelumnyanone">≪ Sebelumnya</button>
             }
             {
               showNext &&
-              <button className="pageberikutnya" onClick={() => this.filter((page + 1), sortby, ascdsc)}>Berikutnya ≫</button>
+              <button className="pageberikutnya" onClick={() => this.filter((state.page + 1), state.sortby, state.ascdsc)}>Berikutnya ≫</button>
             }
             {
               (showNext === false) &&
