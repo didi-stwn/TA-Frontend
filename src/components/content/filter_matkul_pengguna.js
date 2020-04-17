@@ -357,10 +357,10 @@ class Filter_Matkul_Pengguna extends Component {
                 .then(response => response.json())
                 .then(response => {
                     //berhasil dapet data
-                    if ((response.status === 1) && (response.count == 1)) {
+                    if ((response.status === 1) && (response.count === 1)) {
                         this.setState({ namac: response.hasil[0].nama })
                     }
-                    else if ((response.status === 1) && (response.count != 1)) {
+                    else if ((response.status === 1) && (response.count !== 1)) {
                         this.setState({ namac: '' })
                     }
                     //ga dapet token
@@ -393,10 +393,10 @@ class Filter_Matkul_Pengguna extends Component {
                 .then(response => response.json())
                 .then(response => {
                     //berhasil dapet data
-                    if ((response.status === 1) && (response.count == 1)) {
+                    if ((response.status === 1) && (response.count === 1)) {
                         this.setState({ namac: response.hasil[0].nama })
                     }
-                    else if ((response.status === 1) && (response.count != 1)) {
+                    else if ((response.status === 1) && (response.count !== 1)) {
                         this.setState({ namac: '' })
                     }
                     //ga dapet token
@@ -416,7 +416,7 @@ class Filter_Matkul_Pengguna extends Component {
         }
     }
 
-    Back(){
+    Back() {
         this.setState({
             nullkodematkul: true,
         })
@@ -426,7 +426,7 @@ class Filter_Matkul_Pengguna extends Component {
         this.setState({ daftar: true })
     }
     hideDaftar() {
-        this.setState({ 
+        this.setState({
             daftar: false,
             namac: '',
             datasalah: false,
@@ -518,7 +518,7 @@ class Filter_Matkul_Pengguna extends Component {
 
                                     <div className="inputcreatenamapenggunamatkul">
                                         <label><b>Nama</b> </label> <br></br>
-                                        <input className="inputcreatepenggunamatkul" type="text" placeholder="Nama" value={state.namac || ''} required></input>
+                                        <input onChange={this.handleChange} className="inputcreatepenggunamatkul" type="text" placeholder="Nama" value={state.namac || ''} required></input>
                                     </div>
 
                                     <div className="kotaksubmitpenggunadaftar">
@@ -526,7 +526,7 @@ class Filter_Matkul_Pengguna extends Component {
                                     </div>
 
                                     <div className="kotakcancelpenggunadaftar">
-                                        <a onClick={() => this.hideDaftar()}> <span className="cancelformpengguna">Cancel</span></a>
+                                        <button className="buttonlikea" onClick={() => this.hideDaftar()}> <span className="cancelformpengguna">Cancel</span></button>
                                     </div>
                                 </form>
                             </div>
@@ -534,24 +534,24 @@ class Filter_Matkul_Pengguna extends Component {
                     }
 
                     {(state.daftar === false) &&
-                    <div>
-                        <div className="kotakbackmatkul">
-                            <a onClick={() => this.Back()}>
-                                <div className="backmatkul">
-                                    <i className="fa fa-arrow-left"></i>
-                                    <span><b>&nbsp;&nbsp;Kembali</b></span>
-                                </div>
-                            </a>
+                        <div>
+                            <div className="kotakbackmatkul">
+                                <button className="buttonlikea" onClick={() => this.Back()}>
+                                    <div className="backmatkul">
+                                        <i className="fa fa-arrow-left"></i>
+                                        <span><b>&nbsp;&nbsp;Kembali</b></span>
+                                    </div>
+                                </button>
+                            </div>
+                            <div className="kotakdaftarmatkul">
+                                <button className="buttonlikea" onClick={() => this.showDaftar()}>
+                                    <div className="daftarmatkul">
+                                        <i className="fa fa-plus"></i>
+                                        <span><b>&nbsp;&nbsp;Pengguna</b></span>
+                                    </div>
+                                </button>
+                            </div>
                         </div>
-                        <div className="kotakdaftarmatkul">
-                            <a onClick={() => this.showDaftar()}>
-                                <div className="daftarmatkul">
-                                    <i className="fa fa-plus"></i>
-                                    <span><b>&nbsp;&nbsp;Pengguna</b></span>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
                     }
                     <div id={aksidata} className="kotakdata">
                         <div>

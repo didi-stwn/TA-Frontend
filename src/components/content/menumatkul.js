@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { withRouter } from "react-router-dom";
 import Matakuliah from './matakuliah';
-import Filter_Matkul_Pengguna from './filter_matkul_pengguna';
-import Filter_Matkul_Ruangan from './filter_matkul_ruangan';
+import FilterMatkulPengguna from './filter_matkul_pengguna';
+import FilterMatkulRuangan from './filter_matkul_ruangan';
 
 class MenuMatkul extends Component {
     constructor(props) {
@@ -78,11 +78,11 @@ class MenuMatkul extends Component {
                     }
                     {
                         state.ShowMatkulPengguna &&
-                        <Filter_Matkul_Pengguna />
+                        <FilterMatkulPengguna />
                     }
                     {
                         state.ShowMatkulRuangan &&
-                        <Filter_Matkul_Ruangan />
+                        <FilterMatkulRuangan />
                     }
 
                 </div>

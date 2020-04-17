@@ -196,10 +196,10 @@ class Laporan_Pengajar extends Component {
                 .then(response => response.json())
                 .then(response => {
                     //berhasil dapet data
-                    if ((response.status === 1) && (response.count == 1)) {
+                    if ((response.status === 1) && (response.count === 1)) {
                         this.setState({ nama_form: response.hasil[0].nama })
                     }
-                    else if ((response.status === 1) && (response.count != 1)) {
+                    else if ((response.status === 1) && (response.count !== 1)) {
                         this.setState({ nama_form: '' })
                     }
                     //ga dapet token
@@ -387,24 +387,24 @@ class Laporan_Pengajar extends Component {
 
                         <Pdf targetRef={ref} filename={"TA026-" + state.nim}>
                             {({ toPdf }) =>
-                                <a onClick={toPdf} style={{ width: "100%", height: "100%" }}>
+                                <button onClick={toPdf} style={{ width: "100%", height: "100%" }}>
                                     <div className="kotakprintpdflaporan">
                                         <div className="printformlaporan">
                                             <i className="fa fa-print"> <span> Print to PDF</span></i>
                                         </div>
                                     </div>
-                                </a>
+                                </button>
                             }
                         </Pdf>
 
                         <ExcelFile filename={"TA026-" + state.nim} element={
-                            <a>
+                            <button>
                                 <div className="kotakprintxcllaporan">
                                     <div className="printformlaporan">
                                         <i className="fa fa-print"> <span> Print to Excel</span></i>
                                     </div>
                                 </div>
-                            </a>}>
+                            </button>}>
                             <ExcelSheet dataSet={dataXcl} name={"TA026" + state.nim} />
                         </ExcelFile>
 

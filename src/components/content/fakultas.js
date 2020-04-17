@@ -81,11 +81,11 @@ class Fakultas extends Component {
     const { sortby, ascdsc, search, limit, page } = this.state
     const { name, value } = e.target;
     this.setState({ [name]: value });
-    if (name == "search") {
+    if (name === "search") {
       var searching = value
       var max = limit
     }
-    else if (name == "limit") {
+    else if (name === "limit") {
       searching = search
       max = value
     }
@@ -104,12 +104,12 @@ class Fakultas extends Component {
 
   filter(pagenow, sortbynow, ascdscnow) {
     const { sortby, search, limit, page } = this.state
-    if (pagenow == page) {
-      if (sortbynow == sortby) {
-        if (ascdscnow == "asc") {
+    if (pagenow === page) {
+      if (sortbynow === sortby) {
+        if (ascdscnow === "asc") {
           ascdscnow = "desc"
         }
-        else if (ascdscnow == "desc") {
+        else if (ascdscnow === "desc") {
           ascdscnow = "asc"
         }
       }
@@ -326,7 +326,7 @@ class Fakultas extends Component {
                 </div>
 
                 <div className="kotakcancelpenggunadaftar">
-                  <a onClick={() => this.hideDaftar()}> <span className="cancelformpengguna">Cancel</span></a>
+                  <button className="buttonlikea" onClick={() => this.hideDaftar()}> <span className="cancelformpengguna">Cancel</span></button>
                 </div>
               </form>
             </div>
@@ -361,7 +361,7 @@ class Fakultas extends Component {
                 </div>
 
                 <div className="kotakcancelpenggunadaftar">
-                  <a onClick={() => this.hideEdit()}> <span className="cancelformpengguna">Cancel</span></a>
+                  <button className="buttonlikea" onClick={() => this.hideEdit()}> <span className="cancelformpengguna">Cancel</span></button>
                 </div>
               </form>
             </div>
@@ -369,12 +369,12 @@ class Fakultas extends Component {
         }
         {(state.daftar === false) && (state.edit === false) &&
           <div className="kotakdaftarruangan">
-            <a onClick={() => this.showDaftar()}>
+            <button className="buttonlikea" onClick={() => this.showDaftar()}>
               <div className="daftarfakultas">
                 <i className="fa fa-plus"></i>
                 <span><b>&nbsp;&nbsp;Fakultas/Jurusan</b></span>
               </div>
-            </a>
+            </button>
           </div>
         }
         <div id={aksidata} className="kotakdata">

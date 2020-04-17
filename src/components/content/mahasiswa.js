@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import get from './config';
-import { stat } from 'fs';
 
 class Mahasiswa extends Component {
   constructor(props) {
@@ -273,11 +272,11 @@ class Mahasiswa extends Component {
     const { pageshow, sortby, ascdsc, search, limit, page } = this.state
     const { sortbyfilter, ascdscfilter, searchfilter, limitfilter, pagefilter } = this.state
     if (pageshow === "pengguna") {
-      console.log("1")
+      //console.log("1")
       this.getData(pageshow, sortby, ascdsc, search, limit, page)
     }
     else if (pageshow === "filterpengguna") {
-      console.log("2")
+      //console.log("2")
       this.getData(pageshow, sortbyfilter, ascdscfilter, searchfilter, limitfilter, pagefilter)
     }
     this.getFakultas()
@@ -343,7 +342,7 @@ class Mahasiswa extends Component {
     })
       .then(response => response.json())
       .then(response => {
-        console.log(response)
+        //console.log(response)
         //berhasil get data
         if (response.status === 1) {
 
@@ -394,7 +393,7 @@ class Mahasiswa extends Component {
               })
                 .then(response => response.json())
                 .then(response => {
-                  console.log(response)
+                  //console.log(response)
                   //berhasil get data
                   if (response.status === 1) {
                     if (response.hasil.length !== 0) {
@@ -474,7 +473,7 @@ class Mahasiswa extends Component {
               })
                 .then(response => response.json())
                 .then(response => {
-                  console.log(response)
+                  //console.log(response)
                   //berhasil get data
                   if (response.status === 1) {
                     if (response.hasil.length !== 0) {
@@ -694,7 +693,7 @@ class Mahasiswa extends Component {
       })
         .then(response => response.json())
         .then(response => {
-          console.log(response)
+          //console.log(response)
           setTimeout(this.componentDidMount(), 1000)
         })
         .catch(error => {
@@ -1028,7 +1027,7 @@ class Mahasiswa extends Component {
                 </div>
 
                 <div className="kotakcancelpenggunadaftar">
-                  <a onClick={() => this.hideDaftar()}> <span className="cancelformpengguna">Cancel</span></a>
+                  <button className="buttonlikea" onClick={() => this.hideDaftar()}> <span className="cancelformpengguna">Cancel</span></button>
                 </div>
               </form>
             </div>
@@ -1077,7 +1076,7 @@ class Mahasiswa extends Component {
                 </div>
 
                 <div className="kotakcancelpenggunadaftar">
-                  <a onClick={() => this.hideDaftarFilter()}> <span className="cancelformpengguna">Cancel</span></a>
+                  <button className="buttonlikea" onClick={() => this.hideDaftarFilter()}> <span className="cancelformpengguna">Cancel</span></button>
                 </div>
               </form>
             </div>
@@ -1129,7 +1128,7 @@ class Mahasiswa extends Component {
                 </div>
 
                 <div className="kotakcancelpenggunadaftar">
-                  <a onClick={() => this.hideEdit()}> <span className="cancelformpengguna">Cancel</span></a>
+                  <button className="buttonlikea" onClick={() => this.hideEdit()}> <span className="cancelformpengguna">Cancel</span></button>
                 </div>
               </form>
             </div>
@@ -1138,38 +1137,38 @@ class Mahasiswa extends Component {
         {(state.daftar === false) && (state.edit === false) && (state.daftarfilter === false) &&
           <div className="kotakbagiandaftar">
             <div className="kotakdaftarruangan">
-              <a onClick={() => this.showPengguna("pengguna")}>
+              <button className="buttonlikea" onClick={() => this.showPengguna("pengguna")}>
                 <div className="daftar" style={{ width: "150px" }}>
                   <span><b>Daftar Mahasiswa</b></span>
                 </div>
-              </a>
+              </button>
             </div>
             {(state.pageshow === "pengguna") &&
               <div className="kotakdaftarruangan1">
-                <a onClick={() => this.showDaftar()}>
+                <button className="buttonlikea" onClick={() => this.showDaftar()}>
                   <div className="daftar">
                     <i className="fa fa-plus"></i>
                     <span><b>Mahasiswa</b></span>
                   </div>
-                </a>
+                </button>
               </div>}
             {(state.pageshow === "filterpengguna") &&
               <div className="kotakdaftarruangan1">
-                <a onClick={() => this.showDaftarFilter()}>
+                <button className="buttonlikea" onClick={() => this.showDaftarFilter()}>
                   <div className="daftar">
                     <i className="fa fa-plus"></i>
                     <span><b>Mata Kuliah</b></span>
                   </div>
-                </a>
+                </button>
               </div>}
             <div className="kotakfilterpengguna">
               <input name="filternim" value={state.filternim} onChange={this.handleChange} className="inputfilternim" type="text" placeholder="Masukkan NIM..." required ></input>
-              <a onClick={() => this.showFilterPengguna("filterpengguna", state.filternim)}>
+              <button className="buttonlikea" onClick={() => this.showFilterPengguna("filterpengguna", state.filternim)}>
                 <div className="tombolfilterpengguna">
                   <i className="fa fa-search"></i>
                   <span><b>&nbsp;&nbsp;&nbsp;Mata Kuliah Mahasiswa</b></span>
                 </div>
-              </a>
+              </button>
             </div>
           </div>
         }

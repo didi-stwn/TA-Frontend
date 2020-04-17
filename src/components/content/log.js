@@ -62,15 +62,15 @@ class Log extends Component {
       awal = startDateRead.replace("T", " ") + ''
       akhir = endDateRead.replace("T", " ") + ''
     }
-    if (awal == "") {
+    if (awal === "") {
       awal = null
       this.setState({ startDateRead: null })
     }
-    if (akhir == "") {
+    if (akhir === "") {
       akhir = null
       this.setState({ endDateRead: null })
     }
-    
+
     fetch(get.readlog, {
       method: 'post',
       headers: {
@@ -158,10 +158,10 @@ class Log extends Component {
         .then(response => response.json())
         .then(response => {
           //berhasil dapet data
-          if ((response.status === 1) && (response.count == 1)) {
+          if ((response.status === 1) && (response.count === 1)) {
             this.setState({ namac: response.hasil[0].nama })
           }
-          else if ((response.status === 1) && (response.count != 1)) {
+          else if ((response.status === 1) && (response.count !== 1)) {
             this.setState({ namac: '' })
           }
           //ga dapet token
@@ -194,10 +194,10 @@ class Log extends Component {
         .then(response => response.json())
         .then(response => {
           //berhasil dapet data
-          if ((response.status === 1) && (response.count == 1)) {
+          if ((response.status === 1) && (response.count === 1)) {
             this.setState({ namac: response.hasil[0].nama })
           }
-          else if ((response.status === 1) && (response.count != 1)) {
+          else if ((response.status === 1) && (response.count !== 1)) {
             this.setState({ namac: '' })
           }
           //ga dapet token
@@ -231,13 +231,13 @@ class Log extends Component {
   }
 
   filter(pagenow, sortbynow, ascdscnow) {
-    const { startDateRead, endDateRead, sortby, ascdsc, search, limit, page } = this.state
-    if (pagenow == page) {
-      if (sortbynow == sortby) {
-        if (ascdscnow == "asc") {
+    const { startDateRead, endDateRead, sortby, search, limit, page } = this.state
+    if (pagenow === page) {
+      if (sortbynow === sortby) {
+        if (ascdscnow === "asc") {
           ascdscnow = "desc"
         }
-        else if (ascdscnow == "desc") {
+        else if (ascdscnow === "desc") {
           ascdscnow = "asc"
         }
       }
@@ -458,7 +458,7 @@ class Log extends Component {
 
                 <div className="kotakinputlogpinturuangan">
                   <label> <b>Nama</b> </label> <br></br>
-                  <input className="inputformlogpintunim" type="text" placeholder="Nama" value={namac || ''} required ></input>
+                  <input onChange={this.handleChange} className="inputformlogpintunim" type="text" placeholder="Nama" value={namac || ''} required ></input>
                 </div>
 
                 <div className="kotakinputlogpintumatkul">
@@ -495,7 +495,7 @@ class Log extends Component {
                 </div>
 
                 <div className="kotakcancelpengguna2">
-                  <a onClick={() => this.hideDaftar()}> <span className="cancelformpengguna">Cancel</span></a>
+                  <button className="buttonlikea" onClick={() => this.hideDaftar()}> <span className="cancelformpengguna">Cancel</span></button>
                 </div>
               </form>
             </div>
@@ -504,12 +504,12 @@ class Log extends Component {
         {(daftar === false) &&
           <div>
             <div className="kotakdaftarruangan">
-              <a onClick={() => this.showDaftar()}>
+              <button className="buttonlikea" onClick={() => this.showDaftar()}>
                 <div className="daftar">
                   <i className="fa fa-plus"></i>
                   <span><b>Log</b></span>
                 </div>
-              </a>
+              </button>
             </div>
             <div>
               <div className="filtertanggallogpintu">

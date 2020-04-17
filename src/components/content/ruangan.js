@@ -98,11 +98,11 @@ class Ruangan extends Component {
     const { sortby, ascdsc, search, limit, page } = this.state
     const { name, value } = e.target;
     this.setState({ [name]: value });
-    if (name == "search") {
+    if (name === "search") {
       var searching = value
       var max = limit
     }
-    else if (name == "limit") {
+    else if (name === "limit") {
       searching = search
       max = value
     }
@@ -120,13 +120,13 @@ class Ruangan extends Component {
   }
 
   filter(pagenow, sortbynow, ascdscnow) {
-    const { sortby, ascdsc, search, limit, page } = this.state
-    if (pagenow == page) {
-      if (sortbynow == sortby) {
-        if (ascdscnow == "asc") {
+    const { sortby, search, limit, page } = this.state
+    if (pagenow === page) {
+      if (sortbynow === sortby) {
+        if (ascdscnow === "asc") {
           ascdscnow = "desc"
         }
-        else if (ascdscnow == "desc") {
+        else if (ascdscnow === "desc") {
           ascdscnow = "asc"
         }
       }
@@ -162,7 +162,7 @@ class Ruangan extends Component {
       })
         .then(response => response.json())
         .then(response => {
-          console.log(response)
+          //console.log(response)
           //berhasil add data
           if (response.status === 1) {
             this.setState({ databenar: true })
@@ -443,7 +443,7 @@ class Ruangan extends Component {
           if ((response.status === 1) && (response.count >= 1)) {
             this.setState({ namamatkulfilterc: response.hasil[0].namamatkul })
           }
-          else if ((response.status === 1) && (response.count != 1)) {
+          else if ((response.status === 1) && (response.count !== 1)) {
             this.setState({ namamatkulfilterc: '' })
           }
           //ga dapet token
@@ -507,11 +507,11 @@ class Ruangan extends Component {
   getDataMatkulHari(a, b, hari) {
     var c
     if (b.length > 0) {
-      for (var k = 0; k < b.length; k++) {
+      for (let k = 0; k < b.length; k++) {
         if (b[k].hari === hari) {
-          if ((b[k].jam + b[k].durasi - 1 >= a)&&(a>=b[k].jam)) {
+          if ((b[k].jam + b[k].durasi - 1 >= a) && (a >= b[k].jam)) {
             c = (<div>
-              <span style={{fontWeight:'1000'}}>{b[k].kodematkul}</span>
+              <span style={{ fontWeight: '1000' }}>{b[k].kodematkul}</span>
               <br></br>
               <span>{b[k].namamatkul}</span>
               <br></br>
@@ -563,7 +563,7 @@ class Ruangan extends Component {
     // deteksi page pertama
     if (state.page === 1) {
       showPrevious = false;
-      if ((state.page === maxPage) || (maxPage === 0)){
+      if ((state.page === maxPage) || (maxPage === 0)) {
         showNext = false;
       }
       else {
@@ -713,7 +713,7 @@ class Ruangan extends Component {
                 </div>
 
                 <div className="kotakcancelpenggunadaftar">
-                  <a onClick={() => this.hideDaftar()}> <span className="cancelformpengguna">Cancel</span></a>
+                  <button className="buttonlikea" onClick={() => this.hideDaftar()}> <span className="cancelformpengguna">Cancel</span></button>
                 </div>
               </form>
             </div>
@@ -781,7 +781,7 @@ class Ruangan extends Component {
                 </div>
 
                 <div className="kotakcancelpenggunadaftar">
-                  <a onClick={() => this.hideDaftarFilter()}> <span className="cancelformpengguna">Cancel</span></a>
+                  <button className="buttonlikea" onClick={() => this.hideDaftarFilter()}> <span className="cancelformpengguna">Cancel</span></button>
                 </div>
               </form>
             </div>
@@ -816,7 +816,7 @@ class Ruangan extends Component {
                 </div>
 
                 <div className="kotakcancelpenggunadaftar">
-                  <a onClick={() => this.hideEdit()}> <span className="cancelformpengguna">Cancel</span></a>
+                  <button className="buttonlikea" onClick={() => this.hideEdit()}> <span className="cancelformpengguna">Cancel</span></button>
                 </div>
               </form>
             </div>
@@ -825,29 +825,29 @@ class Ruangan extends Component {
         {(state.daftar === false) && (state.edit === false) && (state.daftarfilter === false) &&
           <div className="kotakbagiandaftar">
             <div className="kotakdaftarruangan">
-              <a onClick={() => this.showRuangan("ruangan")}>
+              <button className="buttonlikea" onClick={() => this.showRuangan("ruangan")}>
                 <div className="daftar" style={{ width: "150px" }}>
                   <span><b>Daftar Ruangan</b></span>
                 </div>
-              </a>
+              </button>
             </div>
             {(state.pageshow === "ruangan") &&
               <div className="kotakdaftarruangan1">
-                <a onClick={() => this.showDaftar()}>
+                <button className="buttonlikea" onClick={() => this.showDaftar()}>
                   <div className="daftar">
                     <i className="fa fa-plus"></i>
                     <span><b>Ruangan</b></span>
                   </div>
-                </a>
+                </button>
               </div>}
             <div className={stylefilterruangan}>
               <input name="koderuanganfilterc" style={{ width: "200px" }} onChange={this.handleChange} className="inputfilternim" type="text" placeholder="Masukkan Kode Ruangan..." value={state.koderuanganfilterc} required ></input>
-              <a onClick={() => this.showFilterRuangan("filterruangan", state.koderuanganfilterc)}>
+              <button className="buttonlikea" onClick={() => this.showFilterRuangan("filterruangan", state.koderuanganfilterc)}>
                 <div className="tombolfilterpengguna" style={{ marginLeft: "230px" }}>
                   <i className="fa fa-search"></i>
                   <span><b>&nbsp;&nbsp;&nbsp;Mata Kuliah Ruangan</b></span>
                 </div>
-              </a>
+              </button>
             </div>
           </div>
         }

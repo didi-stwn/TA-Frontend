@@ -212,7 +212,7 @@ class Filter_Matkul_Ruangan extends Component {
         const { kodematkul, kelas } = this.state
         var out
         if (b.length > 0) {
-            for (var k = 0; k < b.length; k++) {
+            for (let k = 0; k < b.length; k++) {
                 if (b[k].hari === hari) {
                     if ((b[k].jam + b[k].durasi - 1 >= a) && (a >= b[k].jam)) {
                         out = (<div>
@@ -276,12 +276,12 @@ class Filter_Matkul_Ruangan extends Component {
             })
                 .then(response => response.json())
                 .then(response => {
-                    console.log(response)
+                    //console.log(response)
                     //berhasil dapet data
-                    if ((response.status === 1) && (response.count == 1)) {
+                    if ((response.status === 1) && (response.count === 1)) {
                         this.setState({ alamatc: response.hasil[0].alamat })
                     }
-                    else if ((response.status === 1) && (response.count != 1)) {
+                    else if ((response.status === 1) && (response.count !== 1)) {
                         this.setState({ alamatc: '' })
                     }
                     //ga dapet token
@@ -455,7 +455,7 @@ class Filter_Matkul_Ruangan extends Component {
                                     </div>
 
                                     <div className="kotakcancelpenggunadaftar">
-                                        <a onClick={() => this.hideDaftar()}> <span className="cancelformpengguna">Cancel</span></a>
+                                        <button className="buttonlikea" onClick={() => this.hideDaftar()}> <span className="cancelformpengguna">Cancel</span></button>
                                     </div>
                                 </form>
                             </div>
@@ -464,12 +464,12 @@ class Filter_Matkul_Ruangan extends Component {
 
                     {(state.daftar === false) &&
                         <div className="kotakbackmatkul">
-                            <a onClick={() => this.Back()}>
+                            <button className="buttonlikea" onClick={() => this.Back()}>
                                 <div className="backmatkul">
                                     <i className="fa fa-arrow-left"></i>
                                     <span><b>&nbsp;&nbsp;Kembali</b></span>
                                 </div>
-                            </a>
+                            </button>
                         </div>
                     }
                     <div style={{ marginTop: '20px' }} />

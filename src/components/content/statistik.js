@@ -38,25 +38,25 @@ class Statistik extends Component {
             <div>
                 <div>
                     <div>
-                        <a>
+                        <button className="buttonlikea">
                             <div className="statistiknim">
                                 <span><b>NIM</b></span>
                             </div>
-                        </a>
+                        </button>
                     </div>
                     <div>
-                        <a>
+                        <button className="buttonlikea">
                             <div className="statistikmatakuliah">
                                 <span><b>Mata Kuliah</b></span>
                             </div>
-                        </a>
+                        </button>
                     </div>
                     <div>
-                        <a>
+                        <button className="buttonlikea">
                             <div className="statistikruangan">
                                 <span><b>Ruangan</b></span>
                             </div>
-                        </a>
+                        </button>
                     </div>
                 </div>
                 <div className="paddingtop30px"></div>

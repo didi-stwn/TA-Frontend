@@ -502,7 +502,7 @@ class Matakuliah extends Component {
                 </div>
 
                 <div className="kotakcancelpenggunadaftar">
-                  <a onClick={() => this.hideDaftar()}> <span className="cancelformpengguna">Cancel</span></a>
+                  <button className="buttonlikea" onClick={() => this.hideDaftar()}> <span className="cancelformpengguna">Cancel</span></button>
                 </div>
               </form>
             </div>
@@ -542,7 +542,7 @@ class Matakuliah extends Component {
                 </div>
 
                 <div className="kotakcancelpenggunadaftar">
-                  <a onClick={() => this.hideEdit()}> <span className="cancelformpengguna">Cancel</span></a>
+                  <button className="buttonlikea" onClick={() => this.hideEdit()}> <span className="cancelformpengguna">Cancel</span></button>
                 </div>
               </form>
             </div>
@@ -550,12 +550,12 @@ class Matakuliah extends Component {
         }
         {(state.daftar === false) && (state.edit === false) &&
           <div className="kotakdaftarruangan">
-            <a onClick={() => this.showDaftar()}>
+            <button className="buttonlikea" onClick={() => this.showDaftar()}>
               <div className="daftarfakultas">
                 <i className="fa fa-plus"></i>
                 <span><b>&nbsp;&nbsp;Mata Kuliah</b></span>
               </div>
-            </a>
+            </button>
           </div>
         }
         <div id={aksidata} className="kotakdata">

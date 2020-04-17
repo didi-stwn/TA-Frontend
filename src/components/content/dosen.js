@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import get from './config';
-import { stat } from 'fs';
 
 class Dosen extends Component {
     constructor(props) {
@@ -111,7 +110,7 @@ class Dosen extends Component {
                 .catch(error => {
                     sessionStorage.removeItem("name")
                     window.location.reload()
-                  })
+                })
         }
         else if (pageshow === "filterdosen") {
             fetch(get.readfilterdosen, {
@@ -150,7 +149,7 @@ class Dosen extends Component {
                 .catch(error => {
                     sessionStorage.removeItem("name")
                     window.location.reload()
-                  })
+                })
         }
     }
 
@@ -184,7 +183,7 @@ class Dosen extends Component {
             .catch(error => {
                 sessionStorage.removeItem("name")
                 window.location.reload()
-              })
+            })
     }
 
     getJurusan(e) {
@@ -225,7 +224,7 @@ class Dosen extends Component {
                 .catch(error => {
                     sessionStorage.removeItem("name")
                     window.location.reload()
-                  })
+                })
         }
     }
 
@@ -273,11 +272,11 @@ class Dosen extends Component {
         const { pageshow, sortby, ascdsc, search, limit, page } = this.state
         const { sortbyfilter, ascdscfilter, searchfilter, limitfilter, pagefilter } = this.state
         if (pageshow === "dosen") {
-            console.log("1")
+            //console.log("1")
             this.getData(pageshow, sortby, ascdsc, search, limit, page)
         }
         else if (pageshow === "filterdosen") {
-            console.log("2")
+            //console.log("2")
             this.getData(pageshow, sortbyfilter, ascdscfilter, searchfilter, limitfilter, pagefilter)
         }
         this.getFakultas()
@@ -343,7 +342,7 @@ class Dosen extends Component {
         })
             .then(response => response.json())
             .then(response => {
-                console.log(response)
+                //console.log(response)
                 //berhasil get data
                 if (response.status === 1) {
 
@@ -361,7 +360,7 @@ class Dosen extends Component {
             .catch(error => {
                 sessionStorage.removeItem("name")
                 window.location.reload()
-              })
+            })
     }
 
     getFinger1() {
@@ -394,7 +393,7 @@ class Dosen extends Component {
                             })
                                 .then(response => response.json())
                                 .then(response => {
-                                    console.log(response)
+                                    //console.log(response)
                                     //berhasil get data
                                     if (response.status === 1) {
                                         if (response.hasil.length !== 0) {
@@ -419,7 +418,7 @@ class Dosen extends Component {
                                 .catch(error => {
                                     sessionStorage.removeItem("name")
                                     window.location.reload()
-                                  })
+                                })
                         }, 2000);
                     }
                     //tidak berhasil get data
@@ -436,7 +435,7 @@ class Dosen extends Component {
                 .catch(error => {
                     sessionStorage.removeItem("name")
                     window.location.reload()
-                  })
+                })
         }
         else {
             this.setState({ pesandevice: true })
@@ -447,7 +446,7 @@ class Dosen extends Component {
 
     getFinger2() {
         const { kodedevice, finger1 } = this.state
-        if ((kodedevice !== '') && ((finger1!=='') && (finger1!=='-'))) {
+        if ((kodedevice !== '') && ((finger1 !== '') && (finger1 !== '-'))) {
             fetch(get.checkdevice + "/" + kodedevice, {
                 method: 'get',
                 headers: {
@@ -475,7 +474,7 @@ class Dosen extends Component {
                             })
                                 .then(response => response.json())
                                 .then(response => {
-                                    console.log(response)
+                                    //console.log(response)
                                     //berhasil get data
                                     if (response.status === 1) {
                                         if (response.hasil.length !== 0) {
@@ -500,7 +499,7 @@ class Dosen extends Component {
                                 .catch(error => {
                                     sessionStorage.removeItem("name")
                                     window.location.reload()
-                                  })
+                                })
                         }, 2000);
                     }
                     //tidak berhasil get data
@@ -517,7 +516,7 @@ class Dosen extends Component {
                 .catch(error => {
                     sessionStorage.removeItem("name")
                     window.location.reload()
-                  })
+                })
         }
         // this.setState({ finger2: '-' })
     }
@@ -566,7 +565,7 @@ class Dosen extends Component {
                 .catch(error => {
                     sessionStorage.removeItem("name")
                     window.location.reload()
-                  })
+                })
         }
         else if (pageshow === "filterdosen") {
             fetch(get.createfilterdosen, {
@@ -606,7 +605,7 @@ class Dosen extends Component {
                 .catch(error => {
                     sessionStorage.removeItem("name")
                     window.location.reload()
-                  })
+                })
         }
     }
 
@@ -651,7 +650,7 @@ class Dosen extends Component {
             .catch(error => {
                 sessionStorage.removeItem("name")
                 window.location.reload()
-              })
+            })
     }
 
     deletePengguna(a) {
@@ -674,7 +673,7 @@ class Dosen extends Component {
                 .catch(error => {
                     sessionStorage.removeItem("name")
                     window.location.reload()
-                  })
+                })
         }
     }
 
@@ -696,13 +695,13 @@ class Dosen extends Component {
             })
                 .then(response => response.json())
                 .then(response => {
-                    console.log(response)
+                    //console.log(response)
                     setTimeout(this.componentDidMount(), 1000)
                 })
                 .catch(error => {
                     sessionStorage.removeItem("name")
                     window.location.reload()
-                  })
+                })
         }
     }
 
@@ -740,7 +739,7 @@ class Dosen extends Component {
             .catch(error => {
                 sessionStorage.removeItem("name")
                 window.location.reload()
-              })
+            })
     }
 
     getNameMatkulFilter(e) {
@@ -780,7 +779,7 @@ class Dosen extends Component {
                 .catch(error => {
                     sessionStorage.removeItem("name")
                     window.location.reload()
-                  })
+                })
         }
         else {
             this.setState({ namamatkulfilterc: '' })
@@ -841,7 +840,7 @@ class Dosen extends Component {
         this.getData(a, sortby, ascdsc, search, limit, page)
     }
     componentWillUnmount() {
-      clearInterval(this.interval);
+        clearInterval(this.interval);
     }
     render() {
         const state = this.state
@@ -1029,7 +1028,7 @@ class Dosen extends Component {
                                 </div>
 
                                 <div className="kotakcancelpenggunadaftar">
-                                    <a onClick={() => this.hideDaftar()}> <span className="cancelformpengguna">Cancel</span></a>
+                                    <button className="buttonlikea" onClick={() => this.hideDaftar()}> <span className="cancelformpengguna">Cancel</span></button>
                                 </div>
                             </form>
                         </div>
@@ -1078,7 +1077,7 @@ class Dosen extends Component {
                                 </div>
 
                                 <div className="kotakcancelpenggunadaftar">
-                                    <a onClick={() => this.hideDaftarFilter()}> <span className="cancelformpengguna">Cancel</span></a>
+                                    <button className="buttonlikea" onClick={() => this.hideDaftarFilter()}> <span className="cancelformpengguna">Cancel</span></button>
                                 </div>
                             </form>
                         </div>
@@ -1130,7 +1129,7 @@ class Dosen extends Component {
                                 </div>
 
                                 <div className="kotakcancelpenggunadaftar">
-                                    <a onClick={() => this.hideEdit()}> <span className="cancelformpengguna">Cancel</span></a>
+                                    <button className="buttonlikea" onClick={() => this.hideEdit()}> <span className="cancelformpengguna">Cancel</span></button>
                                 </div>
                             </form>
                         </div>
@@ -1139,38 +1138,38 @@ class Dosen extends Component {
                 {(state.daftar === false) && (state.edit === false) && (state.daftarfilter === false) &&
                     <div className="kotakbagiandaftar">
                         <div className="kotakdaftarruangan">
-                            <a onClick={() => this.showPengguna("dosen")}>
+                            <button className="buttonlikea" onClick={() => this.showPengguna("dosen")}>
                                 <div className="daftar" style={{ width: "150px" }}>
                                     <span><b>Daftar Dosen</b></span>
                                 </div>
-                            </a>
+                            </button>
                         </div>
                         {(state.pageshow === "dosen") &&
                             <div className="kotakdaftarruangan1">
-                                <a onClick={() => this.showDaftar()}>
+                                <button className="buttonlikea" onClick={() => this.showDaftar()}>
                                     <div className="daftar">
                                         <i className="fa fa-plus"></i>
                                         <span><b>Dosen</b></span>
                                     </div>
-                                </a>
+                                </button>
                             </div>}
                         {(state.pageshow === "filterdosen") &&
                             <div className="kotakdaftarruangan1">
-                                <a onClick={() => this.showDaftarFilter()}>
+                                <button className="buttonlikea" onClick={() => this.showDaftarFilter()}>
                                     <div className="daftar">
                                         <i className="fa fa-plus"></i>
                                         <span><b>Mata Kuliah</b></span>
                                     </div>
-                                </a>
+                                </button>
                             </div>}
                         <div className="kotakfilterpengguna">
                             <input name="filternip" value={state.filternip} onChange={this.handleChange} className="inputfilternim" type="text" placeholder="Masukkan NIP..." required ></input>
-                            <a onClick={() => this.showFilterPengguna("filterdosen", state.filternip)}>
+                            <button className="buttonlikea" onClick={() => this.showFilterPengguna("filterdosen", state.filternip)}>
                                 <div className="tombolfilterpengguna">
                                     <i className="fa fa-search"></i>
                                     <span><b>&nbsp;&nbsp;&nbsp;Mata Kuliah Dosen</b></span>
                                 </div>
-                            </a>
+                            </button>
                         </div>
                     </div>
                 }

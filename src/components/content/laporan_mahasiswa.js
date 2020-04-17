@@ -3,7 +3,6 @@ import Pdf from "react-to-pdf"
 import ReactExport from "react-data-export";
 import { withRouter } from 'react-router-dom';
 import get from './config';
-import { stat } from 'fs';
 
 const ref = React.createRef();
 const ExcelFile = ReactExport.ExcelFile;
@@ -162,10 +161,10 @@ class Laporan_Mahasiswa extends Component {
                 .then(response => response.json())
                 .then(response => {
                     //berhasil dapet data
-                    if ((response.status === 1) && (response.count == 1)) {
+                    if ((response.status === 1) && (response.count === 1)) {
                         this.setState({ nama_form: response.hasil[0].nama })
                     }
-                    else if ((response.status === 1) && (response.count != 1)) {
+                    else if ((response.status === 1) && (response.count !== 1)) {
                         this.setState({ nama_form: '' })
                     }
                     //ga dapet token
@@ -442,7 +441,7 @@ class Laporan_Mahasiswa extends Component {
 
         dataset_excel.splice(0, state.data_matkul.length)
 
-        console.log(dataset_excel)
+        //console.log(dataset_excel)
 
         const dataXcl = [
             {
@@ -506,60 +505,62 @@ class Laporan_Mahasiswa extends Component {
                             (state.datasalah === false) &&
                             <p className="texthijau">&emsp;</p>
                         }
-                        <div className="kotaksubmitlaporan">
-                            <input className="submitformlogpintu2" type="submit" value="Find"></input>
-                        </div>
-                        {
-                            (state.datakosong === true) &&
-                            <a style={{ width: "100%", height: "100%" }}>
-                                <div className="kotakprintpdflaporan">
-                                    <div className="printformlaporan">
-                                        <i className="fa fa-print"> <span> Print to PDF</span></i>
-                                    </div>
-                                </div>
-                            </a>
-                        }
-                        {
-                            (state.datakosong === false) &&
-                            <Pdf targetRef={ref} filename={"TA026-" + state.nim}>
-                                {({ toPdf }) =>
-                                    <a onClick={toPdf} style={{ width: "100%", height: "100%" }}>
-                                        <div className="kotakprintpdflaporan">
-                                            <div className="printformlaporan">
-                                                <i className="fa fa-print"> <span> Print to PDF</span></i>
-                                            </div>
+
+                        <div className="floatright">
+                            <div className="kotaksubmitlaporan">
+                                <input className="submitformlogpintu2" type="submit" value="Find"></input>
+                            </div>
+                            {
+                                (state.datakosong === true) &&
+                                <button className="buttonlikea" style={{ width: "100%", height: "100%" }}>
+                                    <div className="kotakprintpdflaporan">
+                                        <div className="printformlaporan">
+                                            <i className="fa fa-print"> <span> Print to PDF</span></i>
                                         </div>
-                                    </a>
-                                }
-                            </Pdf>
-                        }
-
-                        {
-                            (state.datakosong === true) &&
-
-                            <a>
-                                <div className="kotakprintxcllaporan">
-                                    <div className="printformlaporan">
-                                        <i className="fa fa-print"> <span> Print to Excel</span></i>
                                     </div>
-                                </div>
-                            </a>
-                        }
+                                </button>
+                            }
+                            {
+                                (state.datakosong === false) &&
+                                <Pdf targetRef={ref} filename={"TA026-" + state.nim}>
+                                    {({ toPdf }) =>
+                                        <button className="buttonlikea" onClick={toPdf} style={{ width: "100%", height: "100%" }}>
+                                            <div className="kotakprintpdflaporan">
+                                                <div className="printformlaporan">
+                                                    <i className="fa fa-print"> <span> Print to PDF</span></i>
+                                                </div>
+                                            </div>
+                                        </button>
+                                    }
+                                </Pdf>
+                            }
 
-                        {
-                            (state.datakosong === false) &&
-                            <ExcelFile filename={"TA026-" + state.nim} element={
-                                <a>
+                            {
+                                (state.datakosong === true) &&
+
+                                <button className="buttonlikea">
                                     <div className="kotakprintxcllaporan">
                                         <div className="printformlaporan">
                                             <i className="fa fa-print"> <span> Print to Excel</span></i>
                                         </div>
                                     </div>
-                                </a>}>
-                                <ExcelSheet dataSet={dataXcl} name={"Xirka" + state.nim} />
-                            </ExcelFile>
-                        }
+                                </button>
+                            }
 
+                            {
+                                (state.datakosong === false) &&
+                                <ExcelFile filename={"TA026-" + state.nim} element={
+                                    <button className="buttonlikea">
+                                        <div className="kotakprintxcllaporan">
+                                            <div className="printformlaporan">
+                                                <i className="fa fa-print"> <span> Print to Excel</span></i>
+                                            </div>
+                                        </div>
+                                    </button>}>
+                                    <ExcelSheet dataSet={dataXcl} name={"Xirka" + state.nim} />
+                                </ExcelFile>
+                            }
+                        </div>
                     </form>
                 </div>
                 <div className="ruangandaftarruangan">

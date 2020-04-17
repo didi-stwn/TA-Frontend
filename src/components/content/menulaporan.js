@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from "react-router-dom";
-import Laporan_Mahasiswa from './laporan_mahasiswa';
-import Laporan_Pengajar from './laporan_pengajar';
+import LaporanMahasiswa from './laporan_mahasiswa';
+import LaporanPengajar from './laporan_pengajar';
 
 class MenuLaporan extends Component {
     constructor(props) {
@@ -51,11 +51,11 @@ class MenuLaporan extends Component {
                 <div>
                     {
                         state.ShowLaporanMahasiswa &&
-                        <Laporan_Mahasiswa />
+                        <LaporanMahasiswa />
                     }
                     {
                         state.ShowLaporanPengajar &&
-                        <Laporan_Pengajar />
+                        <LaporanPengajar />
                     }
 
                 </div>

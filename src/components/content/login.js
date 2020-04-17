@@ -1,7 +1,7 @@
 import React from 'react';
 import logo from './img/logoitb.png';
 import get from './config';
-import { Route, Redirect, withRouter } from "react-router-dom";
+import { Redirect} from "react-router-dom";
 
 export default class Login extends React.Component {
     constructor(props) {
@@ -84,7 +84,7 @@ export default class Login extends React.Component {
                     <div className="paddingtop100px"></div>
                     <div className="backgroundloginnn">
                         <div className="imglogin">
-                            <img src={logo}></img>
+                            <img src={logo} alt="User"></img>
                         </div>
                         <div className="formform">
                             <form onSubmit={this.handleSubmit}>

@@ -52,7 +52,7 @@ class SideBar extends Component {
                             </div>
                             <div className="user-panel">
                                 <div className="pull-left image">                                        
-                                    <img src={logo} className="img-circle" alt="User Image" />
+                                    <img src={logo} className="img-circle" alt="User" />
                                 </div>
                                 <div className="pull-left info">
                                     <p className="tulisanadmin">ADMIN</p>
