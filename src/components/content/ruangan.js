@@ -734,12 +734,12 @@ class Ruangan extends Component {
 
                 <div className="kotakinputfilterruanganhari">
                   <label><b>Hari</b> </label> <br></br>
-                  <input onChange={this.handleChange} className="inputfilterruangan" type="text" value={this.getHari(state.harifilterc)} required ></input>
+                  <input onChange={this.handleChange} className="inputfilterruangan" type="text" value={this.getHari(state.harifilterc) || ''} required ></input>
                 </div>
 
                 <div className="kotakinputfilterruanganjam">
                   <label><b>Jam</b> </label> <br></br>
-                  <input onChange={this.handleChange} className="inputfilterruangan" type="text" value={this.getJam(state.jamfilterc)} required ></input>
+                  <input onChange={this.handleChange} className="inputfilterruangan" type="text" value={this.getJam(state.jamfilterc) || ''} required ></input>
                 </div>
 
                 <div className="kotakinputfilterruangandurasi">
@@ -768,7 +768,7 @@ class Ruangan extends Component {
 
                 <div className="kotakinputfilterruangannamamatkul">
                   <label><b>Nama Matakuliah</b> </label> <br></br>
-                  <input value={state.namamatkulfilterc} className="inputfilterruangan" type="text" placeholder="Nama Matkul..." required ></input>
+                  <input onChange={this.handleChange} value={state.namamatkulfilterc || ''} className="inputfilterruangan" type="text" placeholder="Nama Matkul..." required ></input>
                 </div>
 
                 <div className="kotakinputfilterruangankelas">
@@ -803,12 +803,12 @@ class Ruangan extends Component {
 
                 <div className="kotakinputfakultas">
                   <label><b>Kode Ruangan</b> </label> <br></br>
-                  <input name="newkoderuangan" onChange={this.handleChange} className="inputformfakultas" type="text" placeholder="Kode Ruangan" value={state.newkoderuangan} required ></input>
+                  <input name="newkoderuangan" onChange={this.handleChange} className="inputformfakultas" type="text" placeholder="Kode Ruangan" value={state.newkoderuangan || ''} required ></input>
                 </div>
 
                 <div className="kotakinputjurusan">
                   <label><b>Alamat</b> </label> <br></br>
-                  <input name="newalamat" onChange={this.handleChange} className="inputformfakultas" type="text" placeholder="Alamat" value={state.newalamat} required ></input>
+                  <input name="newalamat" onChange={this.handleChange} className="inputformfakultas" type="text" placeholder="Alamat" value={state.newalamat || ''} required ></input>
                 </div>
 
                 <div className="kotaksubmitpenggunadaftar">
@@ -841,7 +841,7 @@ class Ruangan extends Component {
                 </button>
               </div>}
             <div className={stylefilterruangan}>
-              <input name="koderuanganfilterc" style={{ width: "200px" }} onChange={this.handleChange} className="inputfilternim" type="text" placeholder="Masukkan Kode Ruangan..." value={state.koderuanganfilterc} required ></input>
+              <input name="koderuanganfilterc" style={{ width: "200px" }} onChange={this.handleChange} className="inputfilternim" type="text" placeholder="Masukkan Kode Ruangan..." value={state.koderuanganfilterc || ''} required ></input>
               <button className="buttonlikea" onClick={() => this.showFilterRuangan("filterruangan", state.koderuanganfilterc)}>
                 <div className="tombolfilterpengguna" style={{ marginLeft: "230px" }}>
                   <i className="fa fa-search"></i>

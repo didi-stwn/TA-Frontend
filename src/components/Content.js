@@ -10,7 +10,7 @@ import Fakultas from './content/fakultas';
 import MenuLaporan from './content/menulaporan';
 import Bantuan from './content/bantuan';
 import Home from './content/home';
-import Statistik from './content/statistik';
+import MenuStatistik from './content/menustatistik';
 
 
 class Content extends Component {
@@ -27,7 +27,7 @@ class Content extends Component {
               className="switch-route"
             >
               <Route exact path="/" component={Home} />
-              <Route path="/statistik" render={ () => <Statistik/> } />
+              <Route path="/statistik" render={ () => <MenuStatistik/> } />
               <Route path="/log" render={ () => <Log/> } />
               <Route path="/mahasiswa" render={ () => <Mahasiswa/> } />
               <Route path="/dosen" render={ () => <Dosen/> } />

@@ -1,8 +1,9 @@
 {
-  "name": "adminlte-react",
+  "name": "TA026",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@react-pdf/renderer": "^1.6.8",
     "base-64": "^0.1.0",
     "chart.js": "^2.9.3",
     "mdbreact": "^4.17.0",

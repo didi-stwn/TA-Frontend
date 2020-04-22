@@ -1048,12 +1048,12 @@ class Mahasiswa extends Component {
 
                 <div className="kotakinputfilterpenggunanim">
                   <label><b>Nim</b> </label> <br></br>
-                  <input onChange={this.handleChange} className="inputformlogpintujurusan" type="text" placeholder="NIM" value={state.filternim} required ></input>
+                  <input onChange={this.handleChange} className="inputformlogpintujurusan" type="text" placeholder="NIM" value={state.filternim || ''} required ></input>
                 </div>
 
                 <div className="kotakinputfilterpenggunanama">
                   <label><b>Nama</b> </label> <br></br>
-                  <input onChange={this.handleChange} className="inputformlogpintujurusan" type="text" placeholder="Nama" value={state.namafilterc} required ></input>
+                  <input onChange={this.handleChange} className="inputformlogpintujurusan" type="text" placeholder="Nama" value={state.namafilterc || ''} required ></input>
                 </div>
 
                 <div className="kotakinputfilterpenggunakodematkul">
@@ -1063,7 +1063,7 @@ class Mahasiswa extends Component {
 
                 <div className="kotakinputfilterpenggunanamamatkul">
                   <label><b>Nama Matakuliah</b> </label> <br></br>
-                  <input value={state.namamatkulfilterc} onChange={this.handleChange} className="inputformlogpintujurusan" type="text" placeholder="Nama Matkul..." required ></input>
+                  <input value={state.namamatkulfilterc || ''} onChange={this.handleChange} className="inputformlogpintujurusan" type="text" placeholder="Nama Matkul..." required ></input>
                 </div>
 
                 <div className="kotakinputfilterpenggunakelas">
@@ -1098,12 +1098,12 @@ class Mahasiswa extends Component {
 
                 <div className="kotakinputpenggunanimu">
                   <label><b>Nim</b> </label> <br></br>
-                  <input name="nimu" onChange={this.handleChange} className="inputformlogpintunimu" type="text" placeholder="NIM" value={state.nimu} required ></input>
+                  <input name="nimu" onChange={this.handleChange} className="inputformlogpintunimu" type="text" placeholder="NIM" value={state.nimu || ''} required ></input>
                 </div>
 
                 <div className="kotakinputpenggunanamau">
                   <label><b>Nama</b> </label> <br></br>
-                  <input name="namau" onChange={this.handleChange} className="inputformlogpintunimu" type="text" placeholder="Nama" value={state.namau} required ></input>
+                  <input name="namau" onChange={this.handleChange} className="inputformlogpintunimu" type="text" placeholder="Nama" value={state.namau || ''} required ></input>
                 </div>
 
                 <div className="kotakinputpenggunadeviceu">
@@ -1162,7 +1162,7 @@ class Mahasiswa extends Component {
                 </button>
               </div>}
             <div className="kotakfilterpengguna">
-              <input name="filternim" value={state.filternim} onChange={this.handleChange} className="inputfilternim" type="text" placeholder="Masukkan NIM..." required ></input>
+              <input name="filternim" value={state.filternim || ''} onChange={this.handleChange} className="inputfilternim" type="text" placeholder="Masukkan NIM..." required ></input>
               <button className="buttonlikea" onClick={() => this.showFilterPengguna("filterpengguna", state.filternim)}>
                 <div className="tombolfilterpengguna">
                   <i className="fa fa-search"></i>

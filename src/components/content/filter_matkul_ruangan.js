@@ -413,12 +413,12 @@ class Filter_Matkul_Ruangan extends Component {
 
                                     <div className="kotakdaftarmatkulruanganhari">
                                         <label><b>Hari</b> </label> <br></br>
-                                        <input onChange={this.handleChange} className="inputformlogpintujurusan" type="text" value={this.getHari(state.haric)} required ></input>
+                                        <input onChange={this.handleChange} className="inputformlogpintujurusan" type="text" value={this.getHari(state.haric) || ''} required ></input>
                                     </div>
 
                                     <div className="kotakdaftarmatkulruanganjam">
                                         <label><b>Jam</b> </label> <br></br>
-                                        <input onChange={this.handleChange} className="inputformlogpintujurusan" type="text" value={this.getJam(state.jamc)} required ></input>
+                                        <input onChange={this.handleChange} className="inputformlogpintujurusan" type="text" value={this.getJam(state.jamc) || ''} required ></input>
                                     </div>
 
                                     <div className="kotakdaftarmatkulruangandurasi">
@@ -447,7 +447,7 @@ class Filter_Matkul_Ruangan extends Component {
 
                                     <div className="kotakdaftarmatkulruanganalamat">
                                         <label><b>Alamat</b> </label> <br></br>
-                                        <input value={state.alamatc} onChange={this.handleChange} className="inputformlogpintujurusan" type="text" placeholder="Alamat..." required ></input>
+                                        <input value={state.alamatc || ''} onChange={this.handleChange} className="inputformlogpintujurusan" type="text" placeholder="Alamat..." required ></input>
                                     </div>
 
                                     <div className="kotaksubmitpenggunadaftar">

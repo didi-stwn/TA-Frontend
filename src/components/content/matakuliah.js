@@ -462,7 +462,7 @@ class Matakuliah extends Component {
                   <select onChange={this.getJurusan} className="inputformlogpintustatus" required>
                     <option> </option>
                     {fakultas.map(isidata => (
-                      <option key={i++} value={isidata}>{isidata}</option>
+                      <option key={i++} value={isidata || ''}>{isidata}</option>
                     ))}
                   </select>
                 </div>
@@ -477,7 +477,7 @@ class Matakuliah extends Component {
                       <option> </option>
                     }
                     {(state.jurusankosong === false) && state.jurusan.map(isidata => (
-                      <option key={i++} value={isidata.jurusan}>{isidata.jurusan}</option>
+                      <option key={i++} value={isidata.jurusan || ''}>{isidata.jurusan}</option>
                     ))}
                   </select>
                 </div>
@@ -524,17 +524,17 @@ class Matakuliah extends Component {
 
                 <div className="kotakinputkodematkuledit">
                   <label><b>Kode Mata Kuliah</b> </label> <br></br>
-                  <input onChange={this.handleChange} className="inputformeditmatkul" type="text" placeholder="Kode" value={state.oldkodematkul} required ></input>
+                  <input onChange={this.handleChange} className="inputformeditmatkul" type="text" placeholder="Kode" value={state.oldkodematkul || ''} required ></input>
                 </div>
 
                 <div className="kotakinputnamamatkuledit">
                   <label><b>Nama Mata Kuliah</b> </label> <br></br>
-                  <input name="newnamamatkul" onChange={this.handleChange} className="inputformeditmatkul" type="text" placeholder="Nama" value={state.newnamamatkul} required ></input>
+                  <input name="newnamamatkul" onChange={this.handleChange} className="inputformeditmatkul" type="text" placeholder="Nama" value={state.newnamamatkul || ''} required ></input>
                 </div>
 
                 <div className="kotakinputkelasedit">
                   <label><b>Kelas</b> </label> <br></br>
-                  <input name="newkelas" onChange={this.handleChange} className="inputformeditmatkul" type="text" placeholder="Kelas" value={state.newkelas} required ></input>
+                  <input name="newkelas" onChange={this.handleChange} className="inputformeditmatkul" type="text" placeholder="Kelas" value={state.newkelas || ''} required ></input>
                 </div>
 
                 <div className="kotaksubmitpenggunadaftar">

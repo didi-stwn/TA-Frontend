@@ -1049,12 +1049,12 @@ class Dosen extends Component {
 
                                 <div className="kotakinputfilterpenggunanim">
                                     <label><b>NIP</b> </label> <br></br>
-                                    <input onChange={this.handleChange} className="inputformlogpintujurusan" type="text" placeholder="NIP" value={state.filternip} required ></input>
+                                    <input onChange={this.handleChange} className="inputformlogpintujurusan" type="text" placeholder="NIP" value={state.filternip || ''} required ></input>
                                 </div>
 
                                 <div className="kotakinputfilterpenggunanama">
                                     <label><b>Nama</b> </label> <br></br>
-                                    <input onChange={this.handleChange} className="inputformlogpintujurusan" type="text" placeholder="Nama" value={state.namafilterc} required ></input>
+                                    <input onChange={this.handleChange} className="inputformlogpintujurusan" type="text" placeholder="Nama" value={state.namafilterc || ''} required ></input>
                                 </div>
 
                                 <div className="kotakinputfilterpenggunakodematkul">
@@ -1099,12 +1099,12 @@ class Dosen extends Component {
 
                                 <div className="kotakinputpenggunanimu">
                                     <label><b>NIP</b> </label> <br></br>
-                                    <input name="nipu" onChange={this.handleChange} className="inputformlogpintunimu" type="text" placeholder="NIP" value={state.nipu} required ></input>
+                                    <input name="nipu" onChange={this.handleChange} className="inputformlogpintunimu" type="text" placeholder="NIP" value={state.nipu || ''} required ></input>
                                 </div>
 
                                 <div className="kotakinputpenggunanamau">
                                     <label><b>Nama</b> </label> <br></br>
-                                    <input name="namau" onChange={this.handleChange} className="inputformlogpintunimu" type="text" placeholder="Nama" value={state.namau} required ></input>
+                                    <input name="namau" onChange={this.handleChange} className="inputformlogpintunimu" type="text" placeholder="Nama" value={state.namau || ''} required ></input>
                                 </div>
 
                                 <div className="kotakinputpenggunadeviceu">
@@ -1163,7 +1163,7 @@ class Dosen extends Component {
                                 </button>
                             </div>}
                         <div className="kotakfilterpengguna">
-                            <input name="filternip" value={state.filternip} onChange={this.handleChange} className="inputfilternim" type="text" placeholder="Masukkan NIP..." required ></input>
+                            <input name="filternip" value={state.filternip || ''} onChange={this.handleChange} className="inputfilternim" type="text" placeholder="Masukkan NIP..." required ></input>
                             <button className="buttonlikea" onClick={() => this.showFilterPengguna("filterdosen", state.filternip)}>
                                 <div className="tombolfilterpengguna">
                                     <i className="fa fa-search"></i>

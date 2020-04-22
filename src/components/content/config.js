@@ -7,6 +7,7 @@ const s = {
     //log
     readlog: url + "/log/read",
     readstatistiklog: url + "/log/statistik",
+    readlogpengajar: url + "/log/pengajar",
     createlog: url + "/log/create",
     deletelog: url + "/log/delete",
 

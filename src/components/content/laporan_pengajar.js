@@ -1,96 +1,10 @@
-// import React from "react";
-// import ReactExport from "react-data-export";
-// import { withRouter } from 'react-router-dom';
-// import get from './config';
-
-// const ExcelFile = ReactExport.ExcelFile;
-// const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
-// const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
-
-// class Laporan extends React.Component {
-//     constructor(props) {
-//         super(props);
-//         this.state = {
-//             data: [],
-//             sortby: 'fakultas',
-//             ascdsc: 'asc',
-//             search: '',
-//             page: 1,
-//             limit: 20
-//         };
-//     }
-
-//     componentDidMount() {
-//         const { sortby, ascdsc, search, limit, page } = this.state
-//         fetch(get.readpengguna, {
-//             method: 'post',
-//             headers: {
-//                 "x-access-token": sessionStorage.name,
-//                 "Content-Type": "application/json"
-//             },
-//             body: JSON.stringify({
-//                 sortby: sortby,
-//                 ascdsc: ascdsc,
-//                 search: search,
-//                 limit: limit,
-//                 page: page,
-//             })
-//         })
-//             .then(response => response.json())
-//             .then(response => {
-//                 //berhasil dapet data
-//                 if ((response.status === 1) && (response.count !== 0)) {
-//                     this.setState({ data: response.hasil })
-//                     this.setState({ datakosong: false })
-//                 }
-//                 else if ((response.status === 1) && (response.count === 0)) {
-//                     this.setState({ datakosong: true })
-//                 }
-//                 //ga dapet token
-//                 else if ((response.status !== 1) && (response.status !== 0)) {
-//                     sessionStorage.removeItem("name")
-//                     window.location.reload()
-//                 }
-//             })
-//             .catch(error => {
-//                 sessionStorage.removeItem("name")
-//                 window.location.reload()
-//             })
-//     }
-
-//     render() {
-//         console.log(this.state.data)
-//         const dataSet1 = this.state.data.map(isi => {
-//             return {
-//                 fakultas: isi.fakultas,
-//                 jurusan: isi.jurusan,
-//                 nim: isi.nim,
-//                 nama: isi.nama
-//             }
-//         })
-//         console.log(dataSet1)
-//         return (
-//             <ExcelFile element={<button>Download Data</button>}>
-//                 <ExcelSheet data={dataSet1} name="Employees">
-//                     <ExcelColumn label="Fakultas" value="fakultas" />
-//                     <ExcelColumn label="Jurusan" value="jurusan" />
-//                     <ExcelColumn label="NIM" value="nim" />
-//                     <ExcelColumn label="Nama" value="nama" />
-//                 </ExcelSheet>
-//             </ExcelFile>
-//         );
-//     }
-// }
-
-// export default withRouter(Laporan);
-
 import React, { Component } from 'react';
 import Pdf from "react-to-pdf"
 import ReactExport from "react-data-export";
 import { withRouter } from 'react-router-dom';
 import get from './config';
 
-
+var dataset_excel = []
 const ref = React.createRef();
 const ExcelFile = ReactExport.ExcelFile;
 const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
@@ -99,108 +13,59 @@ class Laporan_Pengajar extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data_mahasiswa: [],
-            data_dosen: [],
-            data_matkul: [],
+            data_pengajar: [],
+            data_all_pengajar: [],
+            matkul_input: [],
+            matkul_form: [],
+            matkulkosong: true,
             nim_form: '',
             nim: '',
-            nama_form: '',
             nama: '',
+            matkul_pilih: '',
+            kelas_pilih: '',
+            startDate_form: '',
+            endDate_form: '',
             startDate: '',
             endDate: '',
-            nimuser: '',
             find_pressed: false,
             datasalah: false,
             datakosong: true,
         };
+        this.getmatkul = this.getmatkul.bind(this);
         this.handleChange = this.handleChange.bind(this);
-        this.getNameFilter = this.getNameFilter.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    handleChange(e) {
-        const { name, value } = e.target;
-        this.setState({ [name]: value });
-    }
-
-    handleSubmit(e) {
-        e.preventDefault();
-        const { nim_form, startDate, endDate, nama_form } = this.state
-        fetch(get.readstatistiklog + "/" + nim_form, {
-            method: 'post',
-            headers: {
-                "x-access-token": sessionStorage.name,
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                startDate: startDate,
-                endDate: endDate
-            })
-        })
-            .then(response => response.json())
-            .then(response => {
-                //berhasil dapet data
-                if ((response.status === 1) && (response.log_dosen.length !== 0) && (response.matkul.length !== 0)) {
-                    this.setState({
-                        find_pressed: true,
-                        nama: nama_form,
-                        nim: nim_form,
-                        datakosong: false,
-                        data_mahasiswa: response.log_mahasiswa,
-                        data_dosen: response.log_dosen,
-                        data_matkul: response.matkul,
-                    })
-                }
-                else if ((response.status === 1) && ((response.log_dosen.length === 0) || (response.matkul.length === 0))) {
-                    this.setState({
-                        datakosong: true,
-                        find_pressed: true,
-                        nama: nama_form,
-                        nim: nim_form,
-                    })
-                }
-                //ga dapet token
-                else if ((response.status !== 1) && (response.status !== 0)) {
-                    sessionStorage.removeItem("name")
-                    window.location.reload()
-                }
-            })
-            .catch(error => {
-                sessionStorage.removeItem("name")
-                window.location.reload()
-            })
-    }
-
-    getNameFilter(e) {
-        const { name, value } = e.target;
-        this.setState({ [name]: value });
-        var lengthnama;
-
-        lengthnama = value.length;
-
-        if (lengthnama === 8) {
-            fetch(get.readpengguna, {
+    getmatkul(e) {
+        const { value } = e.target
+        this.setState({ nim_form: value })
+        if (value === '') {
+            this.setState({ matkulkosong: true })
+        }
+        else if (value.length >= 8) {
+            fetch(get.readfilterdosen + "/" + value, {
                 method: 'post',
                 headers: {
                     "x-access-token": sessionStorage.name,
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({
-                    sortby: "nim",
-                    ascdsc: "asc",
-                    search: value,
-                    limit: "1",
-                    page: "1",
-                })
             })
                 .then(response => response.json())
                 .then(response => {
                     //berhasil dapet data
-                    if ((response.status === 1) && (response.count === 1)) {
-                        this.setState({ nama_form: response.hasil[0].nama })
-                    }
-                    else if ((response.status === 1) && (response.count !== 1)) {
-                        this.setState({ nama_form: '' })
+                    if (response.status === 1) {
+                        if (response.count !== 0) {
+                            this.setState({
+                                matkul_input: response.hasil,
+                                matkulkosong: false
+                            })
+                        }
+                        else {
+                            this.setState({
+                                matkul_input: '',
+                                matkulkosong: true
+                            })
+                        }
                     }
                     //ga dapet token
                     else if ((response.status !== 1) && (response.status !== 0)) {
@@ -213,68 +78,232 @@ class Laporan_Pengajar extends Component {
                     window.location.reload()
                 })
         }
-
         else {
-            this.setState({ nama_form: '' })
+            this.setState({
+                matkul_input: '',
+                matkulkosong: true
+            })
         }
     }
 
-    getDataTable(matkul, datadosen, datamahasiswa, col){
-        return("hehe")
+    handleChange(e) {
+        const { name, value } = e.target;
+        this.setState({ [name]: value });
+    }
+
+    handleSubmit(e) {
+        e.preventDefault();
+        const { nim_form, startDate_form, endDate_form, status_input, matkul_form, matkul_input } = this.state
+        fetch(get.readlogpengajar + "/" + nim_form, {
+            method: 'post',
+            headers: {
+                "x-access-token": sessionStorage.name,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                status: status_input,
+                startDate: startDate_form,
+                endDate: endDate_form,
+                kodematkul: matkul_input[matkul_form].kodematkul,
+                kelas: matkul_input[matkul_form].kelas
+            })
+        })
+            .then(response => response.json())
+            .then(response => {
+                //berhasil dapet data
+                if (response.status === 1) {
+                    this.setState({
+                        nama: response.nama_pengajar,
+                        nim: nim_form,
+                        matkul_pilih: matkul_input[matkul_form].kodematkul,
+                        kelas_pilih: matkul_input[matkul_form].kelas,
+                        startDate: startDate_form,
+                        endDate: endDate_form
+                    })
+                    if (response.log_all_pengajar.length !== 0) {
+                        this.setState({
+                            find_pressed: true,
+                            datakosong: false,
+                            data_pengajar: response.log_pengajar,
+                            nama: response.nama_pengajar,
+                            nim: nim_form
+                        })
+                        this.getTanggalPengajar(response.log_all_pengajar)
+                    }
+                    else {
+                        this.setState({
+                            datakosong: true,
+                            find_pressed: true,
+                        })
+                    }
+                }
+                else if ((response.status !== 1) && (response.status !== 0)) {
+                    sessionStorage.removeItem("name")
+                    window.location.reload()
+                }
+            })
+            .catch(error => {
+                sessionStorage.removeItem("name")
+                window.location.reload()
+            })
+        dataset_excel = []
+    }
+
+    getTanggalPengajar(data) {
+        var output = [];
+        output.push(data[0])
+        var date = (new Date(data[0].waktu)).toLocaleDateString()
+        var jam;
+
+        if ((new Date(data[0].waktu)).getMinutes() > 40) {
+            jam = (new Date(data[0].waktu)).getHours() + 1
+        }
+        else {
+            jam = (new Date(data[0].waktu)).getHours()
+        }
+
+        var date_next, jam_next;
+
+        for (var i = 1; i < data.length; i++) {
+            date_next = (new Date(data[i].waktu)).toLocaleDateString()
+            jam_next = (new Date(data[i].waktu)).getHours()
+            if ((data[i].keterangan === "Hadir") || (data[i].keterangan === "Izin") || (data[i].keterangan === "Sakit")) {
+                if ((date_next === date) && ((jam_next === jam - 1) || (jam_next === jam))) {
+                }
+                else {
+                    output.push(data[i])
+                    date = (new Date(data[i].waktu)).toLocaleDateString()
+
+                    if ((new Date(data[i].waktu)).getMinutes() > 40) {
+                        jam = (new Date(data[i].waktu)).getHours() + 1
+                    }
+                    else {
+                        jam = (new Date(data[i].waktu)).getHours()
+                    }
+                }
+
+            }
+        }
+        this.setState({
+            data_all_pengajar: output
+        })
+    }
+
+    waktu(t) {
+        var tahun, bulan, tanggal, jam, tgl, j, m, date;
+        date = new Date(t)
+        tahun = String(date.getFullYear())
+        var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
+        bulan = months[(date.getMonth())]
+        tgl = date.getDate()
+        if (tgl <= 9) {
+            tanggal = "0" + String(tgl)
+        }
+        else {
+            tanggal = String(tgl)
+        }
+
+        m = date.getMinutes()
+
+        if (m > 40) {
+            j = date.getHours() + 1
+        }
+        else {
+            j = date.getHours()
+        }
+
+        if (j <= 9) {
+            jam = "0" + String(j)
+        }
+        else {
+            jam = String(j)
+        }
+        return bulan + " " + tanggal + ", " + tahun + " " + jam + ":00:00"
+    }
+
+    getDataTable(dataallpengajar, datapengajar, no) {
+        var date_pengajar, jam_pengajar, min_jam_pengajar, max_jam_pengajar
+        var date_all_pengajar
+        var waktudata, koderuangandata, hadirdata, izindata,sakitdata,alfadata
+        date_all_pengajar = (new Date(dataallpengajar.waktu)).toLocaleDateString()
+
+        if ((new Date(dataallpengajar.waktu)).getMinutes() > 40) {
+            min_jam_pengajar = (new Date(dataallpengajar.waktu)).getHours()
+        }
+        else {
+            min_jam_pengajar = (new Date(dataallpengajar.waktu)).getHours() - 1
+        }
+
+        max_jam_pengajar = min_jam_pengajar + 1
+
+        for (var j = 0; j < datapengajar.length; j++) { //datamahasiswa : kodematkul, kelas, waktu.
+            date_pengajar = (new Date(datapengajar[j].waktu)).toLocaleDateString()
+            jam_pengajar = (new Date(datapengajar[j].waktu)).getHours()
+            if ((date_pengajar === date_all_pengajar) && (jam_pengajar >= min_jam_pengajar) && (jam_pengajar <= max_jam_pengajar)) {
+                if (datapengajar[j].keterangan === "Hadir") {
+                    waktudata = this.waktu(new Date(dataallpengajar.waktu))
+                    koderuangandata = dataallpengajar.koderuangan
+                    hadirdata = "✔"
+                    izindata = ""
+                    sakitdata = ""
+                    alfadata = ""
+                    break;
+                }
+                else if (datapengajar[j].keterangan === "Izin") {
+                    waktudata = this.waktu(new Date(dataallpengajar.waktu))
+                    koderuangandata = dataallpengajar.koderuangan
+                    hadirdata = ""
+                    izindata = "✔"
+                    sakitdata = ""
+                    alfadata = ""
+                    break;
+                }
+                else if (datapengajar[j].keterangan === "Sakit") {
+                    waktudata = this.waktu(new Date(dataallpengajar.waktu))
+                    koderuangandata = dataallpengajar.koderuangan
+                    hadirdata = ""
+                    izindata = ""
+                    sakitdata = "✔"
+                    alfadata = ""
+                    break;
+                }
+            }
+        }
+        if (j === datapengajar.length) {
+            waktudata = this.waktu(new Date(dataallpengajar.waktu))
+            koderuangandata = dataallpengajar.koderuangan
+            hadirdata = ""
+            izindata = ""
+            sakitdata = ""
+            alfadata = "✔"
+        }
+
+        var output = []
+        output.push(no)
+        output.push(waktudata)
+        output.push(koderuangandata)
+        output.push(hadirdata)
+        output.push(izindata)
+        output.push(sakitdata)
+        output.push(alfadata)
+
+        dataset_excel.push(output)
+
+        return (
+            <tr key={no} className="tabellaporanbody">
+                <td className="laporanno">{no}</td>
+                <td className="laporanno">{waktudata}</td>
+                <td className="laporanno">{koderuangandata}</td>
+                <td className="laporanno">{hadirdata}</td>
+                <td className="laporanno">{izindata}</td>
+                <td className="laporanno">{sakitdata}</td>
+                <td className="laporanno">{alfadata}</td>
+            </tr>
+        )
     }
 
     render() {
         const state = this.state
-
-        function getDataXcl(a) {
-            var data = new Array(a.length);
-            for (var i = 0; i < a.length; i++) {
-                data[i] = new Array(9)
-
-                data[i][0] = " "
-                data[i][1] = " "
-                data[i][2] = " "
-                data[i][3] = " "
-                data[i][4] = " "
-                data[i][5] = " "
-                data[i][6] = " "
-                data[i][7] = " "
-                data[i][8] = " "
-            }
-            return data
-        }
-
-        const dataXcl = [
-            {
-                columns: [" ", " ", " ", " ", " ", " ", " ", " ", " "],
-                data: [
-                    ["NIM/NIP", " "],
-                    ["Nama", " "],
-                    ["Nama Ruangan", " "],
-                    [" "],
-                    [" "],
-                    [" ", " ", " ", "Pencetak", "ADMIN"],
-                    // [" "," "," ","Pencetak",sessionStorage.message ],
-                    ["Periode", " ", " ", "Tanggal Cetak", " ",]
-                ]
-            },
-
-            {
-                ySteps: 2,
-                columns: [
-                    { title: "No", width: { wpx: 30 } },
-                    { title: "Hari, Tanggal", width: { wpx: 120 } },
-                    { title: "Jam Masuk", width: { wpx: 100 } },
-                    { title: "Jam Keluar", width: { wpx: 100 } },
-                    { title: "Total Jam/Hari", width: { wpx: 100 } },
-                    { title: "Alfa", width: { wpx: 50 } },
-                    { title: "Izin", width: { wpx: 50 } },
-                    { title: "Sakit", width: { wpx: 50 } },
-                    { title: "Keterangan", width: { wpx: 100 } },
-                ],
-                data: getDataXcl(1)
-            }
-        ]
 
         function PeriodeCetak(start, end) {
             var hasil, awal, akhir, tahunawal, tahunakhir, bulanawal, bulanakhir, tanggalawal, tanggalakhir, tglawal, tglakhir;
@@ -348,29 +377,72 @@ class Laporan_Pengajar extends Component {
             }
         }
 
-        var i = 1
+        dataset_excel.splice(0, dataset_excel.length)
+
+        var dataXcl = [
+            {
+                columns: [
+                    { title: "", width: { wpx: 120 } },
+                    { title: "", width: { wpx: 200 } },
+                    { title: "", width: { wpx: 120 } },
+                    { title: "", width: { wpx: 50 } },
+                    { title: "", width: { wpx: 50 } },
+                    { title: "", width: { wpx: 50 } },
+                    { title: "", width: { wpx: 50 } },
+                ],
+
+                data: [
+                    ["NIM/NIP", state.nim],
+                    ["Nama", state.nama],
+                    ["MataKuliah", state.matkul_pilih + "-" + state.kelas_pilih],
+                    [" "],
+                    [" ", " ", " ", " ", " ", "Pencetak", "ADMIN"],
+                    // [" "," "," ","Pencetak",sessionStorage.message ],
+                    ["Periode", PeriodeCetak(state.startDate, state.endDate), " ", " ", " ", "Tanggal Cetak", sekarang(new Date())],
+                ]
+            },
+
+            {
+                ySteps: 1,
+                columns: ["Pertemuan Ke-", "Waktu", "Kode Ruangan", "Hadir", "Izin", "Sakit", "Alfa"],
+                data: dataset_excel
+            }
+        ]
+
+        var i = 0
+        var l = 1
         return (
             <div>
                 <div className="kotakfilter2">
                     <form className="kotakforminputlogpintu" onSubmit={this.handleSubmit}>
                         <div className="kotakinputlaporannim">
-                            <label> NIM </label> <br></br>
-                            <input name="nim_form" onChange={this.getNameFilter} className="inputformlaporannim" type="text" placeholder="NIM..." required></input>
+                            <label> NIM/NIP </label> <br></br>
+                            <input name="nim_form" onChange={this.getmatkul} className="inputformlaporannim" type="text" placeholder="NIM..." required></input>
                         </div>
 
-                        <div className="kotakinputlaporannama">
-                            <label> Nama </label> <br></br>
-                            <input onChange={this.handleChange} className="inputformlaporannim" type="text" placeholder="Nama..." value={state.nama_form || ''} required></input>
+                        <div className="kotakinputlaporannama2">
+                            <label> Mata Kuliah </label> <br></br>
+                            <select name="matkul_form" onChange={this.handleChange} className="inputformlaporannim" required>
+                                {state.matkulkosong &&
+                                    <option> </option>
+                                }
+                                {(state.matkulkosong === false) &&
+                                    <option> </option>
+                                }
+                                {(state.matkulkosong === false) && state.matkul_input.map(isidata => (
+                                    <option key={i} value={i++}>{isidata.kodematkul} - {isidata.kelas}</option>
+                                ))}
+                            </select>
                         </div>
 
-                        <div className="kotakinputlaporanstart">
+                        <div className="kotakinputlaporanstart2">
                             <label> Start Date </label> <br></br>
-                            <input name="startDate" onChange={this.handleChange} className="inputformlaporannim" type="date" required></input>
+                            <input name="startDate_form" onChange={this.handleChange} className="inputformlaporannim" type="date" required></input>
                         </div>
 
                         <div className="kotakinputlaporanend">
                             <label> End Date </label> <br></br>
-                            <input name="endDate" onChange={this.handleChange} className="inputformlaporannim" type="date" required></input>
+                            <input name="endDate_form" onChange={this.handleChange} className="inputformlaporannim" type="date" required></input>
                         </div>
                         {
                             state.datasalah &&
@@ -380,14 +452,13 @@ class Laporan_Pengajar extends Component {
                             (state.datasalah === false) &&
                             <p className="texthijau">&emsp;</p>
                         }
-                        <div className="kotaksubmitlaporan">
-                            <input className="submitformlogpintu2" type="submit" value="Find"></input>
-                        </div>
-
-
-                        <Pdf targetRef={ref} filename={"TA026-" + state.nim}>
-                            {({ toPdf }) =>
-                                <button onClick={toPdf} style={{ width: "100%", height: "100%" }}>
+                        <div className="floatright">
+                            <div className="kotaksubmitlaporan">
+                                <input className="submitformlogpintu2" type="submit" value="Find"></input>
+                            </div>
+                            {
+                                (state.datakosong === true) &&
+                                <button className="buttonlikea" style={{ width: "100%", height: "100%" }}>
                                     <div className="kotakprintpdflaporan">
                                         <div className="printformlaporan">
                                             <i className="fa fa-print"> <span> Print to PDF</span></i>
@@ -395,31 +466,59 @@ class Laporan_Pengajar extends Component {
                                     </div>
                                 </button>
                             }
-                        </Pdf>
+                            {
+                                (state.datakosong === false) &&
+                                <Pdf targetRef={ref} filename={"TA026-" + state.nim}>
+                                    {({ toPdf }) =>
+                                        <button className="buttonlikea" onClick={toPdf} style={{ width: "100%", height: "100%" }}>
+                                            <div className="kotakprintpdflaporan">
+                                                <div className="printformlaporan">
+                                                    <i className="fa fa-print"> <span> Print to PDF</span></i>
+                                                </div>
+                                            </div>
+                                        </button>
+                                    }
+                                </Pdf>
+                            }
 
-                        <ExcelFile filename={"TA026-" + state.nim} element={
-                            <button>
-                                <div className="kotakprintxcllaporan">
-                                    <div className="printformlaporan">
-                                        <i className="fa fa-print"> <span> Print to Excel</span></i>
+                            {
+                                (state.datakosong === true) &&
+
+                                <button className="buttonlikea">
+                                    <div className="kotakprintxcllaporan">
+                                        <div className="printformlaporan">
+                                            <i className="fa fa-print"> <span> Print to Excel</span></i>
+                                        </div>
                                     </div>
-                                </div>
-                            </button>}>
-                            <ExcelSheet dataSet={dataXcl} name={"TA026" + state.nim} />
-                        </ExcelFile>
+                                </button>
+                            }
 
+                            {
+                                (state.datakosong === false) &&
+                                <ExcelFile filename={"TA026-" + state.nim} element={
+                                    <button className="buttonlikea">
+                                        <div className="kotakprintxcllaporan">
+                                            <div className="printformlaporan">
+                                                <i className="fa fa-print"> <span> Print to Excel</span></i>
+                                            </div>
+                                        </div>
+                                    </button>}>
+                                    <ExcelSheet dataSet={dataXcl} name={"TA026-" + state.nim} />
+                                </ExcelFile>
+                            }
+                        </div>
                     </form>
                 </div>
                 <div className="ruangandaftarruangan">
                     <div className="box-footer">
                         <div className="kotakisigrafik">
                             <div className="kotakisigrafik2">
-                                <div ref={ref} className="ruangandaftarruangan2">
+                                <div ref={ref} id="dididi" className="ruangandaftarruangan2">
                                     <table className="tabellaporan">
                                         <tbody>
                                             <tr>
                                                 <td style={{ width: '15%' }}>
-                                                    <b>NIM</b>
+                                                    <b>NIM/NIP</b>
                                                 </td>
                                                 <td style={{ width: '40%' }}>
                                                     <b>&emsp;:&emsp;{state.nim}</b>
@@ -431,6 +530,14 @@ class Laporan_Pengajar extends Component {
                                                 </td>
                                                 <td>
                                                     <b>&emsp;:&emsp;{state.nama}</b>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <b>Mata Kuliah</b>
+                                                </td>
+                                                <td>
+                                                    <b>&emsp;:&emsp;{state.matkul_pilih} - {state.kelas_pilih}</b>
                                                 </td>
                                             </tr>
                                             <tr><td>&emsp;</td></tr>
@@ -463,32 +570,20 @@ class Laporan_Pengajar extends Component {
                                     <table className="tabellaporan">
                                         <thead>
                                             <tr className="tabellaporantrhead">
-                                                <th className="laporanno" > No </th>
-                                                <th className="laporanhari"> Nama Mata Kuliah </th>
-                                                <th className="laporantotal"> Kode Mata Kuliah </th>
-                                                <th className="laporanalfa"> Kelas </th>
-                                                <th className="laporanalfa"> Hadir </th>
-                                                <th className="laporanizin"> Izin </th>
+                                                <th className="laporanmasuk"> Pertemuan ke- </th>
+                                                <th className="laporanhari"> Waktu </th>
+                                                <th className="laporanmasuk"> Kode Ruangan </th>
+                                                <th className="laporansakit"> Hadir </th>
+                                                <th className="laporansakit"> Izin </th>
                                                 <th className="laporansakit"> Sakit </th>
                                                 <th className="laporansakit"> Alfa </th>
-                                                <th className="laporanketerangan"> Persentase Kehadiran </th>
                                             </tr>
                                         </thead>
                                         {
                                             (state.datakosong === false) &&
                                             <tbody>
-                                                {state.data_matkul.map(isidata => (
-                                                    <tr key={i} className="tabellaporanbody">
-                                                        <td className ="laporanno">{i++}</td>
-                                                        <td className ="laporanmasuk">{isidata.namamatkul}</td>
-                                                        <td className ="laporanhari">{isidata.kodematkul}</td>
-                                                        <td className ="laporanno">{isidata.kelas}</td>
-                                                        <td className ="laporanno">{this.getDataTable(isidata,state.data_dosen, state.data_mahasiswa, 1)}</td>
-                                                        <td className ="laporanno">{this.getDataTable(isidata,state.data_dosen, state.data_mahasiswa, 2)}</td>
-                                                        <td className ="laporanno">{this.getDataTable(isidata,state.data_dosen, state.data_mahasiswa, 3)}</td>
-                                                        <td className ="laporanno">{this.getDataTable(isidata,state.data_dosen, state.data_mahasiswa, 4)}</td>
-                                                        <td className ="laporanno">{this.getDataTable(isidata,state.data_dosen, state.data_mahasiswa, 5)}</td>
-                                                    </tr>
+                                                {state.data_all_pengajar.map(isidata => (
+                                                    this.getDataTable(isidata, state.data_pengajar, l++)
                                                 ))}
                                             </tbody>
                                         }
@@ -496,7 +591,7 @@ class Laporan_Pengajar extends Component {
                                             (state.datakosong === true) &&
                                             <tbody>
                                                 <tr className="tabellaporanbody">
-                                                    <td colSpan="9">Data tidak ditemukasssn</td>
+                                                    <td colSpan="10">Data tidak ditemukan</td>
                                                 </tr>
                                             </tbody>
                                         }

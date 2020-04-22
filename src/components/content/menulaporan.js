@@ -7,8 +7,8 @@ class MenuLaporan extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            ShowLaporanMahasiswa: true,
-            ShowLaporanPengajar: false,
+            ShowLaporanMahasiswa: false,
+            ShowLaporanPengajar: true,
         };
     }
     ShowLaporanMahasiswaNow() {
@@ -36,7 +36,7 @@ class MenuLaporan extends Component {
         }
         return (
             <div>
-                <div>
+                <div className="menulaporan">
                     <div className="kotakmenumatkul">
                         <button className={stylelaporanmahasiswa} onClick={() => this.ShowLaporanMahasiswaNow()}>
                             <span>Mahasiswa</span>

@@ -2805,6 +2805,9 @@ a:focus {
   .kotakfilter2{
     margin-top: 50px;
   }
+  .kotakfilter3{
+    margin-top: 50px;
+  }
   .ruangandaftarruangan{
     margin-top: -20px;
   }
@@ -2812,6 +2815,10 @@ a:focus {
 }
 
 .paddingtop30px{
+  padding-top: 30px;
+}
+
+.paddingtop30px2{
   padding-top: 30px;
 }
 
@@ -3178,6 +3185,16 @@ a:focus {
   border: 2px solid rgb(0, 0, 100);
 }
 
+.kotakfilter3{
+  background-color: #ffffff;
+  position: relative;
+  border-radius: 10px;
+  width: 100%;
+  height: auto;
+  box-shadow: 5px 8px 8px rgba(0, 0, 0, 0.3);
+  border-top: 5px solid rgb(0, 0, 100);
+}
+
 .filterdatastatistik{
   margin: 0px;
 }
@@ -3189,28 +3206,39 @@ a:focus {
   margin-top: -56px;
   margin-left: 60%;
 }
-.filterstatistik{
+
+.kotaksubmitstatistik{
   margin-top: -45px;
   margin-left: 90%;
+  margin-right: 10px;
 }
-@media(max-width:832px){
+
+.submitformstatistik{
+  background-color: rgb(0, 0, 100);
+  color : white;
+  height: 40px;
+  border-radius: 10px;
+  width: 100%;
+}
+@media(max-width:910px){
   .filtertanggalawalstatistik{
-    margin-left: 50%;
+    margin-left: 60%;
   }
   .filtertanggalakhirstatistik{
     margin-top: 20px;
     margin-left: 0%;
   }
-  .filterstatistik{
+  .kotaksubmitstatistik{
     margin-top: -45px;
-    margin-left: 50%;
+    margin-left: 60%;
+    width: 30%;
   }
 }
 @media(max-width:767px){
   .filterdatastatistik{
     margin-top: 20px;
   }
-  .filterstatistik{
+  .kotaksubmitstatistik{
     margin-bottom: 20px;
   }
 }
@@ -3223,9 +3251,16 @@ a:focus {
     margin-top: 20px;
     margin-left: 0%;
   }
-  .filterstatistik{
-    margin-top: 20px;
+
+  .kotaksubmitstatistik{
+    margin-top: 30px;
     margin-left: 0%;
+    width: 100%;
+    display: block;
+  }
+
+  .submitformstatistik{
+    width: 100%;
   }
 }
 
@@ -3340,9 +3375,19 @@ a:focus {
   margin-top: -56px
 }
 
+.kotakinputlaporannama2{
+  margin-left: 20%;
+  margin-top: -54px
+}
+
 .kotakinputlaporanstart{
   margin-left: 40%;
   margin-top: -56px
+}
+
+.kotakinputlaporanstart2{
+  margin-left: 40%;
+  margin-top: -58px
 }
 
 .kotakinputlaporanend{
@@ -3357,6 +3402,7 @@ a:focus {
   border-bottom: solid 1px rgb(0, 0, 100);
   font-size: 13px;
   width: 130px;
+  background-color: transparent;
 }
 
 .kotaksubmitlaporan2{
@@ -3425,6 +3471,14 @@ a:focus {
     margin-left: 50%;
   }
 
+  .kotakinputlaporannama2{
+    margin-left: 25%;
+  }
+
+  .kotakinputlaporanstart2{
+    margin-left: 50%;
+  }
+
   .kotakinputlaporanend{
     margin-left: 75%;
   }
@@ -3469,6 +3523,16 @@ a:focus {
   }
 
   .kotakinputlaporanstart{
+    margin-left: 0%;
+    margin-top: 20px
+  }
+
+  .kotakinputlaporannama2{
+    margin-top: 20px;
+    margin-left: 0%;
+  }
+
+  .kotakinputlaporanstart2{
     margin-left: 0%;
     margin-top: 20px
   }
@@ -3554,7 +3618,7 @@ a:focus {
   border: solid 1px black;
 }
 .laporanmasuk{
-  width: 14%;
+  width: 10%;
   height: 10px;
   border: solid 1px black;
 }
@@ -9019,6 +9083,9 @@ table.text-center th {
 /*
  * Misc: print
  * -----------
+                    <div className="box-footer">
+                        <div className="kotakisigrafik">
+                            <div className="kotakisigrafik2">
  */
 @media print {
   .no-print,
@@ -9026,8 +9093,9 @@ table.text-center th {
   .left-side,
   .main-header,
   .content-header {
-    display: none !important;
+    display: none;
   }
+
   .content-wrapper,
   .right-side,
   .main-footer {

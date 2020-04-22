@@ -348,12 +348,12 @@ class Fakultas extends Component {
 
                 <div className="kotakinputfakultas">
                   <label><b>Fakultas</b> </label> <br></br>
-                  <input onChange={this.handleChange} className="inputformfakultas" type="text" placeholder="Fakultas" value={state.oldfakultas} required ></input>
+                  <input onChange={this.handleChange} className="inputformfakultas" type="text" placeholder="Fakultas" value={state.oldfakultas || ''} required ></input>
                 </div>
 
                 <div className="kotakinputjurusan">
                   <label><b>Jurusan</b> </label> <br></br>
-                  <input name="newjurusan" onChange={this.handleChange} className="inputformfakultas" type="text" placeholder="Jurusan" value={state.newjurusan} required ></input>
+                  <input name="newjurusan" onChange={this.handleChange} className="inputformfakultas" type="text" placeholder="Jurusan" value={state.newjurusan || ''} required ></input>
                 </div>
 
                 <div className="kotaksubmitpenggunadaftar">

@@ -25,7 +25,6 @@ class Laporan_Mahasiswa extends Component {
             nama: '',
             startDate: '',
             endDate: '',
-            nimuser: '',
             find_pressed: false,
             datasalah: false,
             datakosong: true,
@@ -332,20 +331,6 @@ class Laporan_Mahasiswa extends Component {
         data_excel.push(percent.toFixed(2))
 
         dataset_excel.push(data_excel)
-
-        // var data_excel = JSON.stringify({
-        //     no: key,
-        //     namamatkul: matkul.namamatkul,
-        //     kodematkul: matkul.kodematkul,
-        //     kelas: matkul.kelas,
-        //     hadir: hadir,
-        //     izin: izin,
-        //     sakit: sakit,
-        //     alfa: alfa,
-        //     percent: percent.toFixed(2)
-        // })
-
-        // dataset_excel.push(JSON.parse(data_excel))
 
         return (
             <tr key={key} className="tabellaporanbody">
