@@ -145,47 +145,56 @@ class Ruangan extends Component {
     const { pageshow, kodedevicec, koderuanganc, alamatc } = this.state;
     const { harifilterc, jamfilterc, durasifilterc, koderuanganfilterc, kodematkulfilterc, kelasfilterc } = this.state;
     if (pageshow === "filterruangan") {
-      fetch(get.createfilterruangan, {
-        method: 'post',
-        headers: {
-          "x-access-token": sessionStorage.name,
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          hari: harifilterc,
-          jam: jamfilterc,
-          durasi: durasifilterc,
-          koderuangan: koderuanganfilterc,
-          kodematkul: kodematkulfilterc,
-          kelas: kelasfilterc,
+      if (parseInt(jamfilterc) + parseInt(durasifilterc) > 22){
+        this.setState({
+          databenar: false,
+          datasalah: true,
+          pesan: "Input durasi is incorrect",
         })
-      })
-        .then(response => response.json())
-        .then(response => {
-          //console.log(response)
-          //berhasil add data
-          if (response.status === 1) {
-            this.setState({ databenar: true })
-            this.setState({ datasalah: false })
-            this.setState({ pesan: response.pesan })
-            setTimeout(this.getDataFilterRuangan(), 1000)
-          }
-          //tidak berhasil add data
-          else if (response.status === 0) {
-            this.setState({ databenar: false })
-            this.setState({ datasalah: true })
-            this.setState({ pesan: response.pesan })
-          }
-          //ga ada token
-          else {
+      }
+      else {
+        fetch(get.createfilterruangan, {
+          method: 'post',
+          headers: {
+            "x-access-token": sessionStorage.name,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            hari: harifilterc,
+            jam: jamfilterc,
+            durasi: durasifilterc,
+            koderuangan: koderuanganfilterc,
+            kodematkul: kodematkulfilterc,
+            kelas: kelasfilterc,
+          })
+        })
+          .then(response => response.json())
+          .then(response => {
+            //console.log(response)
+            //berhasil add data
+            if (response.status === 1) {
+              this.setState({ databenar: true })
+              this.setState({ datasalah: false })
+              this.setState({ pesan: response.pesan })
+              setTimeout(this.getDataFilterRuangan(), 1000)
+            }
+            //tidak berhasil add data
+            else if (response.status === 0) {
+              this.setState({ databenar: false })
+              this.setState({ datasalah: true })
+              this.setState({ pesan: response.pesan })
+            }
+            //ga ada token
+            else {
+              sessionStorage.removeItem("name")
+              window.location.reload()
+            }
+          })
+          .catch(error => {
             sessionStorage.removeItem("name")
             window.location.reload()
-          }
-        })
-        .catch(error => {
-          sessionStorage.removeItem("name")
-          window.location.reload()
-        })
+          })
+      }
     }
     else if (pageshow === "ruangan") {
       fetch(get.createruangan, {

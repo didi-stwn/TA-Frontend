@@ -7,8 +7,8 @@ class MenuLaporan extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            ShowLaporanMahasiswa: false,
-            ShowLaporanPengajar: true,
+            ShowLaporanMahasiswa: true,
+            ShowLaporanPengajar: false,
         };
     }
     ShowLaporanMahasiswaNow() {

@@ -91,47 +91,55 @@ class Filter_Matkul_Ruangan extends Component {
     handleSubmitDaftar(e) {
         e.preventDefault();
         const { haric, jamc, durasic, koderuanganc, kodematkul, kelas } = this.state;
-
-        fetch(get.createfilterruangan, {
-            method: 'post',
-            headers: {
-                "x-access-token": sessionStorage.name,
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                hari: haric,
-                jam: jamc,
-                durasi: durasic,
-                koderuangan: koderuanganc,
-                kodematkul: kodematkul,
-                kelas: kelas,
+        if (parseInt(jamc) + parseInt(durasic) > 22) {
+            this.setState({
+                databenar: false,
+                datasalah: true,
+                pesan: "Input durasi is incorrect",
             })
-        })
-            .then(response => response.json())
-            .then(response => {
-                //berhasil add data
-                if (response.status === 1) {
-                    this.setState({ databenar: true })
-                    this.setState({ datasalah: false })
-                    this.setState({ pesan: response.pesan })
-                    setTimeout(this.getData(kodematkul, kelas), 1000)
-                }
-                //tidak berhasil add data
-                else if (response.status === 0) {
-                    this.setState({ databenar: false })
-                    this.setState({ datasalah: true })
-                    this.setState({ pesan: response.pesan })
-                }
-                //ga ada token
-                else {
+        }
+        else {
+            fetch(get.createfilterruangan, {
+                method: 'post',
+                headers: {
+                    "x-access-token": sessionStorage.name,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    hari: haric,
+                    jam: jamc,
+                    durasi: durasic,
+                    koderuangan: koderuanganc,
+                    kodematkul: kodematkul,
+                    kelas: kelas,
+                })
+            })
+                .then(response => response.json())
+                .then(response => {
+                    //berhasil add data
+                    if (response.status === 1) {
+                        this.setState({ databenar: true })
+                        this.setState({ datasalah: false })
+                        this.setState({ pesan: response.pesan })
+                        setTimeout(this.getData(kodematkul, kelas), 1000)
+                    }
+                    //tidak berhasil add data
+                    else if (response.status === 0) {
+                        this.setState({ databenar: false })
+                        this.setState({ datasalah: true })
+                        this.setState({ pesan: response.pesan })
+                    }
+                    //ga ada token
+                    else {
+                        sessionStorage.removeItem("name")
+                        window.location.reload()
+                    }
+                })
+                .catch(error => {
                     sessionStorage.removeItem("name")
                     window.location.reload()
-                }
-            })
-            .catch(error => {
-                sessionStorage.removeItem("name")
-                window.location.reload()
-            })
+                })
+        }
     }
 
     handleSubmitFirst(e) {

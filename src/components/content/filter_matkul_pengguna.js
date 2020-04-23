@@ -630,7 +630,7 @@ class Filter_Matkul_Pengguna extends Component {
                                 {(state.datakosongpengajar === true) &&
                                     <tbody className="tbodylog">
                                         <tr>
-                                            <td colSpan="5">Data tidak ditemukan</td>
+                                            <td colSpan="6">Data tidak ditemukan</td>
                                         </tr>
                                     </tbody>}
                             </table>
