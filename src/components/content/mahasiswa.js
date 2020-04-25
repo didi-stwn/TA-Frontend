@@ -1007,7 +1007,7 @@ class Mahasiswa extends Component {
                 <div className="kotakinputpenggunafinger1">
                   <label><b>Finger1</b> </label> <br></br>
                   {state.pesanfinger1 &&
-                    <span className="pesanfinger1">*Press 1 in your fingerprint device</span>
+                    <span className="pesanfinger1">*Press B in your fingerprint device</span>
                   }
                   <input onChange={this.handleChange} className="inputformlogpintunimc" type="text" placeholder="Finger 1" value={showfinger1 || ''} required ></input>
                   <button type="button" className="submitfinger1" onClick={() => this.getFinger1()}><i className="fa fa-bullseye"></i></button>
@@ -1016,7 +1016,7 @@ class Mahasiswa extends Component {
                 <div className="kotakinputpenggunafinger2">
                   <label><b>Finger2</b> </label> <br></br>
                   {state.pesanfinger2 &&
-                    <span className="pesanfinger1">*Press 1 in your fingerprint device</span>
+                    <span className="pesanfinger1">*Press B in your fingerprint device</span>
                   }
                   <input onChange={this.handleChange} className="inputformlogpintunimc" type="text" placeholder="Finger 2" value={showfinger2 || ''} required ></input>
                   <button type="button" className="submitfinger2" onClick={() => this.getFinger2()}><i className="fa fa-bullseye"></i></button>

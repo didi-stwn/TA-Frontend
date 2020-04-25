@@ -17,8 +17,6 @@ class Laporan_Mahasiswa extends Component {
             data_mahasiswa: [],
             data_pengajar: [],
             data_matkul: [],
-            hadir: 0,
-            tidakhadir: 0,
             nim_form: '',
             nim: '',
             nama_form: '',
@@ -57,6 +55,7 @@ class Laporan_Mahasiswa extends Component {
             .then(response => {
                 //berhasil dapet data
                 if ((response.status === 1) && (response.log_pengajar.length !== 0) && (response.matkul.length !== 0)) {
+                    this.getTanggalPengajar(response.log_pengajar)
                     this.setState({
                         find_pressed: true,
                         nama: nama_form,
@@ -65,7 +64,6 @@ class Laporan_Mahasiswa extends Component {
                         data_mahasiswa: response.log_mahasiswa,
                         data_matkul: response.matkul,
                     })
-                    this.getTanggalPengajar(response.log_pengajar)
                 }
                 else if ((response.status === 1) && ((response.log_pengajar.length === 0) || (response.matkul.length === 0))) {
                     this.setState({

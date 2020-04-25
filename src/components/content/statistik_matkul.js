@@ -91,7 +91,8 @@ class StatistikMatkul extends Component {
                 <div className="kotakdata">
                     <Pie
                         data={data}
-                        width={200}
+                        width={300}
+                        height={250}
                         options={options}
                     />
                 </div>

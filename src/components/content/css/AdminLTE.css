@@ -3264,6 +3264,10 @@ a:focus {
   }
 }
 
+.scrollx{
+  overflow-x: scroll;
+}
+
 /* ---------- START CSS JASON ---------- */
 
 /* ---------- END CSS JASON ---------- */
