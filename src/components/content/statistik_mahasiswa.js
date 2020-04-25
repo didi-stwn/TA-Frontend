@@ -24,10 +24,6 @@ class StatistikMahasiswa extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    // handleSubmit(e){
-    //     e.preventDefault();
-    //     console.log("aaa")
-    // }
     handleChange(e) {
         const { name, value } = e.target;
         this.setState({ [name]: value });
@@ -73,7 +69,7 @@ class StatistikMahasiswa extends Component {
                     this.setState({
                         datakosong: true,
                         find_pressed: true,
-                        nama: response.log_mahasiswa[0].nama,
+                        nama: "Nama tidak ditemukan",
                         nim: nim_form,
                     })
                 }
@@ -147,6 +143,14 @@ class StatistikMahasiswa extends Component {
             )
         }
         else {
+            var oldmatkul = matkul[0].kodematkul
+            var oldkelas = matkul[0].kelas
+            var log_bermasalah_1d = []
+            var log_bermasalah_2d = []
+            var count_alfa_bermasalah = 0
+            var count_izin_bermasalah = 0
+            var count_sakit_bermasalah = 0
+
             var labelxminggu = [""]
             var hadir = [0]
             var count_hadir = 0
@@ -201,6 +205,7 @@ class StatistikMahasiswa extends Component {
             var count_matkul = 0
             var kodematkul_now = matkul[count_matkul].kodematkul
             var kelas_now = matkul[count_matkul].kelas
+            var count_now = 4 * parseInt(matkul[count_matkul].count)
 
             for (var i = 0; i < pengajar.length; i++) {
                 tanggal_pengajar_now = new Date(pengajar[i].waktu)
@@ -221,9 +226,12 @@ class StatistikMahasiswa extends Component {
                     }
                     kodematkul_now = matkul[count_matkul].kodematkul
                     kelas_now = matkul[count_matkul].kelas
+                    count_now = 4 * parseInt(matkul[count_matkul].count)
                 }
 
                 if ((kodematkul_now === kodematkul_pengajar) && (kelas_now === kelas_pengajar)) {
+
+
                     date_pengajar = (new Date(pengajar[i].waktu)).toLocaleDateString()
 
                     if ((new Date(pengajar[i].waktu)).getMinutes() > 40) {
@@ -234,9 +242,11 @@ class StatistikMahasiswa extends Component {
                     }
 
                     if (i === pengajar.length - 1) {
+                        var a = i
                         max_jam_mahasiswa = 23;
                     }
                     else {
+                        a = i + 1
                         kodematkul_pengajar_next = pengajar[i + 1].kodematkul
                         kelas_pengajar_next = pengajar[i + 1].kelas
                         date_pengajar_next = (new Date(pengajar[i + 1].waktu)).toLocaleDateString()
@@ -279,16 +289,28 @@ class StatistikMahasiswa extends Component {
                                 else {
                                     telat_pie[1] = telat_pie[1] + 1
                                 }
+
+                                if (count_sakit_bermasalah < count_now) {
+                                    count_sakit_bermasalah = 0
+                                }
+                                if (count_izin_bermasalah < count_now) {
+                                    count_izin_bermasalah = 0
+                                }
+                                if (count_alfa_bermasalah < count_now) {
+                                    count_alfa_bermasalah = 0
+                                }
                                 break;
                             }
                             else if (mahasiswa[j].keterangan === "Sakit") {
                                 sakit[count_minggu] = sakit[count_minggu] + 1
                                 count_sakit = count_sakit + 1
+                                count_sakit_bermasalah = count_sakit_bermasalah + 1
                                 break;
                             }
                             else if (mahasiswa[j].keterangan === "Izin") {
                                 izin[count_minggu] = izin[count_minggu] + 1
                                 count_izin = count_izin + 1
+                                count_izin_bermasalah = count_izin_bermasalah + 1
                                 break;
                             }
                         }
@@ -296,10 +318,27 @@ class StatistikMahasiswa extends Component {
                     if (j === mahasiswa.length) {
                         alfa[count_minggu] = alfa[count_minggu] + 1
                         count_alfa = count_alfa + 1
+                        count_alfa_bermasalah = count_alfa_bermasalah + 1
+                    }
+
+                    //deteksi mahasiswa bermasalah
+                    if ((pengajar[a].kodematkul !== oldmatkul) || (pengajar[a].kelas !== oldkelas)) {
+                        if ((count_sakit_bermasalah >= count_now) || (count_izin_bermasalah >= count_now) || (count_alfa_bermasalah >= count_now)) {
+                            log_bermasalah_1d.push(oldmatkul)
+                            log_bermasalah_1d.push(oldkelas)
+                            log_bermasalah_1d.push(matkul[count_matkul].namamatkul)
+                            log_bermasalah_2d.push(log_bermasalah_1d)
+                        }
+                        oldmatkul = pengajar[a].kodematkul
+                        oldkelas = pengajar[a].kelas
+                        count_sakit_bermasalah = 0
+                        count_izin_bermasalah = 0
+                        count_alfa_bermasalah = 0
                     }
                 }
             }
 
+            console.log(log_bermasalah_2d)
             hadir_pie[0] = count_hadir
             hadir_pie[1] = count_izin
             hadir_pie[2] = count_sakit
@@ -425,9 +464,45 @@ class StatistikMahasiswa extends Component {
                     text: 'Data Keterlambatan'
                 }
             }
-
+            var p = 0
             return (
                 <div>
+                    <div className="isitabel">
+                        <table className="tablefakultas">
+                            <thead className="theadlog">
+                                <tr>
+                                    <th colSpan="4"><h5 style={{ letterSpacing: "2px" }}>Data Mata Kuliah Bermasalah</h5></th>
+                                </tr>
+                                <tr>
+                                    <th className="kodematkul" style={{ cursor: "default" }}>Nama Matakuliah</th>
+                                    <th className="namamatkul" style={{ cursor: "default" }}>Kode MataKuliah</th>
+                                    <th className="kelas" style={{ cursor: "default" }}>Kelas</th>
+                                    <th className="keterangan" style={{ cursor: "default" }}>Keterangan</th>
+                                </tr>
+                            </thead>
+                            {(log_bermasalah_2d.length === 0) &&
+                                <tbody className="tbodylog">
+                                    <tr>
+                                        <td colSpan="4">Tidak ada</td>
+                                    </tr>
+                                </tbody>
+                            }
+                            {
+                                (log_bermasalah_2d.length !== 0) &&
+                                <tbody className="tbodylog">
+                                    {log_bermasalah_2d.map(isidata => (
+                                        <tr key={p++}>
+                                            <td>{isidata[2]}</td>
+                                            <td>{isidata[0]}</td>
+                                            <td>{isidata[1]}</td>
+                                            <td><a href={"#" + isidata[0] + isidata[1]}><u>Show Detail</u></a></td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            }
+                        </table>
+                    </div>
+                    <div className="paddingtop30px2"></div>
                     <div className="texttengah">
                         <Pie
                             data={DataHadir}
@@ -447,7 +522,7 @@ class StatistikMahasiswa extends Component {
                     <div>
                         <Line
                             data={DataMinggu}
-                            width={800}
+                            width={900}
                             height={250}
                             options={OptionMinggu}
                         />
@@ -503,6 +578,7 @@ class StatistikMahasiswa extends Component {
         return (
             <div>
                 <div className="kotakfilter3">
+                    {/* <a href="#bawah"> click </a> */}
                     <form className="kotakforminputlogpintu" onSubmit={this.handleSubmit}>
                         <div className="filterdatastatistik">
                             <label><b>NIM</b> </label> <br></br>
@@ -536,6 +612,13 @@ class StatistikMahasiswa extends Component {
                         <div className="texttengah" style={{ minWidth: "800px" }}>
                             {this.graphfirst(state.data_matkul, state.data_pengajar, state.data_mahasiswa)}
                         </div>
+                    </div>
+                </div>
+                <div className="kotakdata">
+                    <div style={{ textAlign: "left", display: "block" }}>
+                        <h5>
+                            EL0001 K01
+                        </h5>
                     </div>
                 </div>
             </div>
