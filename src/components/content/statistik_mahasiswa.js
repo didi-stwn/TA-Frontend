@@ -15,8 +15,6 @@ class StatistikMahasiswa extends Component {
             data_mahasiswa: [],
             data_pengajar: [],
             data_matkul: [],
-            data_matkul_bermasalah: [1, 1, 1, 1],
-            data_matkul_aman: [1],
             nim_form: '',
             nim: '',
             nama: '',
