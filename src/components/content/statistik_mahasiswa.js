@@ -7,6 +7,7 @@ import get from './config';
 
 var data_matkul_bermasalah = []
 var data_matkul_aman = []
+var data_statistik_all = []
 
 class StatistikMahasiswa extends Component {
     constructor(props) {
@@ -16,16 +17,282 @@ class StatistikMahasiswa extends Component {
             data_pengajar: [],
             data_matkul: [],
             nim_form: '',
-            nim: '',
-            nama: '',
+            nim: 'Masukkan nim',
+            nama: '-',
             startDate: '',
             endDate: '',
             find_pressed: false,
             datasalah: false,
             datakosong: true,
+            counter_loading: 0,
+            lengthMahasiswa: 0,
+            showStatistikAll: true,
+            showStatistikbyNIM: false,
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    componentWillMount() {
+        data_statistik_all = []
+        fetch(get.readallpengguna, {
+            method: 'post',
+            headers: {
+                "x-access-token": sessionStorage.name,
+                "Content-Type": "application/json"
+            },
+        })
+            .then(response => response.json())
+            .then(response => {
+                if ((response.status === 1) && (response.hasil.count !== 0)) {
+                    this.setState({ lengthMahasiswa: response.hasil.length })
+                    this.requestStatistikAll(response.hasil)
+                }
+                //ga dapet token
+                else if ((response.status !== 1) && (response.status !== 0)) {
+                    sessionStorage.removeItem("name")
+                    window.location.reload()
+                }
+            })
+            .catch(error => {
+                sessionStorage.removeItem("name")
+                window.location.reload()
+            })
+    }
+
+    requestStatistikAll(mahasiswa) {
+        for (let i = 0; i < mahasiswa.length; i++) {
+            fetch(get.readstatistikall + "/" + mahasiswa[i].nim, {
+                method: 'post',
+                headers: {
+                    "x-access-token": sessionStorage.name,
+                    "Content-Type": "application/json"
+                },
+            })
+                .then(response => response.json())
+                .then(response => {
+                    //berhasil dapet data
+                    if ((response.status === 1) && (response.log_pengajar.length !== 0) && (response.matkul.length !== 0)) {
+                        this.getDataStatistikAll(response.matkul, response.log_pengajar, response.log_mahasiswa, mahasiswa[i].fakultas, mahasiswa[i].jurusan, mahasiswa[i].nim, mahasiswa[i].nama)
+                        this.setState({
+                            counter_loading: i
+                        })
+                    }
+                    //ga dapet token
+                    else if ((response.status !== 1) && (response.status !== 0)) {
+                        sessionStorage.removeItem("name")
+                        window.location.reload()
+                    }
+                })
+                .catch(error => {
+                    sessionStorage.removeItem("name")
+                    window.location.reload()
+                })
+        }
+    }
+
+    getDataStatistikAll(matkul, pengajar, mahasiswa, fakultas, jurusan, nim, nama) {
+        //mendapatkan tanggal pengajar agar tidak tumpuk
+        var filter_tanggal_pengajar = [];
+        filter_tanggal_pengajar.push(pengajar[0])
+        var filter_kodematkul_pengajar = pengajar[0].kodematkul
+        var filter_kelas_pengajar = pengajar[0].kelas
+        var filter_date_pengajar = (new Date(pengajar[0].waktu)).toLocaleDateString()
+        var filter_jam_pengajar;
+
+        if ((new Date(pengajar[0].waktu)).getMinutes() > 40) {
+            filter_jam_pengajar = (new Date(pengajar[0].waktu)).getHours() + 1
+        }
+        else {
+            filter_jam_pengajar = (new Date(pengajar[0].waktu)).getHours()
+        }
+
+        var filter_kodematkul_next_pengajar, filter_kelas_next_pengajar, filter_date_next_pengajar, filter_jam_next_pengajar;
+        for (var i = 1; i < pengajar.length; i++) {
+            filter_kodematkul_next_pengajar = pengajar[i].kodematkul
+            filter_kelas_next_pengajar = pengajar[i].kelas
+            filter_date_next_pengajar = (new Date(pengajar[i].waktu)).toLocaleDateString()
+            filter_jam_next_pengajar = (new Date(pengajar[i].waktu)).getHours()
+            if ((pengajar[i].keterangan === "Hadir") || (pengajar[i].keterangan === "Izin") || (pengajar[i].keterangan === "Sakit")) {
+                if ((filter_kodematkul_next_pengajar === filter_kodematkul_pengajar) && (filter_kelas_next_pengajar === filter_kelas_pengajar) && (filter_date_next_pengajar === filter_date_pengajar) && ((filter_jam_next_pengajar === filter_jam_pengajar - 1) || (filter_jam_next_pengajar === filter_jam_pengajar))) {
+                }
+                else {
+                    filter_tanggal_pengajar.push(pengajar[i])
+                    filter_kodematkul_pengajar = pengajar[i].kodematkul
+                    filter_kelas_pengajar = pengajar[i].kelas
+                    filter_date_pengajar = (new Date(pengajar[i].waktu)).toLocaleDateString()
+
+                    if ((new Date(pengajar[i].waktu)).getMinutes() > 40) {
+                        filter_jam_pengajar = (new Date(pengajar[i].waktu)).getHours() + 1
+                    }
+                    else {
+                        filter_jam_pengajar = (new Date(pengajar[i].waktu)).getHours()
+                    }
+                }
+
+            }
+        }
+
+        // console.log(filter_tanggal_pengajar)
+
+        var oldmatkul = matkul[0].kodematkul
+        var oldkelas = matkul[0].kelas
+        var log_bermasalah_1d = []
+        var count_hadir_table = 0
+        var count_izin_table = 0
+        var count_sakit_table = 0
+        var count_alfa_table = 0
+        var count_alfa_bermasalah = 0
+        var count_izin_bermasalah = 0
+        var count_sakit_bermasalah = 0
+
+        var kodematkul_pengajar, kelas_pengajar, date_pengajar, kodematkul_pengajar_next, kelas_pengajar_next, date_pengajar_next
+        var kodematkul_mahasiswa, kelas_mahasiswa, date_mahasiswa, jam_mahasiswa, min_jam_mahasiswa, max_jam_mahasiswa
+
+        var count_matkul = 0
+        var kodematkul_now = matkul[count_matkul].kodematkul
+        var kelas_now = matkul[count_matkul].kelas
+        var count_now = 4 * parseInt(matkul[count_matkul].count)
+
+        for (i = 0; i < filter_tanggal_pengajar.length; i++) {
+            kodematkul_pengajar = filter_tanggal_pengajar[i].kodematkul
+            kelas_pengajar = filter_tanggal_pengajar[i].kelas
+
+            if ((kodematkul_now !== kodematkul_pengajar) || (kelas_now !== kelas_pengajar)) {
+                count_matkul = count_matkul + 1
+                if (count_matkul > matkul.length - 1) {
+                    count_matkul = count_matkul - 1
+                }
+                kodematkul_now = matkul[count_matkul].kodematkul
+                kelas_now = matkul[count_matkul].kelas
+                count_now = 4 * parseInt(matkul[count_matkul].count)
+            }
+
+            if ((kodematkul_now === kodematkul_pengajar) && (kelas_now === kelas_pengajar)) {
+
+
+                date_pengajar = (new Date(filter_tanggal_pengajar[i].waktu)).toLocaleDateString()
+
+                if ((new Date(filter_tanggal_pengajar[i].waktu)).getMinutes() > 40) {
+                    min_jam_mahasiswa = (new Date(filter_tanggal_pengajar[i].waktu)).getHours()
+                }
+                else {
+                    min_jam_mahasiswa = (new Date(filter_tanggal_pengajar[i].waktu)).getHours() - 1
+                }
+
+                if (i === filter_tanggal_pengajar.length - 1) {
+                    var a = i
+                    max_jam_mahasiswa = 23;
+                }
+                else {
+                    a = i + 1
+                    kodematkul_pengajar_next = filter_tanggal_pengajar[i + 1].kodematkul
+                    kelas_pengajar_next = filter_tanggal_pengajar[i + 1].kelas
+                    date_pengajar_next = (new Date(filter_tanggal_pengajar[i + 1].waktu)).toLocaleDateString()
+
+                    if ((kodematkul_pengajar_next === kodematkul_pengajar) && (kelas_pengajar_next === kelas_pengajar)) {
+                        if (date_pengajar === date_pengajar_next) {
+                            if ((new Date(filter_tanggal_pengajar[i + 1].waktu)).getMinutes() > 40) {
+                                max_jam_mahasiswa = (new Date(filter_tanggal_pengajar[i + 1].waktu)).getHours()
+                            }
+                            else {
+                                max_jam_mahasiswa = (new Date(filter_tanggal_pengajar[i + 1].waktu)).getHours() - 1
+                            }
+                        }
+                        else {
+                            max_jam_mahasiswa = 23
+                        }
+                    }
+                    else {
+                        max_jam_mahasiswa = 23
+                    }
+                }
+
+                for (var j = 0; j < mahasiswa.length; j++) {
+
+                    kodematkul_mahasiswa = mahasiswa[j].kodematkul
+                    kelas_mahasiswa = mahasiswa[j].kelas
+                    date_mahasiswa = (new Date(mahasiswa[j].waktu)).toLocaleDateString()
+                    jam_mahasiswa = (new Date(mahasiswa[j].waktu)).getHours()
+
+                    if ((kodematkul_mahasiswa === kodematkul_pengajar) && (kelas_mahasiswa === kelas_pengajar) && (date_mahasiswa === date_pengajar) && (jam_mahasiswa >= min_jam_mahasiswa) && (jam_mahasiswa <= max_jam_mahasiswa)) {
+                        if (mahasiswa[j].keterangan === "Hadir") {
+                            count_hadir_table = count_hadir_table + 1
+
+                            if (count_sakit_bermasalah < count_now) {
+                                count_sakit_bermasalah = 0
+                            }
+                            if (count_izin_bermasalah < count_now) {
+                                count_izin_bermasalah = 0
+                            }
+                            if (count_alfa_bermasalah < count_now) {
+                                count_alfa_bermasalah = 0
+                            }
+                            break;
+                        }
+                        else if (mahasiswa[j].keterangan === "Sakit") {
+                            count_sakit_bermasalah = count_sakit_bermasalah + 1
+                            count_sakit_table = count_sakit_table + 1
+                            break;
+                        }
+                        else if (mahasiswa[j].keterangan === "Izin") {
+                            count_izin_bermasalah = count_izin_bermasalah + 1
+                            count_izin_table = count_izin_table + 1
+                            break;
+                        }
+                    }
+                }
+                if (j === mahasiswa.length) {
+                    count_alfa_bermasalah = count_alfa_bermasalah + 1
+                    count_alfa_table = count_alfa_table + 1
+                }
+
+                // deteksi mahasiswa bermasalah
+                var check_bermasalah = 0
+                if (((filter_tanggal_pengajar[a].kodematkul !== oldmatkul) || (filter_tanggal_pengajar[a].kelas !== oldkelas)) || (i === filter_tanggal_pengajar.length - 1)) {
+                    if (count_alfa_bermasalah >= count_now) {
+                        check_bermasalah = 1
+                    }
+                    else if (count_izin_bermasalah >= count_now) {
+                        check_bermasalah = 2
+                    }
+                    else if (count_sakit_bermasalah >= count_now) {
+                        check_bermasalah = 3
+                    }
+                    else {
+                        check_bermasalah = 0
+                    }
+
+                    if (check_bermasalah !== 0) {
+                        log_bermasalah_1d.push(fakultas)
+                        log_bermasalah_1d.push(jurusan)
+                        log_bermasalah_1d.push(nim)
+                        log_bermasalah_1d.push(nama)
+                        log_bermasalah_1d.push(oldmatkul)
+                        log_bermasalah_1d.push(oldkelas)
+                        log_bermasalah_1d.push(matkul[count_matkul].namamatkul)
+                        log_bermasalah_1d.push(count_hadir_table)
+                        log_bermasalah_1d.push(count_izin_table)
+                        log_bermasalah_1d.push(count_sakit_table)
+                        log_bermasalah_1d.push(count_alfa_table)
+                        log_bermasalah_1d.push(check_bermasalah)
+
+                        data_statistik_all.push(log_bermasalah_1d)
+                    }
+
+                    log_bermasalah_1d = []
+                    oldmatkul = filter_tanggal_pengajar[a].kodematkul
+                    oldkelas = filter_tanggal_pengajar[a].kelas
+                    count_hadir_table = 0
+                    count_izin_table = 0
+                    count_sakit_table = 0
+                    count_alfa_table = 0
+                    count_sakit_bermasalah = 0
+                    count_izin_bermasalah = 0
+                    count_alfa_bermasalah = 0
+                }
+            }
+        }
     }
 
     handleChange(e) {
@@ -34,6 +301,10 @@ class StatistikMahasiswa extends Component {
     }
 
     handleSubmit(e) {
+        this.setState({
+            showStatistikbyNIM: true,
+            showStatistikAll: false
+        })
         e.preventDefault();
         const { nim_form, startDate, endDate } = this.state
         fetch(get.readpengguna, {
@@ -384,7 +655,7 @@ class StatistikMahasiswa extends Component {
                         log_bermasalah_1d.push(count_sakit_table)
                         log_bermasalah_1d.push(count_alfa_table)
                         log_bermasalah_1d.push(check_bermasalah)
-    
+
                         log_bermasalah_2d.push(log_bermasalah_1d)
 
                         log_bermasalah_1d = []
@@ -397,9 +668,6 @@ class StatistikMahasiswa extends Component {
                         count_sakit_bermasalah = 0
                         count_izin_bermasalah = 0
                         count_alfa_bermasalah = 0
-                    }
-                    else {
-
                     }
                 }
             }
@@ -565,7 +833,7 @@ class StatistikMahasiswa extends Component {
                                 (log_bermasalah_2d.length !== 0) &&
                                 <tbody className="tbodylog">
                                     {log_bermasalah_2d.map(isidata => (
-                                            ((isidata[7] === 0) &&
+                                        ((isidata[7] === 0) &&
                                             <tr key={p++}>
                                                 <td>{isidata[2]}</td>
                                                 <td>{isidata[0]}</td>
@@ -577,7 +845,7 @@ class StatistikMahasiswa extends Component {
                                                 <td><a href={"#" + isidata[0] + isidata[1]}><u>Show Detail</u></a></td>
                                             </tr>)
 
-                                            || ((isidata[7] === 1) &&
+                                        || ((isidata[7] === 1) &&
                                             <tr key={p++}>
                                                 <td>{isidata[2]}</td>
                                                 <td>{isidata[0]}</td>
@@ -585,63 +853,63 @@ class StatistikMahasiswa extends Component {
                                                 <td>{isidata[3]}</td>
                                                 <td>{isidata[4]}</td>
                                                 <td>{isidata[5]}</td>
-                                                <td className="kehadiranbermasalah">{isidata[6]}</td>
+                                                <td className="kehadiranbermasalah" style={{ border: "none" }}>{isidata[6]}</td>
                                                 <td><a href={"#" + isidata[0] + isidata[1]}><u>Show Detail</u></a></td>
                                             </tr>)
 
-                                            || ((isidata[7] === 2) &&
+                                        || ((isidata[7] === 2) &&
                                             <tr key={p++}>
                                                 <td>{isidata[2]}</td>
                                                 <td>{isidata[0]}</td>
                                                 <td>{isidata[1]}</td>
                                                 <td>{isidata[3]}</td>
-                                                <td className="kehadiranbermasalah">{isidata[4]}</td>
+                                                <td className="kehadiranbermasalah" style={{ border: "none" }}>{isidata[4]}</td>
                                                 <td>{isidata[5]}</td>
                                                 <td>{isidata[6]}</td>
                                                 <td><a href={"#" + isidata[0] + isidata[1]}><u>Show Detail</u></a></td>
                                             </tr>)
 
-                                            || ((isidata[7] === 3) &&
+                                        || ((isidata[7] === 3) &&
                                             <tr key={p++}>
                                                 <td>{isidata[2]}</td>
                                                 <td>{isidata[0]}</td>
                                                 <td>{isidata[1]}</td>
                                                 <td>{isidata[3]}</td>
                                                 <td>{isidata[4]}</td>
-                                                <td className="kehadiranbermasalah">{isidata[5]}</td>
+                                                <td className="kehadiranbermasalah" style={{ border: "none" }}>{isidata[5]}</td>
                                                 <td>{isidata[6]}</td>
                                                 <td><a href={"#" + isidata[0] + isidata[1]}><u>Show Detail</u></a></td>
                                             </tr>)
-                                ))}
+                                    ))}
                                 </tbody>
-                        }
+                            }
                         </table>
-                </div>
-                <div className="paddingtop30px2"></div>
-                <div className="texttengah">
-                    <Pie
-                        data={DataHadir}
-                        width={300}
-                        height={250}
-                        options={OptionHadir}
-                    />
-                    <div style={{ padding: "20px" }}></div>
-                    <Pie
-                        data={DataTelat}
-                        width={300}
-                        height={250}
-                        options={OptionTelat}
-                    />
-                </div>
-                <div className="paddingtop30px2"></div>
-                <div>
-                    <Line
-                        data={DataMinggu}
-                        width={900}
-                        height={250}
-                        options={OptionMinggu}
-                    />
-                </div>
+                    </div>
+                    <div className="paddingtop30px2"></div>
+                    <div className="texttengah">
+                        <Pie
+                            data={DataHadir}
+                            width={300}
+                            height={250}
+                            options={OptionHadir}
+                        />
+                        <div style={{ padding: "20px" }}></div>
+                        <Pie
+                            data={DataTelat}
+                            width={300}
+                            height={250}
+                            options={OptionTelat}
+                        />
+                    </div>
+                    <div className="paddingtop30px2"></div>
+                    <div>
+                        <Line
+                            data={DataMinggu}
+                            width={900}
+                            height={250}
+                            options={OptionMinggu}
+                        />
+                    </div>
                 </div >
             )
         }
@@ -957,14 +1225,19 @@ class StatistikMahasiswa extends Component {
         }
 
         // var widthgraph = 600 * loop.length + 'px';
+
+        var loadingNow = true
+        if ((state.counter_loading - state.lengthMahasiswa) === -2) {
+            loadingNow = false
+        }
         var inc = 0
         return (
-            <div id="inputform">
+            <div>
                 <div className="kotakfilter3">
                     <form className="kotakforminputlogpintu" onSubmit={this.handleSubmit}>
                         <div className="filterdatastatistik">
                             <label><b>NIM</b> </label> <br></br>
-                            <input name="nim_form" onChange={this.handleChange} className="inputfiltertanggalawallog" type="text" required ></input>
+                            <input name="nim_form" onChange={this.handleChange} className="inputfiltertanggalawallog" type="text" required></input>
                         </div>
                         <div className="filtertanggalawalstatistik">
                             <label><b>Tanggal Awal</b> </label> <br></br>
@@ -980,77 +1253,394 @@ class StatistikMahasiswa extends Component {
                     </form>
                 </div>
                 <div className="paddingtop30px2"></div>
-                <div className="kotakdata">
-                    <div>
-                        <span><b>NIM &ensp;&ensp;&emsp;: {state.nim}</b></span>
-                        <br></br>
-                        <span><b>Nama &emsp; : {state.nama}</b></span>
-                        <br></br>
-                        <span><b>Periode &ensp;: {PeriodeStatistik(state.startDate, state.endDate)}</b></span>
-                        <br></br>
+                {
+                    (loadingNow) &&
+                    <div style={{color:"rgb(0,0,100)"}}>
+                        <i className="fa fa-spinner fa-pulse fa-10x fa-fw"></i>
                     </div>
-                    <div className="paddingtop30px2"></div>
-                    {
-                        state.datakosong &&
-                        <div style={{ textAlign: "center", display: "block" }}>
-                            <h5>
-                                Data tidak ditemukan
-                            </h5>
-                        </div>
-                    }
-                    {
-                        state.datakosong === false &&
-                        <div className="scrollx">
-                            <div className="texttengah" style={{ minWidth: "800px" }}>
-                                {this.graphfirst(state.data_matkul, state.data_pengajar, state.data_mahasiswa)}
-                            </div>
-                        </div>
-                    }
-                </div>
-                {
-                    state.datakosong &&
-                    <div></div>
                 }
                 {
-                    (state.datakosong === false) && (data_matkul_bermasalah.length !== 0) &&
-                    data_matkul_bermasalah.map(isidata => (
-                        <div key={inc++} className="kotakdata2" id={isidata.kodematkul + "" + isidata.kelas}>
-                            <div className="scrollx">
-                                <div style={{ minWidth: "800px" }}>
-                                    <div style={{ textAlign: "center", display: "block" }}>
-                                        <a href="#inputform"><u>Back to top</u></a>
-                                        <h5>{isidata.kodematkul} - {isidata.kelas}</h5>
-                                    </div>
-                                    <div>
-                                        {this.getDataPerMatkul(isidata, state.data_pengajar, state.data_mahasiswa)}
-                                    </div>
-                                </div>
-                            </div>
+                    (loadingNow === false) && state.showStatistikAll &&
+                    <div className="kotakdata">
+                        <div style={{ display: 'block', textAlign: 'center' }}>
+                            <h5>Daftar Mahasiswa Bermasalah</h5>
                         </div>
-                    ))
-                }
-                {
-                    (state.datakosong === false) && (data_matkul_aman.length !== 0) &&
+                        <div className="isitabel">
+                            <table className="tablelog">
+                                <thead className="theadlog">
+                                    <tr>
+                                        <th className="fakultas" style={{ cursor: "default" }}>Fakultas</th>
+                                        <th className="jurusan" style={{ cursor: "default" }}>Jurusan</th>
+                                        <th className="nim" style={{ cursor: "default" }}>NIM</th>
+                                        <th className="nama" style={{ cursor: "default" }}>Nama</th>
+                                        <th className="namamatkul" style={{ cursor: "default" }}>Mata Kuliah</th>
+                                        <th className="kodematkul" style={{ cursor: "default" }}>Kode</th>
+                                        <th className="kelas" style={{ cursor: "default" }}>Kelas</th>
+                                        <th className="kelas" style={{ cursor: "default" }}>Hadir</th>
+                                        <th className="kelas" style={{ cursor: "default" }}>Izin</th>
+                                        <th className="kelas" style={{ cursor: "default" }}>Sakit</th>
+                                        <th className="kelas" style={{ cursor: "default" }}>Alfa</th>
+                                        <th className="keterangan" style={{ cursor: "default" }}>Show Detail</th>
+                                    </tr>
+                                </thead>
+                                {(data_statistik_all.length !== 0) &&
+                                    <tbody className="tbodylog">
+                                        {data_statistik_all.map(isidata => (
+                                            ((isidata[11] === 1) &&
+                                                <tr key={inc++}>
+                                                    <td>{isidata[0]}</td>
+                                                    <td>{isidata[1]}</td>
+                                                    <td>{isidata[2]}</td>
+                                                    <td>{isidata[3]}</td>
+                                                    <td>{isidata[6]}</td>
+                                                    <td>{isidata[4]}</td>
+                                                    <td>{isidata[5]}</td>
+                                                    <td>{isidata[7]}</td>
+                                                    <td>{isidata[8]}</td>
+                                                    <td>{isidata[9]}</td>
+                                                    <td className="kehadiranbermasalah" style={{ border: "none" }}>{isidata[10]}</td>
+                                                    <td><a href={"#" + isidata[0] + isidata[1]}><u>Show Detail</u></a></td>
+                                                </tr>)
 
-                    data_matkul_aman.map(isidata => (
-                        <div key={inc++} className="kotakdata" id={isidata.kodematkul + "" + isidata.kelas}>
-                            <div className="scrollx">
-                                <div style={{ minWidth: "800px" }}>
-                                    <div style={{ textAlign: "center", display: "block" }}>
-                                        <a href="#inputform"><u>Back to top</u></a>
-                                        <h5>{isidata.kodematkul} - {isidata.kelas}</h5>
-                                    </div>
-                                    <div>
-                                        {this.getDataPerMatkul(isidata, state.data_pengajar, state.data_mahasiswa)}
+                                            || ((isidata[11] === 2) &&
+                                                <tr key={inc++}>
+                                                    <td>{isidata[0]}</td>
+                                                    <td>{isidata[1]}</td>
+                                                    <td>{isidata[2]}</td>
+                                                    <td>{isidata[3]}</td>
+                                                    <td>{isidata[6]}</td>
+                                                    <td>{isidata[4]}</td>
+                                                    <td>{isidata[5]}</td>
+                                                    <td>{isidata[7]}</td>
+                                                    <td className="kehadiranbermasalah" style={{ border: "none" }}>{isidata[8]}</td>
+                                                    <td>{isidata[9]}</td>
+                                                    <td>{isidata[10]}</td>
+                                                    <td><a href={"#" + isidata[0] + isidata[1]}><u>Show Detail</u></a></td>
+                                                </tr>)
+
+                                            || ((isidata[11] === 3) &&
+                                                <tr key={inc++}>
+                                                    <td>{isidata[0]}</td>
+                                                    <td>{isidata[1]}</td>
+                                                    <td>{isidata[2]}</td>
+                                                    <td>{isidata[3]}</td>
+                                                    <td>{isidata[6]}</td>
+                                                    <td>{isidata[4]}</td>
+                                                    <td>{isidata[5]}</td>
+                                                    <td>{isidata[7]}</td>
+                                                    <td>{isidata[8]}</td>
+                                                    <td className="kehadiranbermasalah" style={{ border: "none" }}>{isidata[9]}</td>
+                                                    <td>{isidata[10]}</td>
+                                                    <td><a href={"#" + isidata[0] + isidata[1]}><u>Show Detail</u></a></td>
+                                                </tr>)
+                                        ))}
+                                    </tbody>
+                                }
+                                {(data_statistik_all.length === 0) &&
+                                    <tbody className="tbodylog">
+                                        <tr>
+                                            <td colSpan="12">Data tidak ditemukan</td>
+                                        </tr>
+                                    </tbody>}
+                            </table>
+                        </div>
+                    </div>
+                }
+                {
+                    (loadingNow === false) && state.showStatistikbyNIM &&
+                    <div id="inputform">
+                        <div className="kotakdata">
+                            <div>
+                                <span><b>NIM &ensp;&ensp;&emsp;: {state.nim}</b></span>
+                                <br></br>
+                                <span><b>Nama &emsp; : {state.nama}</b></span>
+                                <br></br>
+                                <span><b>Periode &ensp;: {PeriodeStatistik(state.startDate, state.endDate)}</b></span>
+                                <br></br>
+                            </div>
+                            <div className="paddingtop30px2"></div>
+                            {
+                                state.datakosong &&
+                                <div style={{ textAlign: "center", display: "block" }}>
+                                    <h5>
+                                        Data tidak ditemukan
+                                </h5>
+                                </div>
+                            }
+                            {
+                                state.datakosong === false &&
+                                <div className="scrollx">
+                                    <div className="texttengah" style={{ minWidth: "800px" }}>
+                                        {this.graphfirst(state.data_matkul, state.data_pengajar, state.data_mahasiswa)}
                                     </div>
                                 </div>
-                            </div>
+                            }
                         </div>
-                    ))
+                        {
+                            state.datakosong &&
+                            <div></div>
+                        }
+                        {
+                            (state.datakosong === false) && (data_matkul_bermasalah.length !== 0) &&
+                            data_matkul_bermasalah.map(isidata => (
+                                <div key={inc++} className="kotakdata2" id={isidata.kodematkul + "" + isidata.kelas}>
+                                    <div className="scrollx">
+                                        <div style={{ minWidth: "800px" }}>
+                                            <div style={{ textAlign: "center", display: "block" }}>
+                                                <a href="#inputform"><u>Back to top</u></a>
+                                                <h5>{isidata.kodematkul} - {isidata.kelas}</h5>
+                                            </div>
+                                            <div>
+                                                {this.getDataPerMatkul(isidata, state.data_pengajar, state.data_mahasiswa)}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))
+                        }
+                        {
+                            (state.datakosong === false) && (data_matkul_aman.length !== 0) &&
+
+                            data_matkul_aman.map(isidata => (
+                                <div key={inc++} className="kotakdata" id={isidata.kodematkul + "" + isidata.kelas}>
+                                    <div className="scrollx">
+                                        <div style={{ minWidth: "800px" }}>
+                                            <div style={{ textAlign: "center", display: "block" }}>
+                                                <a href="#inputform"><u>Back to top</u></a>
+                                                <h5>{isidata.kodematkul} - {isidata.kelas}</h5>
+                                            </div>
+                                            <div>
+                                                {this.getDataPerMatkul(isidata, state.data_pengajar, state.data_mahasiswa)}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))
+                        }
+                    </div>
                 }
             </div>
+
         )
     }
 }
 
 export default withRouter(StatistikMahasiswa);
+
+
+
+    // getDataStatistikAll(matkul, pengajar, mahasiswa) {
+    // console.log("1")
+    // data_statistik_all = []
+    // //mendapatkan tanggal pengajar agar tidak tumpuk
+    // var filter_tanggal_pengajar = [];
+    // filter_tanggal_pengajar.push(pengajar[0])
+    // var filter_kodematkul_pengajar = pengajar[0].kodematkul
+    // var filter_kelas_pengajar = pengajar[0].kelas
+    // var filter_date_pengajar = (new Date(pengajar[0].waktu)).toLocaleDateString()
+    // var filter_jam_pengajar;
+
+    // if ((new Date(pengajar[0].waktu)).getMinutes() > 40) {
+    //     filter_jam_pengajar = (new Date(pengajar[0].waktu)).getHours() + 1
+    // }
+    // else {
+    //     filter_jam_pengajar = (new Date(pengajar[0].waktu)).getHours()
+    // }
+
+    // var filter_kodematkul_next_pengajar, filter_kelas_next_pengajar, filter_date_next_pengajar, filter_jam_next_pengajar;
+
+    // for (var i = 1; i < pengajar.length; i++) {
+    //     console.log("2")
+    //     filter_kodematkul_next_pengajar = pengajar[i].kodematkul
+    //     filter_kelas_next_pengajar = pengajar[i].kelas
+    //     filter_date_next_pengajar = (new Date(pengajar[i].waktu)).toLocaleDateString()
+    //     filter_jam_next_pengajar = (new Date(pengajar[i].waktu)).getHours()
+    //     if ((pengajar[i].keterangan === "Hadir") || (pengajar[i].keterangan === "Izin") || (pengajar[i].keterangan === "Sakit")) {
+    //         if ((filter_kodematkul_next_pengajar === filter_kodematkul_pengajar) && (filter_kelas_next_pengajar === filter_kelas_pengajar) && (filter_date_next_pengajar === filter_date_pengajar) && ((filter_jam_next_pengajar === filter_jam_pengajar - 1) || (filter_jam_next_pengajar === filter_jam_pengajar))) {
+    //         }
+    //         else {
+    //             filter_tanggal_pengajar.push(pengajar[i])
+    //             filter_kodematkul_pengajar = pengajar[i].kodematkul
+    //             filter_kelas_pengajar = pengajar[i].kelas
+    //             filter_date_pengajar = (new Date(pengajar[i].waktu)).toLocaleDateString()
+
+    //             if ((new Date(pengajar[i].waktu)).getMinutes() > 40) {
+    //                 filter_jam_pengajar = (new Date(pengajar[i].waktu)).getHours() + 1
+    //             }
+    //             else {
+    //                 filter_jam_pengajar = (new Date(pengajar[i].waktu)).getHours()
+    //             }
+    //         }
+
+    //     }
+    // }
+    // console.log("3")
+
+    // var matkul_now, kelas_now, nim_now, namamatkul_now, fakultas_now, jurusan_now, nama_now
+    // var max_tidak_hadir
+
+    // var matkul_pengajar_now, kelas_pengajar_now, date_pengajar_now, matkul_pengajar_next, kelas_pengajar_next, date_pengajar_next
+    // var min_jam_mahasiswa, max_jam_mahasiswa
+
+    // var hadir = 0;
+    // var sakit = 0;
+    // var izin = 0;
+    // var alfa = 0;
+    // var count_sakit = 0;
+    // var count_izin = 0;
+    // var count_alfa = 0;
+
+    // var output_1d = []
+
+    // for (i = 0; i < matkul.length; i++) {
+    //     console.log("4")
+    //     matkul_now = matkul[i].kodematkul
+    //     kelas_now = matkul[i].kelas
+    //     namamatkul_now = matkul[i].namamatkul
+    //     fakultas_now = matkul[i].fakultas
+    //     jurusan_now = matkul[i].jurusan
+    //     nama_now = matkul[i].nama
+    //     nim_now = matkul[i].nim
+    //     max_tidak_hadir = 4 * parseInt(matkul[i].count)
+
+    //     for (var j = 0; j < filter_tanggal_pengajar.length; j++) {
+    //         console.log("5")
+    //         matkul_pengajar_now = filter_tanggal_pengajar[j].kodematkul
+    //         kelas_pengajar_now = filter_tanggal_pengajar[j].kelas
+
+    //         if ((matkul_now === matkul_pengajar_now) && (kelas_now === kelas_pengajar_now)) {
+    //             date_pengajar_now = (new Date(filter_tanggal_pengajar[i].waktu)).toLocaleDateString()
+
+    //             if ((new Date(filter_tanggal_pengajar[i].waktu)).getMinutes() > 40) {
+    //                 min_jam_mahasiswa = (new Date(filter_tanggal_pengajar[i].waktu)).getHours()
+    //             }
+    //             else {
+    //                 min_jam_mahasiswa = (new Date(filter_tanggal_pengajar[i].waktu)).getHours() - 1
+    //             }
+
+    //             if (j === filter_tanggal_pengajar.length - 1) {
+    //                 max_jam_mahasiswa = 23;
+    //             }
+    //             else {
+    //                 //deteksi jam max mahasiswa absen
+    //                 matkul_pengajar_next = filter_tanggal_pengajar[i + 1].kodematkul
+    //                 kelas_pengajar_next = filter_tanggal_pengajar[i + 1].kelas
+    //                 date_pengajar_next = (new Date(filter_tanggal_pengajar[i + 1].waktu)).toLocaleDateString()
+
+    //                 if ((matkul_pengajar_next === matkul_pengajar_now) && (kelas_pengajar_next === kelas_pengajar_now)) {
+    //                     if (date_pengajar_now === date_pengajar_next) {
+    //                         if ((new Date(filter_tanggal_pengajar[i + 1].waktu)).getMinutes() > 40) {
+    //                             max_jam_mahasiswa = (new Date(filter_tanggal_pengajar[i + 1].waktu)).getHours()
+    //                         }
+    //                         else {
+    //                             max_jam_mahasiswa = (new Date(filter_tanggal_pengajar[i + 1].waktu)).getHours() - 1
+    //                         }
+    //                     }
+    //                     else {
+    //                         max_jam_mahasiswa = 23
+    //                     }
+    //                 }
+    //                 else {
+    //                     max_jam_mahasiswa = 23
+    //                 }
+    //             }
+
+    //             var nim_mahasiswa, kodematkul_mahasiswa, kelas_mahasiswa, date_mahasiswa, jam_mahasiswa
+    //             for (var k = 0; k < mahasiswa.length; k++) {
+    //                 console.log("6")
+    //                 nim_mahasiswa = mahasiswa[k].nim
+    //                 kodematkul_mahasiswa = mahasiswa[k].kodematkul
+    //                 kelas_mahasiswa = mahasiswa[k].kelas
+    //                 date_mahasiswa = (new Date(mahasiswa[k].waktu)).toLocaleDateString()
+    //                 jam_mahasiswa = (new Date(mahasiswa[k].waktu)).getHours()
+
+    //                 if ((nim_mahasiswa === nim_now) && (kodematkul_mahasiswa === matkul_pengajar_now) && (kelas_mahasiswa === kelas_pengajar_now) && (date_mahasiswa === date_pengajar_now) && (jam_mahasiswa >= min_jam_mahasiswa) && (jam_mahasiswa <= max_jam_mahasiswa)) {
+    //                     if (mahasiswa[k].keterangan === "Hadir") {
+    //                         hadir = hadir + 1
+
+    //                         if (count_alfa < max_tidak_hadir) {
+    //                             count_alfa = 0
+    //                         }
+    //                         if (count_izin < max_tidak_hadir) {
+    //                             count_izin = 0
+    //                         }
+    //                         if (count_sakit < max_tidak_hadir) {
+    //                             count_sakit = 0
+    //                         }
+
+    //                         break;
+    //                     }
+    //                     else if (mahasiswa[k].keterangan === "Sakit") {
+    //                         sakit = sakit + 1
+    //                         count_sakit = count_sakit + 1
+    //                         break;
+    //                     }
+    //                     else if (mahasiswa[k].keterangan === "Izin") {
+    //                         izin = izin + 1
+    //                         count_izin = count_izin + 1
+    //                         break;
+    //                     }
+    //                 }
+    //             }
+    //             if (k === mahasiswa.length) {
+    //                 alfa = alfa + 1
+    //                 count_alfa = count_alfa + 1
+    //             }
+    //         }
+    //     }
+
+    //     if (count_alfa >= max_tidak_hadir) {
+    //         output_1d.push(fakultas_now)
+    //         output_1d.push(jurusan_now)
+    //         output_1d.push(nim_now)
+    //         output_1d.push(nama_now)
+    //         output_1d.push(namamatkul_now)
+    //         output_1d.push(matkul_now)
+    //         output_1d.push(kelas_now)
+    //         output_1d.push(hadir)
+    //         output_1d.push(izin)
+    //         output_1d.push(sakit)
+    //         output_1d.push(alfa)
+    //         output_1d.push(1)
+    //         data_statistik_all.push(output_1d)
+    //     }
+    //     if (count_izin >= max_tidak_hadir) {
+    //         output_1d.push(fakultas_now)
+    //         output_1d.push(jurusan_now)
+    //         output_1d.push(nim_now)
+    //         output_1d.push(nama_now)
+    //         output_1d.push(namamatkul_now)
+    //         output_1d.push(matkul_now)
+    //         output_1d.push(kelas_now)
+    //         output_1d.push(hadir)
+    //         output_1d.push(izin)
+    //         output_1d.push(sakit)
+    //         output_1d.push(alfa)
+    //         output_1d.push(2)
+    //         data_statistik_all.push(output_1d)
+    //     }
+    //     if (count_sakit >= max_tidak_hadir) {
+    //         output_1d.push(fakultas_now)
+    //         output_1d.push(jurusan_now)
+    //         output_1d.push(nim_now)
+    //         output_1d.push(nama_now)
+    //         output_1d.push(namamatkul_now)
+    //         output_1d.push(matkul_now)
+    //         output_1d.push(kelas_now)
+    //         output_1d.push(hadir)
+    //         output_1d.push(izin)
+    //         output_1d.push(sakit)
+    //         output_1d.push(alfa)
+    //         output_1d.push(3)
+    //         data_statistik_all.push(output_1d)
+    //     }
+    //     output_1d = []
+    //     hadir = 0;
+    //     sakit = 0;
+    //     izin = 0;
+    //     alfa = 0;
+    //     count_sakit = 0;
+    //     count_izin = 0;
+    //     count_alfa = 0;
+    // }
+    // }

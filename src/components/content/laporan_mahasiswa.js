@@ -228,6 +228,7 @@ class Laporan_Mahasiswa extends Component {
                     max_jam_mahasiswa = 23;
                 }
                 else {
+                    //deteksi jam max mahasiswa absen
                     kodematkul_pengajar_next = datapengajar[i + 1].kodematkul
                     kelas_pengajar_next = datapengajar[i + 1].kelas
                     date_pengajar_next = (new Date(datapengajar[i + 1].waktu)).toLocaleDateString()

@@ -7,6 +7,7 @@ const s = {
     //log
     readlog: url + "/log/read",
     readstatistiklog: url + "/log/statistik",
+    readstatistikall: url + "/log/statistik_all",
     readlogpengajar: url + "/log/pengajar",
     createlog: url + "/log/create",
     deletelog: url + "/log/delete",
@@ -18,6 +19,7 @@ const s = {
     deletefinger: url + "/fingerprint/delete",
 
     //pengguna
+    readallpengguna: url + "/pengguna/read_all",
     readpengguna: url + "/pengguna/read",
     createpengguna: url + "/pengguna/create",
     updatepengguna: url + "/pengguna/update",
@@ -73,89 +75,3 @@ const s = {
 }
 
 module.exports = s
-
-// import React from "react";
-// import ReactExport from "react-data-export";
-// import { withRouter } from 'react-router-dom';
-// import get from './config';
-
-// const ExcelFile = ReactExport.ExcelFile;
-// const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
-// const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
-
-// class Laporan extends React.Component {
-//     constructor(props) {
-//         super(props);
-//         this.state = {
-//             data: [],
-//             sortby: 'fakultas',
-//             ascdsc: 'asc',
-//             search: '',
-//             page: 1,
-//             limit: 20
-//         };
-//     }
-
-//     componentDidMount() {
-//         const { sortby, ascdsc, search, limit, page } = this.state
-//         fetch(get.readpengguna, {
-//             method: 'post',
-//             headers: {
-//                 "x-access-token": sessionStorage.name,
-//                 "Content-Type": "application/json"
-//             },
-//             body: JSON.stringify({
-//                 sortby: sortby,
-//                 ascdsc: ascdsc,
-//                 search: search,
-//                 limit: limit,
-//                 page: page,
-//             })
-//         })
-//             .then(response => response.json())
-//             .then(response => {
-//                 //berhasil dapet data
-//                 if ((response.status === 1) && (response.count !== 0)) {
-//                     this.setState({ data: response.hasil })
-//                     this.setState({ datakosong: false })
-//                 }
-//                 else if ((response.status === 1) && (response.count === 0)) {
-//                     this.setState({ datakosong: true })
-//                 }
-//                 //ga dapet token
-//                 else if ((response.status !== 1) && (response.status !== 0)) {
-//                     sessionStorage.removeItem("name")
-//                     window.location.reload()
-//                 }
-//             })
-//             .catch(error => {
-//                 sessionStorage.removeItem("name")
-//                 window.location.reload()
-//             })
-//     }
-
-//     render() {
-//         console.log(this.state.data)
-//         const dataSet1 = this.state.data.map(isi => {
-//             return {
-//                 fakultas: isi.fakultas,
-//                 jurusan: isi.jurusan,
-//                 nim: isi.nim,
-//                 nama: isi.nama
-//             }
-//         })
-//         console.log(dataSet1)
-//         return (
-//             <ExcelFile element={<button>Download Data</button>}>
-//                 <ExcelSheet data={dataSet1} name="Employees">
-//                     <ExcelColumn label="Fakultas" value="fakultas" />
-//                     <ExcelColumn label="Jurusan" value="jurusan" />
-//                     <ExcelColumn label="NIM" value="nim" />
-//                     <ExcelColumn label="Nama" value="nama" />
-//                 </ExcelSheet>
-//             </ExcelFile>
-//         );
-//     }
-// }
-
-// export default withRouter(Laporan);
