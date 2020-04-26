@@ -17,23 +17,24 @@ class StatistikMahasiswa extends Component {
             data_pengajar: [],
             data_matkul: [],
             nim_form: '',
-            nim: 'Masukkan nim',
+            nim: 'Masukkan NIM',
             nama: '-',
             startDate: '',
             endDate: '',
             find_pressed: false,
             datasalah: false,
             datakosong: true,
+            isLoading: false,
             counter_loading: 0,
             lengthMahasiswa: 0,
-            showStatistikAll: true,
-            showStatistikbyNIM: false,
+            showStatistikAll: false,
+            showStatistikbyNIM: true,
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    componentWillMount() {
+    getDataPenggunaAll() {
         data_statistik_all = []
         fetch(get.readallpengguna, {
             method: 'post',
@@ -71,12 +72,14 @@ class StatistikMahasiswa extends Component {
             })
                 .then(response => response.json())
                 .then(response => {
+
+                    this.setState({
+                        counter_loading: i,
+                        isLoading: false,
+                    })
                     //berhasil dapet data
                     if ((response.status === 1) && (response.log_pengajar.length !== 0) && (response.matkul.length !== 0)) {
                         this.getDataStatistikAll(response.matkul, response.log_pengajar, response.log_mahasiswa, mahasiswa[i].fakultas, mahasiswa[i].jurusan, mahasiswa[i].nim, mahasiswa[i].nama)
-                        this.setState({
-                            counter_loading: i
-                        })
                     }
                     //ga dapet token
                     else if ((response.status !== 1) && (response.status !== 0)) {
@@ -1182,6 +1185,14 @@ class StatistikMahasiswa extends Component {
         )
     }
 
+    showAllStatistik() {
+        this.setState({
+            showStatistikAll: true,
+            showStatistikbyNIM: false
+        })
+        this.getDataPenggunaAll()
+    }
+
     render() {
         data_matkul_aman.splice(0, data_matkul_aman.length)
         data_matkul_bermasalah.splice(0, data_matkul_bermasalah.length)
@@ -1226,8 +1237,11 @@ class StatistikMahasiswa extends Component {
 
         // var widthgraph = 600 * loop.length + 'px';
 
+        data_statistik_all.sort(function(a,b){
+            return a[2] - b[2];
+        })
         var loadingNow = true
-        if ((state.counter_loading - state.lengthMahasiswa) === -2) {
+        if ((state.counter_loading - state.lengthMahasiswa) > -20) {
             loadingNow = false
         }
         var inc = 0
@@ -1247,24 +1261,32 @@ class StatistikMahasiswa extends Component {
                             <label><b>Tanggal Akhir</b> </label> <br></br>
                             <input name="endDate" onChange={this.handleChange} className="inputfiltertanggalawallog" type="date" required ></input>
                         </div>
-                        <div className="kotaksubmitstatistik">
-                            <input className="submitformstatistik" type="submit" value="Filter"></input>
+
+                        <div className="kotaksubmitpenggunadaftar">
+                            <input className="submitformlogpintu" type="submit" value="Cari"></input>
                         </div>
                     </form>
+
+                    <div className="kotakcancelpenggunadaftar2">
+                        <button className="buttonlikea" onClick={() => this.showAllStatistik()}> <span className="cancelformpengguna">Show All</span></button>
+                    </div>
                 </div>
                 <div className="paddingtop30px2"></div>
                 {
-                    (loadingNow) &&
-                    <div style={{color:"rgb(0,0,100)"}}>
-                        <i className="fa fa-spinner fa-pulse fa-10x fa-fw"></i>
-                    </div>
-                }
-                {
-                    (loadingNow === false) && state.showStatistikAll &&
+                    (state.isLoading === false) && state.showStatistikAll &&
                     <div className="kotakdata">
-                        <div style={{ display: 'block', textAlign: 'center' }}>
-                            <h5>Daftar Mahasiswa Bermasalah</h5>
-                        </div>
+                        {
+                            loadingNow &&
+                            <div style={{ display: 'block', textAlign: 'center' }}>
+                                <h5>Daftar Mahasiswa Bermasalah&ensp;<i className="fa fa-gear fa-spin" style={{ height: '20px' }} ></i> </h5>
+                            </div>
+                        }
+                        {
+                            loadingNow === false &&
+                            <div style={{ display: 'block', textAlign: 'center' }}>
+                                <h5>Daftar Mahasiswa Bermasalah</h5>
+                            </div>
+                        }
                         <div className="isitabel">
                             <table className="tablelog">
                                 <thead className="theadlog">
@@ -1280,7 +1302,6 @@ class StatistikMahasiswa extends Component {
                                         <th className="kelas" style={{ cursor: "default" }}>Izin</th>
                                         <th className="kelas" style={{ cursor: "default" }}>Sakit</th>
                                         <th className="kelas" style={{ cursor: "default" }}>Alfa</th>
-                                        <th className="keterangan" style={{ cursor: "default" }}>Show Detail</th>
                                     </tr>
                                 </thead>
                                 {(data_statistik_all.length !== 0) &&
@@ -1299,7 +1320,6 @@ class StatistikMahasiswa extends Component {
                                                     <td>{isidata[8]}</td>
                                                     <td>{isidata[9]}</td>
                                                     <td className="kehadiranbermasalah" style={{ border: "none" }}>{isidata[10]}</td>
-                                                    <td><a href={"#" + isidata[0] + isidata[1]}><u>Show Detail</u></a></td>
                                                 </tr>)
 
                                             || ((isidata[11] === 2) &&
@@ -1315,7 +1335,6 @@ class StatistikMahasiswa extends Component {
                                                     <td className="kehadiranbermasalah" style={{ border: "none" }}>{isidata[8]}</td>
                                                     <td>{isidata[9]}</td>
                                                     <td>{isidata[10]}</td>
-                                                    <td><a href={"#" + isidata[0] + isidata[1]}><u>Show Detail</u></a></td>
                                                 </tr>)
 
                                             || ((isidata[11] === 3) &&
@@ -1331,7 +1350,6 @@ class StatistikMahasiswa extends Component {
                                                     <td>{isidata[8]}</td>
                                                     <td className="kehadiranbermasalah" style={{ border: "none" }}>{isidata[9]}</td>
                                                     <td>{isidata[10]}</td>
-                                                    <td><a href={"#" + isidata[0] + isidata[1]}><u>Show Detail</u></a></td>
                                                 </tr>)
                                         ))}
                                     </tbody>
@@ -1347,7 +1365,7 @@ class StatistikMahasiswa extends Component {
                     </div>
                 }
                 {
-                    (loadingNow === false) && state.showStatistikbyNIM &&
+                    (state.isLoading === false) && state.showStatistikbyNIM &&
                     <div id="inputform">
                         <div className="kotakdata">
                             <div>
@@ -1355,7 +1373,7 @@ class StatistikMahasiswa extends Component {
                                 <br></br>
                                 <span><b>Nama &emsp; : {state.nama}</b></span>
                                 <br></br>
-                                <span><b>Periode &ensp;: {PeriodeStatistik(state.startDate, state.endDate)}</b></span>
+                                <span><b>Periode &ensp;: {PeriodeStatistik(state.startDate, state.endDate) || '-'}</b></span>
                                 <br></br>
                             </div>
                             <div className="paddingtop30px2"></div>
@@ -1376,10 +1394,6 @@ class StatistikMahasiswa extends Component {
                                 </div>
                             }
                         </div>
-                        {
-                            state.datakosong &&
-                            <div></div>
-                        }
                         {
                             (state.datakosong === false) && (data_matkul_bermasalah.length !== 0) &&
                             data_matkul_bermasalah.map(isidata => (

@@ -3221,13 +3221,12 @@ a:focus {
   border-radius: 10px;
   width: 100%;
 }
-@media(max-width:910px){
+@media(max-width:988px){
   .filtertanggalawalstatistik{
-    margin-left: 60%;
+    margin-left: 35%;
   }
   .filtertanggalakhirstatistik{
-    margin-top: 20px;
-    margin-left: 0%;
+    margin-left: 70%;
   }
   .kotaksubmitstatistik{
     margin-top: -45px;
@@ -4087,7 +4086,7 @@ a:focus {
   border: none;
   border-bottom: solid 1px rgb(0, 0, 100);
   font-size: 13px;
-  width: 165px;
+  width: 150px;
   background: transparent;
 }
 
@@ -4263,6 +4262,12 @@ a:focus {
   float: right;
 }
 
+.kotakcancelpenggunadaftar2{
+  margin-top: -60px;
+  float: right;
+  margin-right: 5px
+}
+
 .inputformlogpintujurusan{
   border-top: none;
   border-left: none;
@@ -4349,7 +4354,14 @@ a:focus {
     width: 100%;
     text-align: center;
   }
-  
+  .kotakcancelpenggunadaftar2{
+    float: none;
+    margin: none;
+    margin-top: -20px;
+    padding-bottom: 10px;
+    width: 100%;
+    text-align: center;
+  }
 }
 
 
