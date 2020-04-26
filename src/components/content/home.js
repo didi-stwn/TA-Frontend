@@ -13,7 +13,8 @@ class Home extends Component {
                         </div>
                         <div>
                             <span className="welcometo"><b>WELCOME TO</b></span>
-                            <span className="welcometoxirka"><b>Institute Teknologi Bandung</b></span>
+                            {/* <span className="welcometoxirka"><b>Institute Teknologi Bandung</b></span> */}
+                            <span className="welcometoxirka"><b>TA192001026</b></span>
                         </div>
                     </div>
                 </div>

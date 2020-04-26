@@ -4,6 +4,10 @@ import { Pie } from 'react-chartjs-2';
 import { Line } from 'react-chartjs-2';
 import get from './config';
 
+
+var data_matkul_bermasalah = []
+var data_matkul_aman = []
+
 class StatistikMahasiswa extends Component {
     constructor(props) {
         super(props);
@@ -11,11 +15,13 @@ class StatistikMahasiswa extends Component {
             data_mahasiswa: [],
             data_pengajar: [],
             data_matkul: [],
-            nim_form: '11111111',
+            data_matkul_bermasalah: [1, 1, 1, 1],
+            data_matkul_aman: [1],
+            nim_form: '',
             nim: '',
             nama: '',
-            startDate: '2020-04-01',
-            endDate: '2020-10-01',
+            startDate: '',
+            endDate: '',
             find_pressed: false,
             datasalah: false,
             datakosong: true,
@@ -32,45 +38,72 @@ class StatistikMahasiswa extends Component {
     handleSubmit(e) {
         e.preventDefault();
         const { nim_form, startDate, endDate } = this.state
-        fetch(get.readstatistiklog + "/" + nim_form, {
+        fetch(get.readpengguna, {
             method: 'post',
             headers: {
                 "x-access-token": sessionStorage.name,
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                startDate: startDate,
-                endDate: endDate
+                sortby: "nim",
+                ascdsc: "asc",
+                search: nim_form,
+                limit: "1",
+                page: "1",
             })
         })
             .then(response => response.json())
             .then(response => {
                 //berhasil dapet data
-                if ((response.status === 1) && (response.log_pengajar.length === 0) && (response.matkul.length === 0) && (response.log_mahasiswa.length === 0)) {
+                if ((response.status === 1) && (response.count === 1)) {
                     this.setState({
+                        nama: response.hasil[0].nama,
+                        nim: nim_form,
                         find_pressed: true,
+                    })
+                    fetch(get.readstatistiklog + "/" + nim_form, {
+                        method: 'post',
+                        headers: {
+                            "x-access-token": sessionStorage.name,
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            startDate: startDate,
+                            endDate: endDate
+                        })
+                    })
+                        .then(response => response.json())
+                        .then(response => {
+                            //berhasil dapet data
+                            if ((response.status === 1) && (response.log_pengajar.length !== 0) && (response.matkul.length !== 0)) {
+                                this.getTanggalPengajar(response.log_pengajar)
+                                this.setState({
+                                    datakosong: false,
+                                    data_mahasiswa: response.log_mahasiswa,
+                                    data_matkul: response.matkul,
+                                })
+                            }
+                            else if ((response.status === 1) && ((response.log_pengajar.length === 0) || (response.matkul.length === 0))) {
+                                this.setState({
+                                    datakosong: true,
+                                })
+                            }
+                            //ga dapet token
+                            else if ((response.status !== 1) && (response.status !== 0)) {
+                                sessionStorage.removeItem("name")
+                                window.location.reload()
+                            }
+                        })
+                        .catch(error => {
+                            sessionStorage.removeItem("name")
+                            window.location.reload()
+                        })
+                }
+                else if ((response.status === 1) && (response.count !== 1)) {
+                    this.setState({
                         nama: "Nama tidak ditemukan",
                         nim: nim_form,
                         datakosong: true,
-                    })
-                }
-                else if ((response.status === 1) && (response.log_pengajar.length !== 0) && (response.matkul.length !== 0)) {
-                    this.getTanggalPengajar(response.log_pengajar)
-                    this.setState({
-                        find_pressed: true,
-                        nama: response.log_mahasiswa[0].nama,
-                        nim: nim_form,
-                        datakosong: false,
-                        data_mahasiswa: response.log_mahasiswa,
-                        data_matkul: response.matkul,
-                    })
-                }
-                else if ((response.status === 1) && ((response.log_pengajar.length === 0) || (response.matkul.length === 0))) {
-                    this.setState({
-                        datakosong: true,
-                        find_pressed: true,
-                        nama: "Nama tidak ditemukan",
-                        nim: nim_form,
                     })
                 }
                 //ga dapet token
@@ -83,6 +116,8 @@ class StatistikMahasiswa extends Component {
                 sessionStorage.removeItem("name")
                 window.location.reload()
             })
+        data_matkul_bermasalah = []
+        data_matkul_aman = []
     }
 
     getTanggalPengajar(data) {
@@ -147,6 +182,10 @@ class StatistikMahasiswa extends Component {
             var oldkelas = matkul[0].kelas
             var log_bermasalah_1d = []
             var log_bermasalah_2d = []
+            var count_hadir_table = 0
+            var count_izin_table = 0
+            var count_sakit_table = 0
+            var count_alfa_table = 0
             var count_alfa_bermasalah = 0
             var count_izin_bermasalah = 0
             var count_sakit_bermasalah = 0
@@ -280,9 +319,9 @@ class StatistikMahasiswa extends Component {
                             if (mahasiswa[j].keterangan === "Hadir") {
                                 hadir[count_minggu] = hadir[count_minggu] + 1
                                 count_hadir = count_hadir + 1
+                                count_hadir_table = count_hadir_table + 1
                                 var menit_mahasiswa = (new Date(mahasiswa[j].waktu)).getMinutes()
-                                // if ((jam_mahasiswa === min_jam_mahasiswa)&&((jam_mahasiswa > min_jam_mahasiswa + 1) && (menit_mahasiswa >= 15)))
-                                if ((jam_mahasiswa > min_jam_mahasiswa + 1) || ((jam_mahasiswa === min_jam_mahasiswa) && (menit_mahasiswa >= 40) && (menit_mahasiswa <= 60)) || ((jam_mahasiswa === min_jam_mahasiswa + 1) && (menit_mahasiswa >= 15))) {
+                                if ((jam_mahasiswa > min_jam_mahasiswa + 1) || ((jam_mahasiswa === min_jam_mahasiswa + 1) && (menit_mahasiswa >= 15))) {
                                     telat_pie[0] = telat_pie[0] + 1
                                     telat[count_minggu] = telat[count_minggu] + 1
                                 }
@@ -305,12 +344,14 @@ class StatistikMahasiswa extends Component {
                                 sakit[count_minggu] = sakit[count_minggu] + 1
                                 count_sakit = count_sakit + 1
                                 count_sakit_bermasalah = count_sakit_bermasalah + 1
+                                count_sakit_table = count_sakit_table + 1
                                 break;
                             }
                             else if (mahasiswa[j].keterangan === "Izin") {
                                 izin[count_minggu] = izin[count_minggu] + 1
                                 count_izin = count_izin + 1
                                 count_izin_bermasalah = count_izin_bermasalah + 1
+                                count_izin_table = count_izin_table + 1
                                 break;
                             }
                         }
@@ -319,26 +360,67 @@ class StatistikMahasiswa extends Component {
                         alfa[count_minggu] = alfa[count_minggu] + 1
                         count_alfa = count_alfa + 1
                         count_alfa_bermasalah = count_alfa_bermasalah + 1
+                        count_alfa_table = count_alfa_table + 1
                     }
 
                     //deteksi mahasiswa bermasalah
-                    if ((pengajar[a].kodematkul !== oldmatkul) || (pengajar[a].kelas !== oldkelas)) {
-                        if ((count_sakit_bermasalah >= count_now) || (count_izin_bermasalah >= count_now) || (count_alfa_bermasalah >= count_now)) {
-                            log_bermasalah_1d.push(oldmatkul)
-                            log_bermasalah_1d.push(oldkelas)
-                            log_bermasalah_1d.push(matkul[count_matkul].namamatkul)
-                            log_bermasalah_2d.push(log_bermasalah_1d)
+                    var check_bermasalah = 0
+                    if (((pengajar[a].kodematkul !== oldmatkul) || (pengajar[a].kelas !== oldkelas)) || (i === pengajar.length - 1)) {
+                        if (count_alfa_bermasalah >= count_now) {
+                            check_bermasalah = 1
                         }
+                        else if (count_izin_bermasalah >= count_now) {
+                            check_bermasalah = 2
+                        }
+                        else if (count_sakit_bermasalah >= count_now) {
+                            check_bermasalah = 3
+                        }
+                        else {
+                            check_bermasalah = 0
+                        }
+                        log_bermasalah_1d.push(oldmatkul)
+                        log_bermasalah_1d.push(oldkelas)
+                        log_bermasalah_1d.push(matkul[count_matkul].namamatkul)
+                        log_bermasalah_1d.push(count_hadir_table)
+                        log_bermasalah_1d.push(count_izin_table)
+                        log_bermasalah_1d.push(count_sakit_table)
+                        log_bermasalah_1d.push(count_alfa_table)
+                        log_bermasalah_1d.push(check_bermasalah)
+    
+                        log_bermasalah_2d.push(log_bermasalah_1d)
+
+                        log_bermasalah_1d = []
                         oldmatkul = pengajar[a].kodematkul
                         oldkelas = pengajar[a].kelas
+                        count_hadir_table = 0
+                        count_izin_table = 0
+                        count_sakit_table = 0
+                        count_alfa_table = 0
                         count_sakit_bermasalah = 0
                         count_izin_bermasalah = 0
                         count_alfa_bermasalah = 0
                     }
+                    else {
+
+                    }
                 }
             }
 
-            console.log(log_bermasalah_2d)
+            //memasukkan data yg bermasalah dan aman ke var global
+            data_matkul_bermasalah = []
+            data_matkul_aman = []
+            for (i = 0; i < matkul.length; i++) {//namamatkul, kodematkul, kelas, jumlah pertemuan perminggu
+                for (j = 0; j < log_bermasalah_2d.length; j++) {
+                    if ((matkul[i].kodematkul === log_bermasalah_2d[j][0]) && (matkul[i].kelas === log_bermasalah_2d[j][1]) && (log_bermasalah_2d[j][7] === 1)) {
+                        data_matkul_bermasalah.push(matkul[i])
+                        break;
+                    }
+                }
+                if (j === log_bermasalah_2d.length) {
+                    data_matkul_aman.push(matkul[i])
+                }
+            }
+
             hadir_pie[0] = count_hadir
             hadir_pie[1] = count_izin
             hadir_pie[2] = count_sakit
@@ -471,68 +553,372 @@ class StatistikMahasiswa extends Component {
                         <table className="tablefakultas">
                             <thead className="theadlog">
                                 <tr>
-                                    <th colSpan="4"><h5 style={{ letterSpacing: "2px" }}>Data Mata Kuliah Bermasalah</h5></th>
-                                </tr>
-                                <tr>
-                                    <th className="kodematkul" style={{ cursor: "default" }}>Nama Matakuliah</th>
-                                    <th className="namamatkul" style={{ cursor: "default" }}>Kode MataKuliah</th>
+                                    <th className="namamatkul" style={{ cursor: "default" }}>Nama Matakuliah</th>
+                                    <th className="kodematkul" style={{ cursor: "default" }}>Kode</th>
                                     <th className="kelas" style={{ cursor: "default" }}>Kelas</th>
-                                    <th className="keterangan" style={{ cursor: "default" }}>Keterangan</th>
+                                    <th className="kelas" style={{ cursor: "default" }}>Hadir</th>
+                                    <th className="kelas" style={{ cursor: "default" }}>Izin</th>
+                                    <th className="kelas" style={{ cursor: "default" }}>Sakit</th>
+                                    <th className="kelas" style={{ cursor: "default" }}>Alfa</th>
+                                    <th className="keterangan" style={{ cursor: "default" }}>Detail</th>
                                 </tr>
                             </thead>
-                            {(log_bermasalah_2d.length === 0) &&
-                                <tbody className="tbodylog">
-                                    <tr>
-                                        <td colSpan="4">Tidak ada</td>
-                                    </tr>
-                                </tbody>
-                            }
                             {
                                 (log_bermasalah_2d.length !== 0) &&
                                 <tbody className="tbodylog">
                                     {log_bermasalah_2d.map(isidata => (
-                                        <tr key={p++}>
-                                            <td>{isidata[2]}</td>
-                                            <td>{isidata[0]}</td>
-                                            <td>{isidata[1]}</td>
-                                            <td><a href={"#" + isidata[0] + isidata[1]}><u>Show Detail</u></a></td>
-                                        </tr>
-                                    ))}
+                                            ((isidata[7] === 0) &&
+                                            <tr key={p++}>
+                                                <td>{isidata[2]}</td>
+                                                <td>{isidata[0]}</td>
+                                                <td>{isidata[1]}</td>
+                                                <td>{isidata[3]}</td>
+                                                <td>{isidata[4]}</td>
+                                                <td>{isidata[5]}</td>
+                                                <td>{isidata[6]}</td>
+                                                <td><a href={"#" + isidata[0] + isidata[1]}><u>Show Detail</u></a></td>
+                                            </tr>)
+
+                                            || ((isidata[7] === 1) &&
+                                            <tr key={p++}>
+                                                <td>{isidata[2]}</td>
+                                                <td>{isidata[0]}</td>
+                                                <td>{isidata[1]}</td>
+                                                <td>{isidata[3]}</td>
+                                                <td>{isidata[4]}</td>
+                                                <td>{isidata[5]}</td>
+                                                <td className="kehadiranbermasalah">{isidata[6]}</td>
+                                                <td><a href={"#" + isidata[0] + isidata[1]}><u>Show Detail</u></a></td>
+                                            </tr>)
+
+                                            || ((isidata[7] === 2) &&
+                                            <tr key={p++}>
+                                                <td>{isidata[2]}</td>
+                                                <td>{isidata[0]}</td>
+                                                <td>{isidata[1]}</td>
+                                                <td>{isidata[3]}</td>
+                                                <td className="kehadiranbermasalah">{isidata[4]}</td>
+                                                <td>{isidata[5]}</td>
+                                                <td>{isidata[6]}</td>
+                                                <td><a href={"#" + isidata[0] + isidata[1]}><u>Show Detail</u></a></td>
+                                            </tr>)
+
+                                            || ((isidata[7] === 3) &&
+                                            <tr key={p++}>
+                                                <td>{isidata[2]}</td>
+                                                <td>{isidata[0]}</td>
+                                                <td>{isidata[1]}</td>
+                                                <td>{isidata[3]}</td>
+                                                <td>{isidata[4]}</td>
+                                                <td className="kehadiranbermasalah">{isidata[5]}</td>
+                                                <td>{isidata[6]}</td>
+                                                <td><a href={"#" + isidata[0] + isidata[1]}><u>Show Detail</u></a></td>
+                                            </tr>)
+                                ))}
                                 </tbody>
-                            }
+                        }
                         </table>
-                    </div>
-                    <div className="paddingtop30px2"></div>
-                    <div className="texttengah">
-                        <Pie
-                            data={DataHadir}
-                            width={300}
-                            height={250}
-                            options={OptionHadir}
-                        />
-                        <div style={{ padding: "20px" }}></div>
-                        <Pie
-                            data={DataTelat}
-                            width={300}
-                            height={250}
-                            options={OptionTelat}
-                        />
-                    </div>
-                    <div className="paddingtop30px2"></div>
-                    <div>
-                        <Line
-                            data={DataMinggu}
-                            width={900}
-                            height={250}
-                            options={OptionMinggu}
-                        />
-                    </div>
                 </div>
+                <div className="paddingtop30px2"></div>
+                <div className="texttengah">
+                    <Pie
+                        data={DataHadir}
+                        width={300}
+                        height={250}
+                        options={OptionHadir}
+                    />
+                    <div style={{ padding: "20px" }}></div>
+                    <Pie
+                        data={DataTelat}
+                        width={300}
+                        height={250}
+                        options={OptionTelat}
+                    />
+                </div>
+                <div className="paddingtop30px2"></div>
+                <div>
+                    <Line
+                        data={DataMinggu}
+                        width={900}
+                        height={250}
+                        options={OptionMinggu}
+                    />
+                </div>
+                </div >
             )
         }
     }
 
+    waktu(t) {
+        var tahun, bulan, tanggal, jam, tgl, j, m, date;
+        date = new Date(t)
+        tahun = String(date.getFullYear())
+        var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
+        bulan = months[(date.getMonth())]
+        tgl = date.getDate()
+        if (tgl <= 9) {
+            tanggal = "0" + String(tgl)
+        }
+        else {
+            tanggal = String(tgl)
+        }
+
+        m = date.getMinutes()
+
+        if (m > 40) {
+            j = date.getHours() + 1
+        }
+        else {
+            j = date.getHours()
+        }
+
+        if (j <= 9) {
+            jam = "0" + String(j)
+        }
+        else {
+            jam = String(j)
+        }
+        return bulan + " " + tanggal + ", " + tahun + " " + jam + ":00:00"
+    }
+
+    getDataPerMatkul(matkul, pengajar, mahasiswa) {
+        var count_hadir = 0
+        var count_izin = 0
+        var count_sakit = 0
+        var count_alfa = 0
+        var hadir_pie = [0, 0, 0, 0]
+        var telat_pie = [0, 0]
+
+        var output_1d = []
+        var output_2d = []
+        var counter_pertemuan = 0
+        var waktu_table, koderuangan_table, hadir_table, izin_table, sakit_table, alfa_table
+
+        var kodematkul_pengajar, kelas_pengajar, date_pengajar, kodematkul_pengajar_next, kelas_pengajar_next, date_pengajar_next
+        var kodematkul_mahasiswa, kelas_mahasiswa, date_mahasiswa, jam_mahasiswa, min_jam_mahasiswa, max_jam_mahasiswa
+
+
+        for (var i = 0; i < pengajar.length; i++) {//pengajar : kodematkul, kelas, status, keterangan, waktu
+            kodematkul_pengajar = pengajar[i].kodematkul
+            kelas_pengajar = pengajar[i].kelas
+
+            if ((kodematkul_pengajar === matkul.kodematkul) && (kelas_pengajar === matkul.kelas)) {
+                counter_pertemuan = counter_pertemuan + 1
+                date_pengajar = (new Date(pengajar[i].waktu)).toLocaleDateString()
+
+                if ((new Date(pengajar[i].waktu)).getMinutes() > 40) {
+                    min_jam_mahasiswa = (new Date(pengajar[i].waktu)).getHours()
+                }
+                else {
+                    min_jam_mahasiswa = (new Date(pengajar[i].waktu)).getHours() - 1
+                }
+
+                if (i === pengajar.length - 1) {
+                    max_jam_mahasiswa = 23;
+                }
+                else {
+                    kodematkul_pengajar_next = pengajar[i + 1].kodematkul
+                    kelas_pengajar_next = pengajar[i + 1].kelas
+                    date_pengajar_next = (new Date(pengajar[i + 1].waktu)).toLocaleDateString()
+
+                    if ((kodematkul_pengajar_next === kodematkul_pengajar) && (kelas_pengajar_next === kelas_pengajar)) {
+
+                        if (date_pengajar === date_pengajar_next) {
+                            if ((new Date(pengajar[i + 1].waktu)).getMinutes() > 40) {
+                                max_jam_mahasiswa = (new Date(pengajar[i + 1].waktu)).getHours()
+                            }
+                            else {
+                                max_jam_mahasiswa = (new Date(pengajar[i + 1].waktu)).getHours() - 1
+                            }
+                        }
+                        else {
+                            max_jam_mahasiswa = 23
+                        }
+                    }
+                    else {
+                        max_jam_mahasiswa = 23
+                    }
+                }
+
+                for (var j = 0; j < mahasiswa.length; j++) { //mahasiswa : kodematkul, kelas, waktu.
+
+                    kodematkul_mahasiswa = mahasiswa[j].kodematkul
+                    kelas_mahasiswa = mahasiswa[j].kelas
+                    date_mahasiswa = (new Date(mahasiswa[j].waktu)).toLocaleDateString()
+                    jam_mahasiswa = (new Date(mahasiswa[j].waktu)).getHours()
+
+                    if ((kodematkul_mahasiswa === kodematkul_pengajar) && (kelas_mahasiswa === kelas_pengajar) && (date_mahasiswa === date_pengajar) && (jam_mahasiswa >= min_jam_mahasiswa) && (jam_mahasiswa <= max_jam_mahasiswa)) {
+                        if (mahasiswa[j].keterangan === "Hadir") {
+                            count_hadir = count_hadir + 1
+                            hadir_table = "✔"
+                            izin_table = ""
+                            sakit_table = ""
+                            alfa_table = ""
+                            var menit_mahasiswa = (new Date(mahasiswa[j].waktu)).getMinutes()
+                            if ((jam_mahasiswa > min_jam_mahasiswa + 1) || ((jam_mahasiswa === min_jam_mahasiswa + 1) && (menit_mahasiswa >= 15))) {
+                                telat_pie[0] = telat_pie[0] + 1
+                            }
+                            else {
+                                telat_pie[1] = telat_pie[1] + 1
+                            }
+                            break;
+                        }
+                        else if (mahasiswa[j].keterangan === "Sakit") {
+                            count_sakit = count_sakit + 1
+                            hadir_table = ""
+                            izin_table = ""
+                            sakit_table = "✔"
+                            alfa_table = ""
+                            break;
+                        }
+                        else if (mahasiswa[j].keterangan === "Izin") {
+                            count_izin = count_izin + 1
+                            hadir_table = ""
+                            izin_table = "✔"
+                            sakit_table = ""
+                            alfa_table = ""
+                            break;
+                        }
+                    }
+                }
+                if (j === mahasiswa.length) {
+                    count_alfa = count_alfa + 1
+                    hadir_table = ""
+                    izin_table = ""
+                    sakit_table = ""
+                    alfa_table = "✔"
+                }
+
+                waktu_table = this.waktu(new Date(pengajar[i].waktu))
+                koderuangan_table = pengajar[i].koderuangan
+
+                output_1d.push(counter_pertemuan)
+                output_1d.push(waktu_table)
+                output_1d.push(koderuangan_table)
+                output_1d.push(hadir_table)
+                output_1d.push(izin_table)
+                output_1d.push(sakit_table)
+                output_1d.push(alfa_table)
+
+                output_2d.push(output_1d)
+            }
+            output_1d = []
+        }
+
+        hadir_pie[0] = count_hadir
+        hadir_pie[1] = count_izin
+        hadir_pie[2] = count_sakit
+        hadir_pie[3] = count_alfa
+
+        const DataHadir = {
+            labels: ['Hadir', 'Izin', 'Sakit', 'Tidak Hadir'],
+            datasets: [
+                {
+                    data: hadir_pie,
+                    backgroundColor: [
+                        'rgba(0,255,0)',
+                        'rgba(0,0,255)',
+                        'rgba(255,255,0)',
+                        'rgba(255,0,0)'
+                    ],
+                },
+            ],
+        };
+        const OptionHadir = {
+            maintainAspectRatio: false,
+            responsive: false,
+            legend: {
+                position: 'right',
+                labels: {
+                    boxWidth: 10
+                }
+            },
+            title: {
+                display: true,
+                text: 'Data Kehadiran'
+            }
+        }
+
+        const DataTelat = {
+            labels: ['Terlambat', 'Tepat Waktu'],
+            datasets: [
+                {
+                    data: telat_pie,
+                    backgroundColor: [
+                        'red',
+                        'blue',
+                    ],
+                },
+            ],
+        };
+        const OptionTelat = {
+            maintainAspectRatio: false,
+            responsive: false,
+            legend: {
+                position: 'right',
+                labels: {
+                    boxWidth: 10
+                }
+            },
+            title: {
+                display: true,
+                text: 'Data Keterlambatan'
+            }
+        }
+        var p = 0
+        return (
+            <div>
+                <div className="texttengah">
+                    <Pie
+                        data={DataHadir}
+                        width={300}
+                        height={250}
+                        options={OptionHadir}
+                    />
+                    <div style={{ padding: "20px" }}></div>
+                    <Pie
+                        data={DataTelat}
+                        width={300}
+                        height={250}
+                        options={OptionTelat}
+                    />
+                </div>
+                <div className="paddingtop30px2"></div>
+                <div className="isitabel">
+                    <table className="tablelaporan">
+                        <thead className="theadlog">
+                            <tr>
+                                <th className="laporanmasuk"> Pertemuan ke- </th>
+                                <th className="laporanhari"> Waktu </th>
+                                <th className="laporanmasuk"> Kode Ruangan </th>
+                                <th className="laporansakit"> Hadir </th>
+                                <th className="laporansakit"> Izin </th>
+                                <th className="laporansakit"> Sakit </th>
+                                <th className="laporansakit"> Alfa </th>
+                            </tr>
+                        </thead>
+                        <tbody className="tbodylog">
+                            {output_2d.map(isidata => (
+                                <tr key={p++}>
+                                    <td>{isidata[0]}</td>
+                                    <td>{isidata[1]}</td>
+                                    <td>{isidata[2]}</td>
+                                    <td>{isidata[3]}</td>
+                                    <td>{isidata[4]}</td>
+                                    <td>{isidata[5]}</td>
+                                    <td>{isidata[6]}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        )
+    }
+
     render() {
+        data_matkul_aman.splice(0, data_matkul_aman.length)
+        data_matkul_bermasalah.splice(0, data_matkul_bermasalah.length)
         const state = this.state
         function PeriodeStatistik(start, end) {
             var hasil, awal, akhir, tahunawal, tahunakhir, bulanawal, bulanakhir, tanggalawal, tanggalakhir, tglawal, tglakhir;
@@ -572,13 +958,11 @@ class StatistikMahasiswa extends Component {
             }
         }
 
-        var loop = [1, 1, 1, 1, 1, 1, 1]
         // var widthgraph = 600 * loop.length + 'px';
-
+        var inc = 0
         return (
-            <div>
+            <div id="inputform">
                 <div className="kotakfilter3">
-                    {/* <a href="#bawah"> click </a> */}
                     <form className="kotakforminputlogpintu" onSubmit={this.handleSubmit}>
                         <div className="filterdatastatistik">
                             <label><b>NIM</b> </label> <br></br>
@@ -608,19 +992,64 @@ class StatistikMahasiswa extends Component {
                         <br></br>
                     </div>
                     <div className="paddingtop30px2"></div>
-                    <div className="scrollx">
-                        <div className="texttengah" style={{ minWidth: "800px" }}>
-                            {this.graphfirst(state.data_matkul, state.data_pengajar, state.data_mahasiswa)}
+                    {
+                        state.datakosong &&
+                        <div style={{ textAlign: "center", display: "block" }}>
+                            <h5>
+                                Data tidak ditemukan
+                            </h5>
                         </div>
-                    </div>
+                    }
+                    {
+                        state.datakosong === false &&
+                        <div className="scrollx">
+                            <div className="texttengah" style={{ minWidth: "800px" }}>
+                                {this.graphfirst(state.data_matkul, state.data_pengajar, state.data_mahasiswa)}
+                            </div>
+                        </div>
+                    }
                 </div>
-                <div className="kotakdata">
-                    <div style={{ textAlign: "left", display: "block" }}>
-                        <h5>
-                            EL0001 K01
-                        </h5>
-                    </div>
-                </div>
+                {
+                    state.datakosong &&
+                    <div></div>
+                }
+                {
+                    (state.datakosong === false) && (data_matkul_bermasalah.length !== 0) &&
+                    data_matkul_bermasalah.map(isidata => (
+                        <div key={inc++} className="kotakdata2" id={isidata.kodematkul + "" + isidata.kelas}>
+                            <div className="scrollx">
+                                <div style={{ minWidth: "800px" }}>
+                                    <div style={{ textAlign: "center", display: "block" }}>
+                                        <a href="#inputform"><u>Back to top</u></a>
+                                        <h5>{isidata.kodematkul} - {isidata.kelas}</h5>
+                                    </div>
+                                    <div>
+                                        {this.getDataPerMatkul(isidata, state.data_pengajar, state.data_mahasiswa)}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    ))
+                }
+                {
+                    (state.datakosong === false) && (data_matkul_aman.length !== 0) &&
+
+                    data_matkul_aman.map(isidata => (
+                        <div key={inc++} className="kotakdata" id={isidata.kodematkul + "" + isidata.kelas}>
+                            <div className="scrollx">
+                                <div style={{ minWidth: "800px" }}>
+                                    <div style={{ textAlign: "center", display: "block" }}>
+                                        <a href="#inputform"><u>Back to top</u></a>
+                                        <h5>{isidata.kodematkul} - {isidata.kelas}</h5>
+                                    </div>
+                                    <div>
+                                        {this.getDataPerMatkul(isidata, state.data_pengajar, state.data_mahasiswa)}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    ))
+                }
             </div>
         )
     }

@@ -3708,6 +3708,19 @@ a:focus {
   border-top: 5px solid rgb(0, 0, 100);
 }
 
+.kotakdata2 {
+  transition: margin-top .5s cubic-bezier(0, 0.5, 0.3, 1);
+  margin-bottom: 30px;
+  background-color: #ffffff;
+  position: relative;
+  border-radius: 10px;
+  width: 100%;
+  box-shadow: 5px 8px 8px rgba(0, 0, 0, 0.3);
+  height:100%;
+  padding: 30px;
+  border-top: 5px solid rgb(255, 0, 0);
+}
+
 .isitabel{
   border-radius: 15px;
   overflow-x: auto;
@@ -3858,6 +3871,16 @@ a:focus {
 .tbodylog{
   text-align: center;
   padding: 10px;
+}
+
+.tbodylogbermasalah{
+  text-align: center;
+  padding: 10px;
+}
+.tbodylogbermasalah > tr > td {
+  padding: 10px;
+  background-color: red;
+  color: white
 }
 
 .tbodylog > tr:nth-child(even){background-color: rgb(226, 224, 255);}
