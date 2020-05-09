@@ -16,11 +16,15 @@ class StatistikMahasiswa extends Component {
             data_mahasiswa: [],
             data_pengajar: [],
             data_matkul: [],
+            data_statistik_solve: [],
+            data_statistik_bermasalah: [],
             nim_form: '',
             nim: 'Masukkan NIM',
             nama: '-',
             startDate: '',
             endDate: '',
+            konfigurasi: 0,
+            konfigurasiall: 0,
             find_pressed: false,
             datasalah: false,
             datakosong: true,
@@ -48,6 +52,7 @@ class StatistikMahasiswa extends Component {
                 if ((response.status === 1) && (response.hasil.count !== 0)) {
                     this.setState({ lengthMahasiswa: response.hasil.length })
                     this.requestStatistikAll(response.hasil)
+                    this.getDataMahasiswaSolve()
                 }
                 //ga dapet token
                 else if ((response.status !== 1) && (response.status !== 0)) {
@@ -80,6 +85,7 @@ class StatistikMahasiswa extends Component {
                     //berhasil dapet data
                     if ((response.status === 1) && (response.log_pengajar.length !== 0) && (response.matkul.length !== 0)) {
                         this.getDataStatistikAll(response.matkul, response.log_pengajar, response.log_mahasiswa, mahasiswa[i].fakultas, mahasiswa[i].jurusan, mahasiswa[i].nim, mahasiswa[i].nama)
+
                     }
                     //ga dapet token
                     else if ((response.status !== 1) && (response.status !== 0)) {
@@ -95,6 +101,7 @@ class StatistikMahasiswa extends Component {
     }
 
     getDataStatistikAll(matkul, pengajar, mahasiswa, fakultas, jurusan, nim, nama) {
+        const { konfigurasiall } = this.state
         //mendapatkan tanggal pengajar agar tidak tumpuk
         var filter_tanggal_pengajar = [];
         filter_tanggal_pengajar.push(pengajar[0])
@@ -155,7 +162,7 @@ class StatistikMahasiswa extends Component {
         var count_matkul = 0
         var kodematkul_now = matkul[count_matkul].kodematkul
         var kelas_now = matkul[count_matkul].kelas
-        var count_now = 4 * parseInt(matkul[count_matkul].count)
+        var count_now = konfigurasiall * parseInt(matkul[count_matkul].count)
 
         for (i = 0; i < filter_tanggal_pengajar.length; i++) {
             kodematkul_pengajar = filter_tanggal_pengajar[i].kodematkul
@@ -168,7 +175,7 @@ class StatistikMahasiswa extends Component {
                 }
                 kodematkul_now = matkul[count_matkul].kodematkul
                 kelas_now = matkul[count_matkul].kelas
-                count_now = 4 * parseInt(matkul[count_matkul].count)
+                count_now = konfigurasiall * parseInt(matkul[count_matkul].count)
             }
 
             if ((kodematkul_now === kodematkul_pengajar) && (kelas_now === kelas_pengajar)) {
@@ -296,6 +303,116 @@ class StatistikMahasiswa extends Component {
                 }
             }
         }
+    }
+
+    getDataMahasiswaSolve() {
+        var bermasalah = []
+        var solve = []
+        fetch(get.readsolvemahasiswa, {
+            method: 'post',
+            headers: {
+                "x-access-token": sessionStorage.name,
+                "Content-Type": "application/json"
+            },
+        })
+            .then(response => response.json())
+            .then(response => {
+                //berhasil dapet data
+                if (response.status === 1) {
+                    for (var i = 0; i < data_statistik_all.length; i++) {
+                        for (var j = 0; j < response.hasil.length; j++) {
+                            if ((data_statistik_all[i][2] === response.hasil[j].nim) && (data_statistik_all[i][4] === response.hasil[j].kodematkul) && (data_statistik_all[i][5] === response.hasil[j].kelas)) {
+                                solve.push(data_statistik_all[i])
+                                break;
+                            }
+                        }
+                        if (j === response.hasil.length) {
+                            bermasalah.push(data_statistik_all[i])
+                        }
+                    }
+                    this.setState({
+                        data_statistik_solve: solve,
+                        data_statistik_bermasalah: bermasalah
+                    })
+                }
+                //ga dapet token
+                else if ((response.status !== 1) && (response.status !== 0)) {
+                    sessionStorage.removeItem("name")
+                    window.location.reload()
+                }
+            })
+            .catch(error => {
+                sessionStorage.removeItem("name")
+                window.location.reload()
+            })
+    }
+
+    createSolveMahasiswa(nim, kodematkul, kelas) {
+        fetch(get.createsolvemahasiswa, {
+            method: 'post',
+            headers: {
+                "x-access-token": sessionStorage.name,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                nim: nim,
+                kodematkul: kodematkul,
+                kelas: kelas
+            })
+        })
+            .then(response => response.json())
+            .then(response => {
+                //berhasil add data
+                if (response.status === 1) {
+                    setTimeout(this.getDataMahasiswaSolve(), 1000)
+                }
+                //tidak berhasil add data
+                else if (response.status === 0) {
+                }
+                //ga ada token
+                else {
+                    sessionStorage.removeItem("name")
+                    window.location.reload()
+                }
+            })
+            .catch(error => {
+                sessionStorage.removeItem("name")
+                window.location.reload()
+            })
+    }
+
+    deleteSolveMahasiswa(nim, kodematkul, kelas) {
+        fetch(get.deletesolvemahasiswa, {
+            method: 'post',
+            headers: {
+                "x-access-token": sessionStorage.name,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                nim: nim,
+                kodematkul: kodematkul,
+                kelas: kelas
+            })
+        })
+            .then(response => response.json())
+            .then(response => {
+                //berhasil add data
+                if (response.status === 1) {
+                    setTimeout(this.getDataMahasiswaSolve(), 1000)
+                }
+                //tidak berhasil add data
+                else if (response.status === 0) {
+                }
+                //ga ada token
+                else {
+                    sessionStorage.removeItem("name")
+                    window.location.reload()
+                }
+            })
+            .catch(error => {
+                sessionStorage.removeItem("name")
+                window.location.reload()
+            })
     }
 
     handleChange(e) {
@@ -442,7 +559,7 @@ class StatistikMahasiswa extends Component {
         //matkul : namamatkul, kodematkul, kelas, jumlah pertemuan perminggu
         //datapengajar : kodematkul, kelas, status, keterangan, waktu
         //datamahasiswa : waktu, nama, koderuangan, kodematkul, kelas, keterangan
-        const { datakosong } = this.state
+        const { datakosong, konfigurasi } = this.state
         if (datakosong) {
             return (
                 <div>
@@ -516,7 +633,7 @@ class StatistikMahasiswa extends Component {
             var count_matkul = 0
             var kodematkul_now = matkul[count_matkul].kodematkul
             var kelas_now = matkul[count_matkul].kelas
-            var count_now = 4 * parseInt(matkul[count_matkul].count)
+            var count_now = konfigurasi * parseInt(matkul[count_matkul].count)
 
             for (var i = 0; i < pengajar.length; i++) {
                 tanggal_pengajar_now = new Date(pengajar[i].waktu)
@@ -537,7 +654,7 @@ class StatistikMahasiswa extends Component {
                     }
                     kodematkul_now = matkul[count_matkul].kodematkul
                     kelas_now = matkul[count_matkul].kelas
-                    count_now = 4 * parseInt(matkul[count_matkul].count)
+                    count_now = konfigurasi * parseInt(matkul[count_matkul].count)
                 }
 
                 if ((kodematkul_now === kodematkul_pengajar) && (kelas_now === kelas_pengajar)) {
@@ -1190,7 +1307,6 @@ class StatistikMahasiswa extends Component {
             showStatistikAll: true,
             showStatistikbyNIM: false
         })
-        this.getDataPenggunaAll()
     }
 
     render() {
@@ -1237,9 +1353,13 @@ class StatistikMahasiswa extends Component {
 
         // var widthgraph = 600 * loop.length + 'px';
 
-        data_statistik_all.sort(function(a,b){
+        state.data_statistik_solve.sort(function (a, b) {
             return a[2] - b[2];
         })
+        state.data_statistik_bermasalah.sort(function (a, b) {
+            return a[2] - b[2];
+        })
+
         var loadingNow = true
         if ((state.counter_loading - state.lengthMahasiswa) > -20) {
             loadingNow = false
@@ -1249,17 +1369,21 @@ class StatistikMahasiswa extends Component {
             <div>
                 <div className="kotakfilter3">
                     <form className="kotakforminputlogpintu" onSubmit={this.handleSubmit}>
-                        <div className="filterdatastatistik">
+                        <div className="kotakinputlaporannimstatistik">
                             <label><b>NIM</b> </label> <br></br>
-                            <input name="nim_form" onChange={this.handleChange} className="inputfiltertanggalawallog" type="text" required></input>
+                            <input name="nim_form" onChange={this.handleChange} className="inputformlaporannim" type="text" required></input>
                         </div>
-                        <div className="filtertanggalawalstatistik">
+                        <div className="kotakinputlaporannamastatistik">
+                            <label><b>Min absen (minggu)</b> </label> <br></br>
+                            <input name="konfigurasi" onChange={this.handleChange} className="inputformlaporannim" type="number" required ></input>
+                        </div>
+                        <div className="kotakinputlaporanstartstatistik">
                             <label><b>Tanggal Awal</b> </label> <br></br>
-                            <input name="startDate" onChange={this.handleChange} className="inputfiltertanggalawallog" type="date" required ></input>
+                            <input name="startDate" onChange={this.handleChange} className="inputformlaporannim" type="date" required ></input>
                         </div>
-                        <div className="filtertanggalakhirstatistik">
+                        <div className="kotakinputlaporanendstatistik">
                             <label><b>Tanggal Akhir</b> </label> <br></br>
-                            <input name="endDate" onChange={this.handleChange} className="inputfiltertanggalawallog" type="date" required ></input>
+                            <input name="endDate" onChange={this.handleChange} className="inputformlaporannim" type="date" required ></input>
                         </div>
 
                         <div className="kotaksubmitpenggunadaftar">
@@ -1275,6 +1399,26 @@ class StatistikMahasiswa extends Component {
                 {
                     (state.isLoading === false) && state.showStatistikAll &&
                     <div className="kotakdata">
+                        <div className="texttengah">
+                            <label><b>Min absen (minggu)</b> </label> <br></br>
+                            <select name="konfigurasiall" onChange={this.handleChange} className="inputfilterruangan" style={{ marginLeft: "20px" }}>
+                                <option> </option>
+                                <option key={inc++} value={1}>1 Minggu</option>
+                                <option key={inc++} value={2}>2 Minggu</option>
+                                <option key={inc++} value={3}>3 Minggu</option>
+                                <option key={inc++} value={4}>4 Minggu</option>
+                                <option key={inc++} value={5}>5 Minggu</option>
+                                <option key={inc++} value={6}>6 Minggu</option>
+                                <option key={inc++} value={7}>7 Minggu</option>
+                                <option key={inc++} value={8}>8 Minggu</option>
+                                <option key={inc++} value={9}>9 Minggu</option>
+                                <option key={inc++} value={10}>10 Minggu</option>
+                                <option key={inc++} value={11}>11 Minggu</option>
+                                <option key={inc++} value={12}>12 Minggu</option>
+                            </select>
+                            <button className="submitstatistikall" onClick={() => this.getDataPenggunaAll()}> Show All</button>
+                        </div>
+                        <div className="paddingtop30px2"></div>
                         {
                             loadingNow &&
                             <div style={{ display: 'block', textAlign: 'center' }}>
@@ -1302,62 +1446,142 @@ class StatistikMahasiswa extends Component {
                                         <th className="kelas" style={{ cursor: "default" }}>Izin</th>
                                         <th className="kelas" style={{ cursor: "default" }}>Sakit</th>
                                         <th className="kelas" style={{ cursor: "default" }}>Alfa</th>
+                                        <th className="kelas" style={{ cursor: "default" }}>Keterangan</th>
                                     </tr>
                                 </thead>
-                                {(data_statistik_all.length !== 0) &&
+                                {((state.data_statistik_solve.length !== 0) || (state.data_statistik_bermasalah.length !== 0)) &&
                                     <tbody className="tbodylog">
-                                        {data_statistik_all.map(isidata => (
-                                            ((isidata[11] === 1) &&
-                                                <tr key={inc++}>
-                                                    <td>{isidata[0]}</td>
-                                                    <td>{isidata[1]}</td>
-                                                    <td>{isidata[2]}</td>
-                                                    <td>{isidata[3]}</td>
-                                                    <td>{isidata[6]}</td>
-                                                    <td>{isidata[4]}</td>
-                                                    <td>{isidata[5]}</td>
-                                                    <td>{isidata[7]}</td>
-                                                    <td>{isidata[8]}</td>
-                                                    <td>{isidata[9]}</td>
-                                                    <td className="kehadiranbermasalah" style={{ border: "none" }}>{isidata[10]}</td>
-                                                </tr>)
+                                        {
+                                            state.data_statistik_bermasalah.length !== 0 &&
+                                            state.data_statistik_bermasalah.map(isidata => (
+                                                ((isidata[11] === 1) &&
+                                                    <tr key={inc++}>
+                                                        <td>{isidata[0]}</td>
+                                                        <td>{isidata[1]}</td>
+                                                        <td>{isidata[2]}</td>
+                                                        <td>{isidata[3]}</td>
+                                                        <td>{isidata[6]}</td>
+                                                        <td>{isidata[4]}</td>
+                                                        <td>{isidata[5]}</td>
+                                                        <td>{isidata[7]}</td>
+                                                        <td>{isidata[8]}</td>
+                                                        <td>{isidata[9]}</td>
+                                                        <td className="kehadiranbermasalah" style={{ border: "none" }}>{isidata[10]}</td>
+                                                        <td>
+                                                            <button className="backgroundmerah" onClick={() => this.createSolveMahasiswa(isidata[2], isidata[4], isidata[5])} >
+                                                                Solve
+                                                            </button>
+                                                        </td>
+                                                    </tr>)
 
-                                            || ((isidata[11] === 2) &&
-                                                <tr key={inc++}>
-                                                    <td>{isidata[0]}</td>
-                                                    <td>{isidata[1]}</td>
-                                                    <td>{isidata[2]}</td>
-                                                    <td>{isidata[3]}</td>
-                                                    <td>{isidata[6]}</td>
-                                                    <td>{isidata[4]}</td>
-                                                    <td>{isidata[5]}</td>
-                                                    <td>{isidata[7]}</td>
-                                                    <td className="kehadiranbermasalah" style={{ border: "none" }}>{isidata[8]}</td>
-                                                    <td>{isidata[9]}</td>
-                                                    <td>{isidata[10]}</td>
-                                                </tr>)
+                                                || ((isidata[11] === 2) &&
+                                                    <tr key={inc++}>
+                                                        <td>{isidata[0]}</td>
+                                                        <td>{isidata[1]}</td>
+                                                        <td>{isidata[2]}</td>
+                                                        <td>{isidata[3]}</td>
+                                                        <td>{isidata[6]}</td>
+                                                        <td>{isidata[4]}</td>
+                                                        <td>{isidata[5]}</td>
+                                                        <td>{isidata[7]}</td>
+                                                        <td className="kehadiranbermasalah" style={{ border: "none" }}>{isidata[8]}</td>
+                                                        <td>{isidata[9]}</td>
+                                                        <td>{isidata[10]}</td>
+                                                        <td>
+                                                            <button className="backgroundmerah" onClick={() => this.createSolveMahasiswa(isidata[2], isidata[4], isidata[5])} >
+                                                                Solve
+                                                            </button>
+                                                        </td>
+                                                    </tr>)
 
-                                            || ((isidata[11] === 3) &&
-                                                <tr key={inc++}>
-                                                    <td>{isidata[0]}</td>
-                                                    <td>{isidata[1]}</td>
-                                                    <td>{isidata[2]}</td>
-                                                    <td>{isidata[3]}</td>
-                                                    <td>{isidata[6]}</td>
-                                                    <td>{isidata[4]}</td>
-                                                    <td>{isidata[5]}</td>
-                                                    <td>{isidata[7]}</td>
-                                                    <td>{isidata[8]}</td>
-                                                    <td className="kehadiranbermasalah" style={{ border: "none" }}>{isidata[9]}</td>
-                                                    <td>{isidata[10]}</td>
-                                                </tr>)
-                                        ))}
+                                                || ((isidata[11] === 3) &&
+                                                    <tr key={inc++}>
+                                                        <td>{isidata[0]}</td>
+                                                        <td>{isidata[1]}</td>
+                                                        <td>{isidata[2]}</td>
+                                                        <td>{isidata[3]}</td>
+                                                        <td>{isidata[6]}</td>
+                                                        <td>{isidata[4]}</td>
+                                                        <td>{isidata[5]}</td>
+                                                        <td>{isidata[7]}</td>
+                                                        <td>{isidata[8]}</td>
+                                                        <td className="kehadiranbermasalah" style={{ border: "none" }}>{isidata[9]}</td>
+                                                        <td>{isidata[10]}</td>
+                                                        <td>
+                                                            <button className="backgroundmerah" onClick={() => this.createSolveMahasiswa(isidata[2], isidata[4], isidata[5])} >
+                                                                Solve
+                                                            </button>
+                                                        </td>
+                                                    </tr>)
+                                            ))}
+                                        {state.data_statistik_solve.length !== 0 &&
+                                            state.data_statistik_solve.map(isidata => (
+                                                ((isidata[11] === 1) &&
+                                                    <tr key={inc++}>
+                                                        <td>{isidata[0]}</td>
+                                                        <td>{isidata[1]}</td>
+                                                        <td>{isidata[2]}</td>
+                                                        <td>{isidata[3]}</td>
+                                                        <td>{isidata[6]}</td>
+                                                        <td>{isidata[4]}</td>
+                                                        <td>{isidata[5]}</td>
+                                                        <td>{isidata[7]}</td>
+                                                        <td>{isidata[8]}</td>
+                                                        <td>{isidata[9]}</td>
+                                                        <td className="kehadiranbermasalah" style={{ border: "none" }}>{isidata[10]}</td>
+                                                        <td>
+                                                            <button className="backgroundhijau" onClick={() => this.deleteSolveMahasiswa(isidata[2], isidata[4], isidata[5])} >
+                                                                Solved
+                                                            </button>
+                                                        </td>
+                                                    </tr>)
+
+                                                || ((isidata[11] === 2) &&
+                                                    <tr key={inc++}>
+                                                        <td>{isidata[0]}</td>
+                                                        <td>{isidata[1]}</td>
+                                                        <td>{isidata[2]}</td>
+                                                        <td>{isidata[3]}</td>
+                                                        <td>{isidata[6]}</td>
+                                                        <td>{isidata[4]}</td>
+                                                        <td>{isidata[5]}</td>
+                                                        <td>{isidata[7]}</td>
+                                                        <td className="kehadiranbermasalah" style={{ border: "none" }}>{isidata[8]}</td>
+                                                        <td>{isidata[9]}</td>
+                                                        <td>{isidata[10]}</td>
+                                                        <td>
+                                                            <button className="backgroundhijau" onClick={() => this.deleteSolveMahasiswa(isidata[2], isidata[4], isidata[5])} >
+                                                                Solved
+                                                            </button>
+                                                        </td>
+                                                    </tr>)
+
+                                                || ((isidata[11] === 3) &&
+                                                    <tr key={inc++}>
+                                                        <td>{isidata[0]}</td>
+                                                        <td>{isidata[1]}</td>
+                                                        <td>{isidata[2]}</td>
+                                                        <td>{isidata[3]}</td>
+                                                        <td>{isidata[6]}</td>
+                                                        <td>{isidata[4]}</td>
+                                                        <td>{isidata[5]}</td>
+                                                        <td>{isidata[7]}</td>
+                                                        <td>{isidata[8]}</td>
+                                                        <td className="kehadiranbermasalah" style={{ border: "none" }}>{isidata[9]}</td>
+                                                        <td>{isidata[10]}</td>
+                                                        <td>
+                                                            <button className="backgroundhijau" onClick={() => this.deleteSolveMahasiswa(isidata[2], isidata[4], isidata[5])} >
+                                                                Solved
+                                                            </button>
+                                                        </td>
+                                                    </tr>)
+                                            ))}
                                     </tbody>
                                 }
-                                {(data_statistik_all.length === 0) &&
+                                {((state.data_statistik_solve.length === 0) && (state.data_statistik_bermasalah.length === 0)) &&
                                     <tbody className="tbodylog">
                                         <tr>
-                                            <td colSpan="12">Data tidak ditemukan</td>
+                                            <td colSpan="13">Data tidak ditemukan</td>
                                         </tr>
                                     </tbody>}
                             </table>
@@ -1388,7 +1612,7 @@ class StatistikMahasiswa extends Component {
                             {
                                 state.datakosong === false &&
                                 <div className="scrollx">
-                                    <div className="texttengah" style={{ minWidth: "800px" }}>
+                                    <div className="texttengah" style={{ minWidth: "900px" }}>
                                         {this.graphfirst(state.data_matkul, state.data_pengajar, state.data_mahasiswa)}
                                     </div>
                                 </div>

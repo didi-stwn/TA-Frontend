@@ -294,15 +294,15 @@ class Laporan_Mahasiswa extends Component {
             }
         }
 
-        if (count_alfa >= max_bermasalah) {
-            style_alfa = "kehadiranbermasalah"
-        }
-        if (count_izin >= max_bermasalah) {
-            style_izin = "kehadiranbermasalah"
-        }
-        if (count_sakit >= max_bermasalah) {
-            style_sakit = "kehadiranbermasalah"
-        }
+        // if (count_alfa >= max_bermasalah) {
+        //     style_alfa = "kehadiranbermasalah"
+        // }
+        // if (count_izin >= max_bermasalah) {
+        //     style_izin = "kehadiranbermasalah"
+        // }
+        // if (count_sakit >= max_bermasalah) {
+        //     style_sakit = "kehadiranbermasalah"
+        // }
 
         var count_tidak_hadir
 
@@ -314,9 +314,9 @@ class Laporan_Mahasiswa extends Component {
         else {
             percent = 100 * hadir / (count_tidak_hadir + hadir)
         }
-        if (percent < 50) {
-            style_percent = "kehadiranbermasalah"
-        }
+        // if (percent < 50) {
+        //     style_percent = "kehadiranbermasalah"
+        // }
 
         var data_excel = []
         data_excel.push(key)

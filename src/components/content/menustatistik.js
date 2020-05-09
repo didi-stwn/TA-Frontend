@@ -3,6 +3,7 @@ import { withRouter } from "react-router-dom";
 import StatistikMahasiswa from './statistik_mahasiswa';
 import StatistikMatkul from './statistik_matkul';
 import StatistikRuangan from './statistik_ruangan';
+// import KonfigurasiStatistik from './konfigurasi_statistik';
 
 class MenuStatistik extends Component {
     constructor(props) {
@@ -11,6 +12,7 @@ class MenuStatistik extends Component {
             ShowStatistikMahasiswa: true,
             ShowStatistikMatkul: false,
             ShowStatistikRuangan: false,
+            ShowKonfigurasi: false,
         };
     }
     ShowStatistikMahasiswaNow() {
@@ -18,6 +20,7 @@ class MenuStatistik extends Component {
             ShowStatistikMahasiswa: true,
             ShowStatistikMatkul: false,
             ShowStatistikRuangan: false,
+            ShowKonfigurasi: false,
         })
     }
     ShowStatistikMatkulNow() {
@@ -25,6 +28,7 @@ class MenuStatistik extends Component {
             ShowStatistikMahasiswa: false,
             ShowStatistikMatkul: true,
             ShowStatistikRuangan: false,
+            ShowKonfigurasi: false,
         })
     }
     ShowStatistikRuanganNow() {
@@ -32,6 +36,15 @@ class MenuStatistik extends Component {
             ShowStatistikMahasiswa: false,
             ShowStatistikMatkul: false,
             ShowStatistikRuangan: true,
+            ShowKonfigurasi: false,
+        })
+    }
+    ShowKonfigurasiNow() {
+        this.setState({
+            ShowStatistikMahasiswa: false,
+            ShowStatistikMatkul: false,
+            ShowStatistikRuangan: false,
+            ShowKonfigurasi: true,
         })
     }
     render() {
@@ -41,16 +54,25 @@ class MenuStatistik extends Component {
             stylestatistikmahasiswa = "menumatkuldipilih"
             stylestatistikmatkul = "menumatkultidakdipilih"
             stylestatistikruangan = "menumatkultidakdipilih"
+            // stylekonfigurasi = "menumatkultidakdipilih"
         }
         else if (state.ShowStatistikMatkul){
             stylestatistikmahasiswa = "menumatkultidakdipilih"
             stylestatistikmatkul = "menumatkuldipilih"
             stylestatistikruangan = "menumatkultidakdipilih"
+            // stylekonfigurasi = "menumatkultidakdipilih"
         }
         else if (state.ShowStatistikRuangan){
             stylestatistikmahasiswa = "menumatkultidakdipilih"
             stylestatistikmatkul = "menumatkultidakdipilih"
             stylestatistikruangan = "menumatkuldipilih"
+            // stylekonfigurasi = "menumatkultidakdipilih"
+        }
+        else if (state.ShowKonfigurasi){
+            stylestatistikmahasiswa = "menumatkultidakdipilih"
+            stylestatistikmatkul = "menumatkultidakdipilih"
+            stylestatistikruangan = "menumatkultidakdipilih"
+            // stylekonfigurasi = "menumatkuldipilih"
         }
         return (
             <div>
@@ -70,6 +92,11 @@ class MenuStatistik extends Component {
                             <span>Ruangan</span>
                         </button>
                     </div>
+                    {/* <div className="kotakmenumatkulkonfigurasi">
+                        <button className={stylekonfigurasi} onClick={() => this.ShowKonfigurasiNow()}>
+                            <span>Pengaturan</span>
+                        </button>
+                    </div> */}
                 </div>
                 <div>
                     {
@@ -84,7 +111,10 @@ class MenuStatistik extends Component {
                         state.ShowStatistikRuangan &&
                         <StatistikRuangan />
                     }
-
+                    {/* {
+                        state.ShowKonfigurasi &&
+                        <KonfigurasiStatistik />
+                    } */}
                 </div>
             </div>
         )

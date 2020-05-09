@@ -7,8 +7,17 @@ const s = {
     //log
     readlog: url + "/log/read",
     readstatistiklog: url + "/log/statistik",
+    readlogmatkul: url + "/log/logmatkul",
+    readstatistikmatkul: url + "/log/statistikmatkul",
     readstatistikall: url + "/log/statistik_all",
     readlogpengajar: url + "/log/pengajar",
+    readsolvemahasiswa: url + "/log/solve_mahasiswa/read",
+    createsolvemahasiswa: url + "/log/solve_mahasiswa/create",
+    deletesolvemahasiswa: url + "/log/solve_mahasiswa/delete",
+    readkonfigurasimahasiswa: url + "/log/konfigurasi_mahasiswa/read",
+    createkonfigurasimahasiswa: url + "/log/konfigurasi_mahasiswa/create",
+    updatekonfigurasimahasiswa: url + "/log/konfigurasi_mahasiswa/edit",
+    deletekonfigurasimahasiswa: url + "/log/konfigurasi_mahasiswa/delete",
     createlog: url + "/log/create",
     deletelog: url + "/log/delete",
 

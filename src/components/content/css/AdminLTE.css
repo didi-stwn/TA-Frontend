@@ -2681,6 +2681,16 @@ a:focus {
   width: 100%;
 }
 
+.submitstatistikall{
+  background-color: rgb(0, 0, 100);
+  color : white;
+  height: 40px;
+  border-radius: 10px;
+  width: 100px;
+  margin-top: -10px;
+  margin-left: 20px;
+}
+
 .submitformlogpintu2{
   background-color: rgb(0, 0, 100);
   color : white;
@@ -3386,6 +3396,26 @@ a:focus {
   margin-top: 0px
 }
 
+.kotakinputlaporannimstatistik{
+  margin-left: 0%;
+  margin-top: 0px
+}
+
+.kotakinputlaporannamastatistik{
+  margin-left: 20%;
+  margin-top: -56px
+}
+
+.kotakinputlaporanstartstatistik{
+  margin-left: 40%;
+  margin-top: -56px
+}
+
+.kotakinputlaporanendstatistik{
+  margin-left: 60%;
+  margin-top: -56px
+}
+
 .kotakinputlaporannama{
   margin-left: 20%;
   margin-top: -56px
@@ -3476,6 +3506,72 @@ a:focus {
   padding-top: 7px;
   text-align: center;
   width: auto
+}
+
+@media(max-width:1086px){
+  .kotakinputlaporannimstatistik{
+    margin-left: 0%;
+    margin-top: 0px
+  }
+  
+  .kotakinputlaporannamastatistik{
+    margin-left: 40%;
+    margin-top: -56px
+  }
+  
+  .kotakinputlaporanstartstatistik{
+    margin-left: 0%;
+    margin-top: 20px
+  }
+  
+  .kotakinputlaporanendstatistik{
+    margin-left: 40%;
+    margin-top: -56px
+  }
+}
+@media(max-width:988px){
+  .kotakinputlaporannimstatistik{
+    margin-left: 0%;
+    margin-top: 0px
+  }
+  
+  .kotakinputlaporannamastatistik{
+    margin-left: 60%;
+    margin-top: -56px
+  }
+  
+  .kotakinputlaporanstartstatistik{
+    margin-left: 0%;
+    margin-top: 20px
+  }
+  
+  .kotakinputlaporanendstatistik{
+    margin-left: 60%;
+    margin-top: -56px
+  }
+}
+@media(max-width:942px){
+  @media(max-width:1086px){
+    .kotakinputlaporannimstatistik{
+      margin-left: 0%;
+      margin-top: 0px
+    }
+    
+    .kotakinputlaporannamastatistik{
+      margin-left: 0%;
+      margin-top: 20px
+    }
+    
+    .kotakinputlaporanstartstatistik{
+      margin-left: 0%;
+      margin-top: 20px
+    }
+    
+    .kotakinputlaporanendstatistik{
+      margin-left: 0%;
+      margin-top: 20px
+    }
+  }
 }
 
 @media (max-width:1133px){
@@ -4932,6 +5028,11 @@ a:focus {
   margin-top: -47px;
   margin-left: 380px;
 }
+.kotakmenumatkulkonfigurasi{
+  position: absolute;
+  margin-top: -47px;
+  margin-left: 570px;
+}
 
 .menumatkuldipilih{
   background-color: white;
@@ -4962,28 +5063,41 @@ a:focus {
   border: 2px solid rgb(0, 0, 100);
 }
 
+@media(max-width:1012px){
+  .kotakmenumatkulkonfigurasi{
+    position: relative;
+    margin-top: 20px;
+    margin-left: 0px;
+    padding-bottom: 20px;
+  }
+}
+
+@media(max-width:815px){
+  .kotakmenumatkulkonfigurasi{
+    margin-top: -27px;
+    margin-left: 190px;
+    padding-bottom: 20px;
+  }
+  .kotakmenumatkulruangan{
+    position: relative;
+    margin-top: 20px;
+    margin-left: 0px;
+    margin-bottom: 20px;
+  }
+}
+
 @media(max-width:767px){
   .kotakmenumatkul{
     margin-top: 50px;
     margin-bottom: -30px;
   }
   .kotakmenumatkulpengguna{
+    position: relative;
     margin-top: 3px;
+    margin-bottom: 20px;
   }
   .kotakmenumatkulruangan{
-    margin-top: 3px;
-  }
-}
-@media(max-width:600px){
-  .kotakmenumatkul{
-    margin-bottom: 70px;
-  }
-  .kotakmenumatkulpengguna{
-    margin-top: -97px;
-  }
-  .kotakmenumatkulruangan{
-    margin-top: -53px;
-    margin-left: 0px;
+    margin-bottom: -30px;
   }
 }
 @media(max-width:390px){
@@ -4991,14 +5105,22 @@ a:focus {
     margin-bottom: 10px;
   }
   .kotakmenumatkulpengguna{
-    position: relative;
+    margin-left: 0px;
+    margin-top: 13px;
+    margin-bottom: 0px;
+  }
+  .kotakmenumatkulruangan{
     margin-left: 0px;
     margin-top: 13px;
   }
-  .kotakmenumatkulruangan{
-    position: relative;
+  .kotakmenumatkulmatkul{
+    margin-left: 0px;
     margin-top: 13px;
-    margin-bottom: -20px;
+  }
+  .kotakmenumatkulkonfigurasi{
+    margin-left: 0px;
+    margin-top: 13px;
+    margin-bottom: -50px;
   }
   .menumatkuldipilih{
     width: 100%;

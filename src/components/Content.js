@@ -8,7 +8,7 @@ import Ruangan from './content/ruangan';
 import MenuMatkul from './content/menumatkul';
 import Fakultas from './content/fakultas';
 import MenuLaporan from './content/menulaporan';
-import Bantuan from './content/bantuan';
+import Pengaturan from './content/pengaturan';
 import Home from './content/home';
 import MenuStatistik from './content/menustatistik';
 
@@ -35,7 +35,7 @@ class Content extends Component {
               <Route path="/matakuliah" render={ () => <MenuMatkul/> } />
               <Route path="/fakultas" render={ () => <Fakultas/> } />
               <Route path="/laporan" render={ () => <MenuLaporan/> } />
-              <Route path="/bantuan" render={ () => <Bantuan/> } />
+              <Route path="/pengaturan" render={ () => <Pengaturan/> } />
               <Route render={()=>
                 <div className="box-footer">
                   404 NOT FOUND

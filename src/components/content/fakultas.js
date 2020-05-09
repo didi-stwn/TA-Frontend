@@ -429,7 +429,7 @@ class Fakultas extends Component {
               {(state.datakosong === true) &&
                 <tbody className="tbodylog">
                   <tr>
-                    <td colSpan="7">Data tidak ditemukan</td>
+                    <td colSpan="3">Data tidak ditemukan</td>
                   </tr>
                 </tbody>}
             </table>
