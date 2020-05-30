@@ -493,38 +493,62 @@ class StatistikRuangan extends Component {
         )
     }
 
-    dataPerHari(hari) {
+    dataPerHari(hari, data_jadwal, data_kelastambahan) {
         const state = this.state
+        var data_jadwal_show = []
+        var data_kelastambahan_show = []
         var data_telat = []
         var data_tidaktelat = []
+        var hari_to_int = 0
         if (hari === 'Senin') {
+            hari_to_int = 1
             data_telat = state.data_senin_telat_waktu
             data_tidaktelat = state.data_senin_tidaktelat_waktu
         }
         else if (hari === 'Selasa') {
+            hari_to_int = 2
             data_telat = state.data_selasa_telat_waktu
             data_tidaktelat = state.data_selasa_tidaktelat_waktu
         }
         else if (hari === 'Rabu') {
+            hari_to_int = 3
             data_telat = state.data_rabu_telat_waktu
             data_tidaktelat = state.data_rabu_tidaktelat_waktu
         }
         else if (hari === 'Kamis') {
+            hari_to_int = 4
             data_telat = state.data_kamis_telat_waktu
             data_tidaktelat = state.data_kamis_tidaktelat_waktu
         }
         else if (hari === 'Jumat') {
+            hari_to_int = 5
             data_telat = state.data_jumat_telat_waktu
             data_tidaktelat = state.data_jumat_tidaktelat_waktu
         }
         else if (hari === 'Sabtu') {
+            hari_to_int = 6
             data_telat = state.data_sabtu_telat_waktu
             data_tidaktelat = state.data_sabtu_tidaktelat_waktu
         }
         else if (hari === 'Minggu') {
+            hari_to_int = 7
             data_telat = state.data_minggu_telat_waktu
             data_tidaktelat = state.data_minggu_tidaktelat_waktu
         }
+
+        //filter jadwal matkul
+        for (var i = 0; i < data_jadwal.length; i++) {
+            if (data_jadwal[i].hari === hari_to_int) {
+                data_jadwal_show.push(data_jadwal[i])
+            }
+        }
+        //filter jadwal kelas tambahan
+        for (i = 0; i < data_kelastambahan.length; i++) {
+            if (data_kelastambahan[i].hari === hari_to_int) {
+                data_kelastambahan_show.push(data_kelastambahan[i])
+            }
+        }
+
         var labelPerHari = ["06:00", "07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00"];
         const optionBarPerHari = {
             maintainAspectRatio: false,
@@ -563,6 +587,71 @@ class StatistikRuangan extends Component {
                 },
             ]
         };
+
+        function Waktu(t) {
+            var tahun, bulan, tanggal, jam, menit, tgl, j, m, date, d, detik;
+            date = new Date(t)
+            tahun = String(date.getFullYear())
+            var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
+            bulan = months[(date.getMonth())]
+            tgl = date.getDate()
+            if (tgl <= 9) {
+                tanggal = "0" + String(tgl)
+            }
+            else {
+                tanggal = String(tgl)
+            }
+            j = date.getHours()
+            if (j <= 9) {
+                jam = "0" + String(j)
+            }
+            else {
+                jam = String(j)
+            }
+            m = date.getMinutes()
+            if (m <= 9) {
+                menit = "0" + String(m)
+            }
+            else {
+                menit = String(m)
+            }
+            d = date.getSeconds()
+            if (d <= 9) {
+                detik = "0" + String(d)
+            }
+            else {
+                detik = String(d)
+            }
+            return bulan + " " + tanggal + ", " + tahun + " " + jam + ":" + menit + ":" + detik
+        }
+
+        function Jam(jam, durasi) { //07:00 - 09:00
+            var output
+            var jam_mulai_int = parseInt(jam)
+            var durasi_int = parseInt(durasi)
+            var jam_akhir_int = jam_mulai_int + durasi_int
+
+            var jam_mulai_str = ''
+            var jam_akhir_str = ''
+            if (jam_mulai_int < 10){
+                jam_mulai_str = "0" + String(jam_mulai_int)
+            }
+            else {
+                jam_mulai_str = String(jam_mulai_int)
+            }
+
+            if (jam_akhir_int < 10){
+                jam_akhir_str = "0" + String(jam_akhir_int)
+            }
+            else {
+                jam_akhir_str = String(jam_akhir_int)
+            }
+
+            output = jam_mulai_str + ":00 - " + jam_akhir_str + ":00"
+
+            return output
+        }
+
         return (
             <div>
                 <div className="texttengah">
@@ -572,6 +661,74 @@ class StatistikRuangan extends Component {
                         height={200}
                         options={optionBarPerHari}
                     />
+                </div>
+                <div className="paddingtop30px2"></div>
+                <div className="isitabel" style={{maxHeight: "400px", overflowY: "scroll" }}>
+                    <table className="tablefakultas">
+                        <thead className="theadlog">
+                            <tr>
+                                <th colSpan="6"><h5 style={{ letterSpacing: "2px" }}> Jadwal Mata Kuliah Pada Hari {hari} </h5></th>
+                            </tr>
+                            <tr>
+                                <th> Jam </th>
+                                <th> Kode Mata Kuliah </th>
+                                <th> Kelas </th>
+                                <th> Jumlah Mahasiswa </th>
+                            </tr>
+                        </thead>
+                        {(data_jadwal_show.length !== 0) &&
+                            <tbody className="tbodylog">
+                                {data_jadwal_show.map(isidata => (
+                                    <tr key={i++}>
+                                        <td>{Jam(isidata.jam, isidata.durasi)}</td>
+                                        <td>{isidata.kodematkul}</td>
+                                        <td>{isidata.kelas}</td>
+                                        <td>{isidata.jumlah}</td>
+                                    </tr>
+                                ))}
+                            </tbody>}
+                        {(data_jadwal_show.length === 0) &&
+                            <tbody className="tbodylog">
+                                <tr>
+                                    <td colSpan="4">Data tidak ditemukan</td>
+                                </tr>
+                            </tbody>}
+                    </table>
+                </div>
+                <div className="paddingtop30px2"></div>
+                <div className="isitabel" style={{maxHeight: "400px", overflowY: "scroll" }}>
+                    <table className="tablefakultas">
+                        <thead className="theadlog">
+                            <tr>
+                                <th colSpan="7"><h5 style={{ letterSpacing: "2px" }}>  Jadwal Mata Kuliah Tambahan Pada Hari {hari} </h5></th>
+                            </tr>
+                            <tr>
+                                <th> Waktu </th>
+                                <th> Jam </th>
+                                <th> Kode Mata Kuliah </th>
+                                <th> Kelas </th>
+                                <th> Jumlah Mahasiswa </th>
+                            </tr>
+                        </thead>
+                        {(data_kelastambahan_show.length !== 0) &&
+                            <tbody className="tbodylog">
+                                {data_kelastambahan_show.map(isidata => (
+                                    <tr key={i++}>
+                                        <td>{Waktu(isidata.waktu)}</td>
+                                        <td>{Jam(isidata.jam, isidata.durasi)}</td>
+                                        <td>{isidata.kodematkul}</td>
+                                        <td>{isidata.kelas}</td>
+                                        <td>{isidata.jumlah}</td>
+                                    </tr>
+                                ))}
+                            </tbody>}
+                        {(data_kelastambahan_show.length === 0) &&
+                            <tbody className="tbodylog">
+                                <tr>
+                                    <td colSpan="5">Data tidak ditemukan</td>
+                                </tr>
+                            </tbody>}
+                    </table>
                 </div>
             </div>
         )
@@ -714,7 +871,7 @@ class StatistikRuangan extends Component {
                         </div>
                     </form>
                 </div>
-                <div className="paddingtop30px"></div>
+                <div className="paddingtop30px2"></div>
                 <div id="inputform">
                     <div className="kotakdata">
                         <div>
@@ -778,7 +935,7 @@ class StatistikRuangan extends Component {
                                         <h5>{isidata}</h5>
                                     </div>
                                     <div>
-                                        {this.dataPerHari(isidata)}
+                                        {this.dataPerHari(isidata, state.data_jadwal, state.data_kelastambahan)}
                                     </div>
                                 </div>
                             </div>
