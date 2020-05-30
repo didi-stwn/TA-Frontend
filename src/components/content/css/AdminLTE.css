@@ -618,6 +618,25 @@ a:focus {
 .inputnim::placeholder{
  color: rgb(199, 199, 199);
 }
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active,
+a:-webkit-autofill,
+a:-webkit-autofill:hover, 
+a:-webkit-autofill:focus, 
+a:-webkit-autofill:active  {
+  transition: background-color 5000s ease-in-out 0s;
+}
+.buttonlikea{
+  background-color: transparent;
+  border: none;
+  outline: none;
+}
+.inputnim:-webkit-autofill {
+  -webkit-text-fill-color: white;
+}
+
 .inputpass::placeholder{
   color: rgb(199, 199, 199);
 }
@@ -2512,11 +2531,6 @@ a:focus {
   color: rgb(0, 0, 100)
 }
 
-.buttonlikea{
-  background-color: transparent;
-  border: none
-}
-
 .kotaksubmitpengguna2{
   margin-top: -49px;
   margin-left: 83%;
@@ -3223,7 +3237,10 @@ a:focus {
   margin-left: 90%;
   margin-right: 10px;
 }
-
+.kotaksubmitstatistik2{
+  margin-top: -45px;
+  margin-left: 90%;
+}
 .submitformstatistik{
   background-color: rgb(0, 0, 100);
   color : white;
@@ -3231,17 +3248,18 @@ a:focus {
   border-radius: 10px;
   width: 100%;
 }
-@media(max-width:988px){
+@media(max-width:842px){
   .filtertanggalawalstatistik{
-    margin-left: 35%;
+    margin-top: -56px;
+    margin-left: 34%;
   }
   .filtertanggalakhirstatistik{
-    margin-left: 70%;
+    margin-top: -56px;
+    margin-left: 68%;
   }
-  .kotaksubmitstatistik{
-    margin-top: -45px;
-    margin-left: 60%;
-    width: 30%;
+  .kotaksubmitstatistik2{
+    margin-top: 10px;
+    margin-left: 0%;
   }
 }
 @media(max-width:767px){
@@ -3307,6 +3325,16 @@ a:focus {
 
 .daftar > i {
   padding-right: 10px;
+}
+
+.fotoabout{
+  width: 200px;
+  height: 200px;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  border-radius: 100px;
+  border: 3px solid rgb(0, 0, 100)
 }
 
 .kotakhomexirka{
@@ -3819,6 +3847,7 @@ a:focus {
 .isitabel{
   border-radius: 15px;
   overflow-x: auto;
+  /* max-height: 400px; */
 }
 
 /* ///////////////////////////////////////////////////////////////////////////////////////// */
@@ -4528,7 +4557,50 @@ a:focus {
   margin-left: 56%;
   margin-top: -56px
 }
+.kotakinputruangandevice2{
+  margin-left: 0%;
+  margin-top: 0px
+}
+.kotakinputruanganruangan2{
+  margin-left: 20%;
+  margin-top: -56px
+}
+.kotakinputruanganalamat2{
+  margin-left: 40%;
+  margin-top: -56px
+}
+.kotakinputruanganjumlah2{
+  margin-left: 60%;
+  margin-top: -56px
+}
 
+@media(max-width:1112px){
+  .kotakinputruanganruangan2{
+    margin-left: 40%;
+  }
+  .kotakinputruanganalamat2{
+    margin-left: 0%;
+    margin-top: 20px
+  }
+  .kotakinputruanganjumlah2{
+    margin-left: 40%;
+    margin-top: -56px
+  }
+}
+@media(max-width:988px){
+  .kotakinputruanganruangan2{
+    margin-left: 50%;
+  }
+  .kotakinputruanganjumlah2{
+    margin-left: 50%;
+  }
+}
+@media(max-width:942px){
+  .kotakinputruanganruangan2, .kotakinputruanganjumlah2, .kotakinputruanganalamat2{
+    margin-left: 0%;
+    margin-top: 20px
+  }
+}
 .kotakinputfakultas{
   margin-left: 0%;
   margin-top: 0px

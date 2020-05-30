@@ -36,6 +36,10 @@ class Laporan_Pengajar extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
+    componentWillUnmount(){
+        dataset_excel = []
+    }
+
     getmatkul(e) {
         const { value } = e.target
         this.setState({ nim_form: value })

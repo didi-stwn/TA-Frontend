@@ -33,8 +33,8 @@ class Header extends Component {
             else if (window.location.pathname === "/laporan") {
                 return (<span><b>Laporan</b></span>)
             }
-            else if (window.location.pathname === "/bantuan") {
-                return (<span><b>Bantuan</b></span>)
+            else if (window.location.pathname === "/about") {
+                return (<span><b>About Me</b></span>)
             }
             else if (window.location.pathname === "/") {
                 return (<span><b>Home</b></span>)

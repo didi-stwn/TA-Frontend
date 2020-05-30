@@ -9,10 +9,10 @@ class MenuStatistik extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            ShowStatistikMahasiswa: true,
+            ShowStatistikMahasiswa: false,
             ShowStatistikMatkul: false,
-            ShowStatistikRuangan: false,
-            ShowKonfigurasi: false,
+            ShowStatistikRuangan: true,
+            // ShowKonfigurasi: false,
         };
     }
     ShowStatistikMahasiswaNow() {
@@ -39,14 +39,14 @@ class MenuStatistik extends Component {
             ShowKonfigurasi: false,
         })
     }
-    ShowKonfigurasiNow() {
-        this.setState({
-            ShowStatistikMahasiswa: false,
-            ShowStatistikMatkul: false,
-            ShowStatistikRuangan: false,
-            ShowKonfigurasi: true,
-        })
-    }
+    // ShowKonfigurasiNow() {
+    //     this.setState({
+    //         ShowStatistikMahasiswa: false,
+    //         ShowStatistikMatkul: false,
+    //         ShowStatistikRuangan: false,
+    //         ShowKonfigurasi: true,
+    //     })
+    // }
     render() {
         const state = this.state
         var stylestatistikmahasiswa, stylestatistikmatkul, stylestatistikruangan
@@ -68,12 +68,12 @@ class MenuStatistik extends Component {
             stylestatistikruangan = "menumatkuldipilih"
             // stylekonfigurasi = "menumatkultidakdipilih"
         }
-        else if (state.ShowKonfigurasi){
-            stylestatistikmahasiswa = "menumatkultidakdipilih"
-            stylestatistikmatkul = "menumatkultidakdipilih"
-            stylestatistikruangan = "menumatkultidakdipilih"
-            // stylekonfigurasi = "menumatkuldipilih"
-        }
+        // else if (state.ShowKonfigurasi){
+        //     stylestatistikmahasiswa = "menumatkultidakdipilih"
+        //     stylestatistikmatkul = "menumatkultidakdipilih"
+        //     stylestatistikruangan = "menumatkultidakdipilih"
+        //     // stylekonfigurasi = "menumatkuldipilih"
+        // }
         return (
             <div>
                 <div>

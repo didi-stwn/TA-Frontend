@@ -12,7 +12,7 @@ class SideBar extends Component {
         var matakuliah=false
         var fakultas=false
         var laporan=false
-        var bantuan=false
+        var about=false
 
         if (window.location.pathname==="/statistik"){
             statistik=true
@@ -35,8 +35,8 @@ class SideBar extends Component {
         else if (window.location.pathname==="/laporan"){
             laporan=true
         }
-        else if (window.location.pathname==="/bantuan"){
-            bantuan=true
+        else if (window.location.pathname==="/about"){
+            about=true
         }
         else if (window.location.pathname==="/dosen"){
             dosen=true
@@ -195,17 +195,17 @@ class SideBar extends Component {
                                 </li>
                                 <li>
                                     {
-                                        bantuan &&
-                                        <Link to="/bantuan" className="dipilih">
-                                            <i className="fa fa-question"></i> 
-                                            <span>Bantuan</span>
+                                        about &&
+                                        <Link to="/about" className="dipilih">
+                                            <i className="fa fa-info"></i> 
+                                            <span>About</span>
                                         </Link>
                                     }
                                     {
-                                        (bantuan===false) &&
-                                        <Link to="/bantuan">
-                                            <i className="fa fa-question"></i> 
-                                            <span>Bantuan</span>
+                                        (about===false) &&
+                                        <Link to="/about">
+                                            <i className="fa fa-info"></i> 
+                                            <span>About</span>
                                         </Link>
                                     }
                                 </li>

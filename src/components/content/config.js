@@ -20,6 +20,7 @@ const s = {
     deletekonfigurasimahasiswa: url + "/log/konfigurasi_mahasiswa/delete",
     createlog: url + "/log/create",
     deletelog: url + "/log/delete",
+    readstatistikruangan: url + "/log/statistik_ruangan",
 
     //fingerprint
     checkdevice: url + "/fingerprint/check_device",
@@ -75,6 +76,10 @@ const s = {
     creatematkul: url + "/matkul/create",
     updatematkul: url + "/matkul/update",
     deletematkul: url + "/matkul/delete",
+    readmatkultambahanbyruangan: url + "/matkul/tambahan/ruangan/read/",
+    readmatkultambahanbymatkul: url + "/matkul/tambahan/matkul/read/",
+    creatematkultambahan: url + "/matkul/tambahan/create/" ,
+    deletematkultambahan: url + "/matkul/tambahan/delete/",
 
     //device
     readdevice: url + "/device/read",

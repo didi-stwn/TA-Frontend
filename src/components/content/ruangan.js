@@ -23,17 +23,23 @@ class Ruangan extends Component {
       //create
       kodedevicec: '',
       koderuanganc: '',
+      jumlah_mahasiswac: 0,
       alamatc: '',
       //edit
       oldkodedevice: '',
       newkoderuangan: '',
       newalamat: '',
+      newjumlah_mahasiswa: 0,
 
       //Filter Ruangan
       //read
       jam_masuk: [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21],
       datafilterruangan: [],
+      datamatkultambahan: [],
+      max_mahasiswa_filter: 0,
       daftarfilter: false,
+      datafilterkosong: true,
+      datamatkultambahankosong: true,
       //create
       harifilterc: '',
       jamfilterc: '',
@@ -41,7 +47,6 @@ class Ruangan extends Component {
       koderuanganfilterc: '',
       kodematkulfilterc: '',
       kelasfilterc: '',
-      datafilterkosong: false,
 
       //status add
       pesan: '',
@@ -142,10 +147,10 @@ class Ruangan extends Component {
 
   handleSubmitDaftar(e) {
     e.preventDefault();
-    const { pageshow, kodedevicec, koderuanganc, alamatc } = this.state;
+    const { pageshow, kodedevicec, koderuanganc, alamatc, jumlah_mahasiswac } = this.state;
     const { harifilterc, jamfilterc, durasifilterc, koderuanganfilterc, kodematkulfilterc, kelasfilterc } = this.state;
     if (pageshow === "filterruangan") {
-      if (parseInt(jamfilterc) + parseInt(durasifilterc) > 22){
+      if (parseInt(jamfilterc) + parseInt(durasifilterc) > 22) {
         this.setState({
           databenar: false,
           datasalah: true,
@@ -207,6 +212,7 @@ class Ruangan extends Component {
           kodedevice: kodedevicec,
           koderuangan: koderuanganc,
           alamat: alamatc,
+          jumlah_mahasiswa: jumlah_mahasiswac,
         })
       })
         .then(response => response.json())
@@ -239,7 +245,7 @@ class Ruangan extends Component {
 
   handleSubmitEdit(e) {
     e.preventDefault();
-    const { oldkodedevice, newkoderuangan, newalamat } = this.state;
+    const { oldkodedevice, newkoderuangan, newalamat, newjumlah_mahasiswa } = this.state;
 
     fetch(get.updateruangan, {
       method: 'post',
@@ -251,6 +257,7 @@ class Ruangan extends Component {
         oldkodedevice: oldkodedevice,
         newkoderuangan: newkoderuangan,
         newalamat: newalamat,
+        newjumlah_mahasiswa: newjumlah_mahasiswa,
       })
     })
       .then(response => response.json())
@@ -343,6 +350,7 @@ class Ruangan extends Component {
         //berhasil dapet data
         if ((response.status === 1) && (response.count !== 0)) {
           this.setState({ datafilterruangan: response.hasil })
+          this.setState({ max_mahasiswa_filter: response.jumlah[0].jumlah_mahasiswa })
           this.setState({ datafilterkosong: false })
         }
         else if ((response.status === 1) && (response.count === 0)) {
@@ -351,6 +359,41 @@ class Ruangan extends Component {
         }
         else if (response.status === 2) {
           this.setState({ datafilterkosong: true })
+        }
+        //ga dapet token
+        else if ((response.status !== 1) && (response.status !== 0)) {
+          sessionStorage.removeItem("name")
+          window.location.reload()
+        }
+      })
+      .catch(error => {
+        sessionStorage.removeItem("name")
+        window.location.reload()
+      })
+  }
+
+  getDataMatkulTambahan() {
+    const { koderuanganfilterc } = this.state;
+    fetch(get.readmatkultambahanbyruangan, {
+      method: 'post',
+      headers: {
+        "x-access-token": sessionStorage.name,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        koderuangan: koderuanganfilterc,
+      })
+    })
+      .then(response => response.json())
+      .then(response => {
+        //berhasil dapet data
+        if ((response.status === 1) && (response.hasil.length !== 0)) {
+          this.setState({ datamatkultambahan: response.hasil })
+          this.setState({ datamatkultambahankosong: false })
+        }
+        else if ((response.status === 1) && (response.hasil.length === 0)) {
+          this.setState({ datamatkultambahan: [] })
+          this.setState({ datamatkultambahankosong: true })
         }
         //ga dapet token
         else if ((response.status !== 1) && (response.status !== 0)) {
@@ -399,7 +442,6 @@ class Ruangan extends Component {
   }
 
   deleteFilterRuangan(a, b, c, d, e) {
-
     var yes = window.confirm("Apakah anda yakin ingin menghapus Kode Mata Kuliah: " + d + " Kelas: " + e + " pada Ruangan: " + c + " pada Hari: " + this.getHari(a) + " Jam: " + this.getJam(b) + "?");
     if (yes === true) {
       fetch(get.deletefilterruangan, {
@@ -419,6 +461,69 @@ class Ruangan extends Component {
         .then(response => response.json())
         .then(response => {
           setTimeout(this.getDataFilterRuangan(), 1000)
+        })
+        .catch(error => {
+          sessionStorage.removeItem("name")
+          window.location.reload()
+        })
+    }
+  }
+  deleteMatkulTambahan(waktu, kodematkul, kelas, durasi, koderuangan) {
+    function Waktu(t) {
+      var tahun, bulan, tanggal, jam, menit, tgl, j, m, date, d, detik;
+      date = new Date(t)
+      tahun = String(date.getFullYear())
+      var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
+      bulan = months[(date.getMonth())]
+      tgl = date.getDate()
+      if (tgl <= 9) {
+        tanggal = "0" + String(tgl)
+      }
+      else {
+        tanggal = String(tgl)
+      }
+      j = date.getHours()
+      if (j <= 9) {
+        jam = "0" + String(j)
+      }
+      else {
+        jam = String(j)
+      }
+      m = date.getMinutes()
+      if (m <= 9) {
+        menit = "0" + String(m)
+      }
+      else {
+        menit = String(m)
+      }
+      d = date.getSeconds()
+      if (d <= 9) {
+        detik = "0" + String(d)
+      }
+      else {
+        detik = String(d)
+      }
+      return bulan + " " + tanggal + ", " + tahun + " " + jam + ":" + menit + ":" + detik
+    }
+    var yes = window.confirm("Apakah anda yakin ingin menghapus data Matkul Tambahan: " + kodematkul + " - " + kelas + " Berdurasi: " + durasi + " Jam, pada Ruangan: " + koderuangan + ", pada Tanggal: " + Waktu(waktu) + "?");
+    if (yes === true) {
+      fetch(get.deletematkultambahan, {
+        method: 'post',
+        headers: {
+          "Authorization": sessionStorage.name,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          waktu: (new Date(waktu).toLocaleString()), 
+          kodematkul: kodematkul,
+          kelas: kelas, 
+          durasi: durasi, 
+          koderuangan: koderuangan
+        })
+      })
+        .then(response => response.json())
+        .then(response => {
+          setTimeout(this.getDataMatkulTambahan(), 1000)
         })
         .catch(error => {
           sessionStorage.removeItem("name")
@@ -486,9 +591,15 @@ class Ruangan extends Component {
     this.setState({ pageshow: a })
   }
   showFilterRuangan(a, b) {
-    this.setState({ pageshow: a })
-    this.getDataFilterRuangan()
-    this.setState({ koderuanganfilterc: b })
+    if (b.length > 0) {
+      this.setState({ pageshow: a })
+      this.getDataFilterRuangan()
+      this.setState({ koderuanganfilterc: b })
+      this.getDataMatkulTambahan()
+    }
+    else {
+      this.setState({ datafilterkosong: true })
+    }
   }
 
   showDaftar() {
@@ -500,12 +611,13 @@ class Ruangan extends Component {
     this.setState({ datasalah: false })
     this.setState({ databenar: false })
   }
-  showEdit(a, b, c) {
+  showEdit(a, b, c, d) {
     this.setState({ edit: true })
     this.setState({ daftar: false })
     this.setState({ oldkodedevice: a })
     this.setState({ newkoderuangan: b })
     this.setState({ newalamat: c })
+    this.setState({ newjumlah_mahasiswa: d })
   }
   hideEdit() {
     this.setState({ edit: false })
@@ -525,6 +637,8 @@ class Ruangan extends Component {
               <span>{b[k].namamatkul}</span>
               <br></br>
               <span>{b[k].kelas}</span>
+              <br></br>
+              <span>{b[k].jumlah} Mahasiswa</span>
               <br></br>
               <button className="backgroundmerah" onClick={() => { this.deleteFilterRuangan(hari, b[k].jam, b[k].koderuangan, b[k].kodematkul, b[k].kelas) }}>
                 Hapus
@@ -561,7 +675,6 @@ class Ruangan extends Component {
 
   render() {
     const state = this.state
-
     //setting tombol berikutnya and sebelumnya
     var maxPage = parseInt(state.rowCount / state.limit);
     if ((state.rowCount % state.limit) !== 0) {
@@ -650,6 +763,32 @@ class Ruangan extends Component {
       }
       return bulan + " " + tanggal + ", " + tahun + " " + jam + ":" + menit + ":" + detik
     }
+
+    function Hari(a) {
+      var output = ''
+      if (a === 1) {
+        output = 'Senin'
+      }
+      else if (a === 2) {
+        output = 'Selasa'
+      }
+      else if (a === 3) {
+        output = 'Rabu'
+      }
+      else if (a === 4) {
+        output = 'Kamis'
+      }
+      else if (a === 5) {
+        output = 'Jumat'
+      }
+      else if (a === 6) {
+        output = 'Sabtu'
+      }
+      else if (a === 7) {
+        output = 'Minggu'
+      }
+      return output
+    }
     var i = 1;
     if (state.pageshow === "ruangan") {
       var stylefilterruangan = "kotakfilterruangan1"
@@ -702,19 +841,24 @@ class Ruangan extends Component {
                   <span className="textmerah">{state.pesan}</span>
                 }
 
-                <div className="kotakinputruangandevice">
+                <div className="kotakinputruangandevice2">
                   <label><b>Kode Device</b> </label> <br></br>
-                  <input name="kodedevicec" onChange={this.handleChange} className="inputformfakultas" type="text" placeholder="Kode Device" required ></input>
+                  <input name="kodedevicec" onChange={this.handleChange} className="inputformlaporannim" type="text" placeholder="Kode Device" required ></input>
                 </div>
 
-                <div className="kotakinputruanganruangan">
+                <div className="kotakinputruanganruangan2">
                   <label><b>Kode Ruangan</b> </label> <br></br>
-                  <input name="koderuanganc" onChange={this.handleChange} className="inputformfakultas" type="text" placeholder="Kode Ruangan" required ></input>
+                  <input name="koderuanganc" onChange={this.handleChange} className="inputformlaporannim" type="text" placeholder="Kode Ruangan" required ></input>
                 </div>
 
-                <div className="kotakinputruanganalamat">
+                <div className="kotakinputruanganalamat2">
                   <label><b>Alamat</b> </label> <br></br>
-                  <input name="alamatc" onChange={this.handleChange} className="inputformfakultas" type="text" placeholder="Alamat" required ></input>
+                  <input name="alamatc" onChange={this.handleChange} className="inputformlaporannim" type="text" placeholder="Alamat" required ></input>
+                </div>
+
+                <div className="kotakinputruanganjumlah2">
+                  <label><b>Jumlah Mahasiswa</b> </label> <br></br>
+                  <input name="jumlah_mahasiswac" onChange={this.handleChange} className="inputformlaporannim" type="number" placeholder="Maksimum Mahasiswa" required ></input>
                 </div>
 
                 <div className="kotaksubmitpenggunadaftar">
@@ -810,14 +954,19 @@ class Ruangan extends Component {
                   <span className="textmerah">{state.pesan}</span>
                 }
 
-                <div className="kotakinputfakultas">
+                <div className="kotakinputruangandevice">
                   <label><b>Kode Ruangan</b> </label> <br></br>
                   <input name="newkoderuangan" onChange={this.handleChange} className="inputformfakultas" type="text" placeholder="Kode Ruangan" value={state.newkoderuangan || ''} required ></input>
                 </div>
 
-                <div className="kotakinputjurusan">
+                <div className="kotakinputruanganruangan">
                   <label><b>Alamat</b> </label> <br></br>
                   <input name="newalamat" onChange={this.handleChange} className="inputformfakultas" type="text" placeholder="Alamat" value={state.newalamat || ''} required ></input>
+                </div>
+
+                <div className="kotakinputruanganalamat">
+                  <label><b>Jumlah Mahasiswa</b> </label> <br></br>
+                  <input name="newjumlah_mahasiswa" onChange={this.handleChange} className="inputformfakultas" type="number" placeholder="Maksimum Mahasiswa" value={state.newjumlah_mahasiswa || ''} required ></input>
                 </div>
 
                 <div className="kotaksubmitpenggunadaftar">
@@ -888,6 +1037,7 @@ class Ruangan extends Component {
                     <th className="koderuangan" onClick={() => this.filter(state.page, "kodedevice", state.ascdsc)}>Kode Device</th>
                     <th className="koderuangan" onClick={() => this.filter(state.page, "koderuangan", state.ascdsc)}>Kode Ruangan</th>
                     <th className="alamat" onClick={() => this.filter(state.page, "alamat", state.ascdsc)}>Alamat</th>
+                    <th className="koderuangan" onClick={() => this.filter(state.page, "jumlah_mahasiswa", state.ascdsc)}>Jumlah Mahasiswa</th>
                     <th className="lastseen" onClick={() => this.filter(state.page, "lastseen", state.ascdsc)}>Terakhir Aktif</th>
                     <th className="status" onClick={() => this.filter(state.page, "lastseen", state.ascdsc)}>Status</th>
                     <th className="keteranganruangan">Keterangan</th>
@@ -900,13 +1050,14 @@ class Ruangan extends Component {
                         <td>{isidata.kodedevice}</td>
                         <td>{isidata.koderuangan}</td>
                         <td>{isidata.alamat}</td>
+                        <td>{isidata.jumlah_mahasiswa}</td>
                         <td>{Waktu(isidata.lastseen)}</td>
                         <td>{Status(isidata.lastseen)}</td>
                         <td>
                           <div>
                             <button className={update_classname_device(isidata.status)} onClick={() => this.updateDevice(isidata.kodedevice)}>{update_name_device(isidata.status)}</button>
                             &nbsp;
-                        <button className="backgroundbiru" onClick={() => this.showEdit(isidata.kodedevice, isidata.koderuangan, isidata.alamat)} >
+                        <button className="backgroundbiru" onClick={() => this.showEdit(isidata.kodedevice, isidata.koderuangan, isidata.alamat, isidata.jumlah_mahasiswa)} >
                               Edit
                         </button>
                             &nbsp;
@@ -947,47 +1098,100 @@ class Ruangan extends Component {
 
 
         {state.pageshow === "filterruangan" &&
-          <div id={aksidata} className="kotakdata">
-            <div>
-              <span>Kode Ruangan: {state.koderuanganfilterc}</span>
-              <div className="paddingtop30px"></div>
-            </div>
-            <div className="isitabel">
-              <table className="tableruangan">
-                <thead className="theadlog">
-                  <tr>
-                    <th className="keteranganhari">Jam\Hari</th>
-                    <th className="keteranganhari">Senin</th>
-                    <th className="keteranganhari">Selasa</th>
-                    <th className="keteranganhari">Rabu</th>
-                    <th className="keteranganhari">Kamis</th>
-                    <th className="keteranganhari">Jumat</th>
-                    <th className="keteranganhari">Sabtu</th>
-                    <th className="keteranganhari">Minggu</th>
-                  </tr>
-                </thead>
-                <tbody className="tbodylog">
-                  {state.datafilterkosong === false &&
-                    state.jam_masuk.map(isidata => (
-                      <tr key={i++} className="tabletinggi">
-                        <td className="tablewarnamerah">{jam(isidata, isidata + 1)}</td>
-                        <td>{this.getDataMatkulHari(isidata, state.datafilterruangan, 1)}</td>
-                        <td>{this.getDataMatkulHari(isidata, state.datafilterruangan, 2)}</td>
-                        <td>{this.getDataMatkulHari(isidata, state.datafilterruangan, 3)}</td>
-                        <td>{this.getDataMatkulHari(isidata, state.datafilterruangan, 4)}</td>
-                        <td>{this.getDataMatkulHari(isidata, state.datafilterruangan, 5)}</td>
-                        <td>{this.getDataMatkulHari(isidata, state.datafilterruangan, 6)}</td>
-                        <td>{this.getDataMatkulHari(isidata, state.datafilterruangan, 7)}</td>
-                      </tr>
-                    ))}
-                  {
-                    state.datafilterkosong === true &&
-                    <tr key={i++} className="tabletinggi">
-                      <td colSpan="8">Ruangan tidak ditemukan</td>
+          <div>
+            <div id={aksidata} className="kotakdata">
+              <div>
+                <span> <b>Kode Ruangan: {state.koderuanganfilterc}</b></span>
+                <br></br>
+                <span><b>Jumlah Mahasiswa: {state.max_mahasiswa_filter}</b></span>
+                <div className="paddingtop30px"></div>
+              </div>
+              <div className="isitabel">
+                <table className="tableruangan">
+                  <thead className="theadlog">
+                    <tr>
+                      <th className="keteranganhari">Jam\Hari</th>
+                      <th className="keteranganhari">Senin</th>
+                      <th className="keteranganhari">Selasa</th>
+                      <th className="keteranganhari">Rabu</th>
+                      <th className="keteranganhari">Kamis</th>
+                      <th className="keteranganhari">Jumat</th>
+                      <th className="keteranganhari">Sabtu</th>
+                      <th className="keteranganhari">Minggu</th>
                     </tr>
-                  }
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody className="tbodylog">
+                    {
+                      state.datafilterkosong === false &&
+                      state.jam_masuk.map(isidata => (
+                        <tr key={i++} className="tabletinggi">
+                          <td className="tablewarnamerah">{jam(isidata, isidata + 1)}</td>
+                          <td>{this.getDataMatkulHari(isidata, state.datafilterruangan, 1)}</td>
+                          <td>{this.getDataMatkulHari(isidata, state.datafilterruangan, 2)}</td>
+                          <td>{this.getDataMatkulHari(isidata, state.datafilterruangan, 3)}</td>
+                          <td>{this.getDataMatkulHari(isidata, state.datafilterruangan, 4)}</td>
+                          <td>{this.getDataMatkulHari(isidata, state.datafilterruangan, 5)}</td>
+                          <td>{this.getDataMatkulHari(isidata, state.datafilterruangan, 6)}</td>
+                          <td>{this.getDataMatkulHari(isidata, state.datafilterruangan, 7)}</td>
+                        </tr>
+                      ))
+                    }
+                    {
+                      state.datafilterkosong === true &&
+                      <tr key={i++} className="tabletinggi">
+                        <td colSpan="8">Ruangan tidak ditemukan</td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div id={aksidata} className="kotakdata">
+              <div style={{ display: "block", textAlign: 'center', color: 'rgb(0,0,100)' }}>
+                <h4><b>Data Matkul Tambahan pada Ruangan {state.koderuanganfilterc}</b></h4>
+              </div>
+              <div className="paddingtop30px"></div>
+              <div className="isitabel" style={{ maxHeight: "400px", overflowY: "scroll" }}>
+                <table className="tablefakultas">
+                  <thead className="theadlog">
+                    <tr>
+                      <th className="waktu" style={{ cursor: 'default' }}>Waktu</th>
+                      <th className="kelas" style={{ cursor: 'default' }}>Hari</th>
+                      <th className="kodematkul" style={{ cursor: 'default' }}>Kode Matkul</th>
+                      <th className="kelas" style={{ cursor: 'default' }}>Kelas</th>
+                      <th className="kelas" style={{ cursor: 'default' }}>Durasi</th>
+                      <th className="kelas" style={{ cursor: 'default' }}>Keterangan</th>
+                    </tr>
+                  </thead>
+                  <tbody className="tbodylog">
+                    {
+                      state.datamatkultambahankosong === false &&
+                      state.datamatkultambahan.map(isidata => (
+                        <tr key={i++}>
+                          <td>{Waktu(isidata.waktu)}</td>
+                          <td>{Hari(isidata.hari)}</td>
+                          <td>{isidata.kodematkul}</td>
+                          <td>{isidata.kelas}</td>
+                          <td>{isidata.durasi}</td>
+                          <td>
+                            <div>
+                              <button className="backgroundmerah" onClick={() => this.deleteMatkulTambahan(isidata.waktu, isidata.kodematkul, isidata.kelas, isidata.durasi, isidata.koderuangan)}>
+                                Delete
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))
+                    }
+                    {
+                      state.datamatkultambahankosong === true &&
+                      <tr key={i++} className="tabletinggi">
+                        <td colSpan="6">Ruangan tidak ditemukan</td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         }

@@ -38,6 +38,12 @@ class StatistikMahasiswa extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
+    componentWillUnmount() {
+        data_matkul_bermasalah = []
+        data_matkul_aman = []
+        data_statistik_all = []
+    }
+
     getDataPenggunaAll() {
         data_statistik_all = []
         fetch(get.readallpengguna, {
@@ -797,7 +803,7 @@ class StatistikMahasiswa extends Component {
             data_matkul_aman = []
             for (i = 0; i < matkul.length; i++) {//namamatkul, kodematkul, kelas, jumlah pertemuan perminggu
                 for (j = 0; j < log_bermasalah_2d.length; j++) {
-                    if ((matkul[i].kodematkul === log_bermasalah_2d[j][0]) && (matkul[i].kelas === log_bermasalah_2d[j][1]) && (log_bermasalah_2d[j][7] === 1)) {
+                    if ((matkul[i].kodematkul === log_bermasalah_2d[j][0]) && (matkul[i].kelas === log_bermasalah_2d[j][1]) && (log_bermasalah_2d[j][7] > 0)) {
                         data_matkul_bermasalah.push(matkul[i])
                         break;
                     }
@@ -935,6 +941,31 @@ class StatistikMahasiswa extends Component {
             var p = 0
             return (
                 <div>
+                    <div className="texttengah">
+                        <Pie
+                            data={DataHadir}
+                            width={300}
+                            height={250}
+                            options={OptionHadir}
+                        />
+                        <div style={{ padding: "20px" }}></div>
+                        <Pie
+                            data={DataTelat}
+                            width={300}
+                            height={250}
+                            options={OptionTelat}
+                        />
+                    </div>
+                    <div className="paddingtop30px2"></div>
+                    <div>
+                        <Line
+                            data={DataMinggu}
+                            width={900}
+                            height={250}
+                            options={OptionMinggu}
+                        />
+                    </div>
+                    <div className="paddingtop30px2"></div>
                     <div className="isitabel">
                         <table className="tablefakultas">
                             <thead className="theadlog">
@@ -1005,31 +1036,6 @@ class StatistikMahasiswa extends Component {
                             }
                         </table>
                     </div>
-                    <div className="paddingtop30px2"></div>
-                    <div className="texttengah">
-                        <Pie
-                            data={DataHadir}
-                            width={300}
-                            height={250}
-                            options={OptionHadir}
-                        />
-                        <div style={{ padding: "20px" }}></div>
-                        <Pie
-                            data={DataTelat}
-                            width={300}
-                            height={250}
-                            options={OptionTelat}
-                        />
-                    </div>
-                    <div className="paddingtop30px2"></div>
-                    <div>
-                        <Line
-                            data={DataMinggu}
-                            width={900}
-                            height={250}
-                            options={OptionMinggu}
-                        />
-                    </div>
                 </div >
             )
         }
@@ -1067,7 +1073,7 @@ class StatistikMahasiswa extends Component {
         return bulan + " " + tanggal + ", " + tahun + " " + jam + ":00:00"
     }
 
-    getDataPerMatkul(matkul, pengajar, mahasiswa) {
+    getDataPerMatkul(matkul, pengajar, mahasiswa, isBermasalah) {
         var count_hadir = 0
         var count_izin = 0
         var count_sakit = 0
@@ -1252,6 +1258,13 @@ class StatistikMahasiswa extends Component {
             }
         }
         var p = 0
+        // var filter_log = ""
+        // if (isBermasalah === 1) {
+        //     filter_log = "rgb(250, 0, 0)"
+        // }
+        // else {
+        //     filter_log = "rgb(0, 0, 100)"
+        // }
         return (
             <div>
                 <div className="texttengah">
@@ -1270,7 +1283,7 @@ class StatistikMahasiswa extends Component {
                     />
                 </div>
                 <div className="paddingtop30px2"></div>
-                <div className="isitabel">
+                <div className="isitabel" style={{ maxHeight: "400px", overflowY: "scroll" }}>
                     <table className="tablelaporan">
                         <thead className="theadlog">
                             <tr>
@@ -1310,6 +1323,9 @@ class StatistikMahasiswa extends Component {
     }
 
     render() {
+        // console.log(data_matkul_aman)
+        // console.log(data_matkul_bermasalah)
+
         data_matkul_aman.splice(0, data_matkul_aman.length)
         data_matkul_bermasalah.splice(0, data_matkul_bermasalah.length)
         const state = this.state
@@ -1352,7 +1368,6 @@ class StatistikMahasiswa extends Component {
         }
 
         // var widthgraph = 600 * loop.length + 'px';
-
         state.data_statistik_solve.sort(function (a, b) {
             return a[2] - b[2];
         })
@@ -1606,7 +1621,7 @@ class StatistikMahasiswa extends Component {
                                 <div style={{ textAlign: "center", display: "block" }}>
                                     <h5>
                                         Data tidak ditemukan
-                                </h5>
+                                    </h5>
                                 </div>
                             }
                             {
@@ -1629,7 +1644,7 @@ class StatistikMahasiswa extends Component {
                                                 <h5>{isidata.kodematkul} - {isidata.kelas}</h5>
                                             </div>
                                             <div>
-                                                {this.getDataPerMatkul(isidata, state.data_pengajar, state.data_mahasiswa)}
+                                                {this.getDataPerMatkul(isidata, state.data_pengajar, state.data_mahasiswa, 1)}
                                             </div>
                                         </div>
                                     </div>
@@ -1648,7 +1663,7 @@ class StatistikMahasiswa extends Component {
                                                 <h5>{isidata.kodematkul} - {isidata.kelas}</h5>
                                             </div>
                                             <div>
-                                                {this.getDataPerMatkul(isidata, state.data_pengajar, state.data_mahasiswa)}
+                                                {this.getDataPerMatkul(isidata, state.data_pengajar, state.data_mahasiswa, 0)}
                                             </div>
                                         </div>
                                     </div>
