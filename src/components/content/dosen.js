@@ -333,7 +333,7 @@ class Dosen extends Component {
         fetch(get.deletefinger, {
             method: 'post',
             headers: {
-                // "x-access-token" : sessionStorage.name,
+                "x-access-token" : sessionStorage.name,
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
@@ -369,7 +369,7 @@ class Dosen extends Component {
             fetch(get.checkdevice + "/" + kodedevice, {
                 method: 'get',
                 headers: {
-                    // "x-access-token" : sessionStorage.name,
+                    "x-access-token" : sessionStorage.name,
                     "Content-Type": "application/json"
                 }
             })
@@ -387,7 +387,7 @@ class Dosen extends Component {
                             fetch(get.readfinger + "/" + kodedevice, {
                                 method: 'get',
                                 headers: {
-                                    // "x-access-token" : sessionStorage.name,
+                                    "x-access-token" : sessionStorage.name,
                                     "Content-Type": "application/json"
                                 }
                             })
@@ -450,7 +450,7 @@ class Dosen extends Component {
             fetch(get.checkdevice + "/" + kodedevice, {
                 method: 'get',
                 headers: {
-                    // "x-access-token" : sessionStorage.name,
+                    "x-access-token" : sessionStorage.name,
                     "Content-Type": "application/json"
                 }
             })
@@ -468,7 +468,7 @@ class Dosen extends Component {
                             fetch(get.readfinger + "/" + kodedevice, {
                                 method: 'get',
                                 headers: {
-                                    // "x-access-token" : sessionStorage.name,
+                                    "x-access-token" : sessionStorage.name,
                                     "Content-Type": "application/json"
                                 }
                             })
@@ -659,7 +659,7 @@ class Dosen extends Component {
             fetch(get.deletedosen, {
                 method: 'post',
                 headers: {
-                    "Authorization": sessionStorage.name,
+                    "x-access-token": sessionStorage.name,
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
@@ -683,7 +683,7 @@ class Dosen extends Component {
             fetch(get.deletefilterdosen, {
                 method: 'post',
                 headers: {
-                    "Authorization": sessionStorage.name,
+                    "x-access-token": sessionStorage.name,
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({

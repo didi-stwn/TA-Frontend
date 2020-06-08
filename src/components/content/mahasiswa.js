@@ -333,7 +333,7 @@ class Mahasiswa extends Component {
     fetch(get.deletefinger, {
       method: 'post',
       headers: {
-        // "x-access-token" : sessionStorage.name,
+        "x-access-token" : sessionStorage.name,
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
@@ -369,12 +369,13 @@ class Mahasiswa extends Component {
       fetch(get.checkdevice + "/" + kodedevice, {
         method: 'get',
         headers: {
-          // "x-access-token" : sessionStorage.name,
+          "x-access-token" : sessionStorage.name,
           "Content-Type": "application/json"
         }
       })
         .then(response => response.json())
         .then(response => {
+          console.log(response)
           //berhasil get data
           if (response.status === 1) {
             this.setState({ pesanfinger1: true })
@@ -387,7 +388,7 @@ class Mahasiswa extends Component {
               fetch(get.readfinger + "/" + kodedevice, {
                 method: 'get',
                 headers: {
-                  // "x-access-token" : sessionStorage.name,
+                  "x-access-token" : sessionStorage.name,
                   "Content-Type": "application/json"
                 }
               })
@@ -449,7 +450,7 @@ class Mahasiswa extends Component {
       fetch(get.checkdevice + "/" + kodedevice, {
         method: 'get',
         headers: {
-          // "x-access-token" : sessionStorage.name,
+          "x-access-token" : sessionStorage.name,
           "Content-Type": "application/json"
         }
       })
@@ -467,7 +468,7 @@ class Mahasiswa extends Component {
               fetch(get.readfinger + "/" + kodedevice, {
                 method: 'get',
                 headers: {
-                  // "x-access-token" : sessionStorage.name,
+                  "x-access-token" : sessionStorage.name,
                   "Content-Type": "application/json"
                 }
               })
@@ -657,7 +658,7 @@ class Mahasiswa extends Component {
       fetch(get.deletepengguna, {
         method: 'post',
         headers: {
-          "Authorization": sessionStorage.name,
+          "x-access-token": sessionStorage.name,
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
@@ -681,7 +682,7 @@ class Mahasiswa extends Component {
       fetch(get.deletefilterpengguna, {
         method: 'post',
         headers: {
-          "Authorization": sessionStorage.name,
+          "x-access-token": sessionStorage.name,
           "Content-Type": "application/json"
         },
         body: JSON.stringify({

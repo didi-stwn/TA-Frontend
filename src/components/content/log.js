@@ -220,6 +220,26 @@ class Log extends Component {
   componentDidMount() {
     // const { startDateRead, endDateRead, sortby, ascdsc, search, limit, page } = this.state
     // this.getData(startDateRead, endDateRead, sortby, ascdsc, search, limit, page)
+    fetch(get.deleteduplicatelog, {
+      method: 'delete',
+      headers: {
+        "x-access-token": sessionStorage.name,
+        "Content-Type": "application/json"
+      },
+    })
+      .then(response => response.json())
+      .then(response => {
+        //ga dapet token
+        if ((response.status !== 1) && (response.status !== 0)) {
+          sessionStorage.removeItem("name")
+          window.location.reload()
+        }
+      })
+      .catch(error => {
+        sessionStorage.removeItem("name")
+        window.location.reload()
+      })
+      
     this.interval = setInterval(() => {
       const { startDateRead, endDateRead, sortby, ascdsc, search, limit, page } = this.state
       this.getData(startDateRead, endDateRead, sortby, ascdsc, search, limit, page)

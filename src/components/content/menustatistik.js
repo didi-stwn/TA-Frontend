@@ -3,17 +3,39 @@ import { withRouter } from "react-router-dom";
 import StatistikMahasiswa from './statistik_mahasiswa';
 import StatistikMatkul from './statistik_matkul';
 import StatistikRuangan from './statistik_ruangan';
+import get from './config';
 // import KonfigurasiStatistik from './konfigurasi_statistik';
 
 class MenuStatistik extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            ShowStatistikMahasiswa: false,
+            ShowStatistikMahasiswa: true,
             ShowStatistikMatkul: false,
-            ShowStatistikRuangan: true,
+            ShowStatistikRuangan: false,
             // ShowKonfigurasi: false,
         };
+    }
+    componentDidMount() {
+        fetch(get.deleteduplicatelog, {
+            method: 'delete',
+            headers: {
+                "x-access-token": sessionStorage.name,
+                "Content-Type": "application/json"
+            },
+        })
+            .then(response => response.json())
+            .then(response => {
+                //ga dapet token
+                if ((response.status !== 1) && (response.status !== 0)) {
+                    sessionStorage.removeItem("name")
+                    window.location.reload()
+                }
+            })
+            .catch(error => {
+                sessionStorage.removeItem("name")
+                window.location.reload()
+            })
     }
     ShowStatistikMahasiswaNow() {
         this.setState({
@@ -56,13 +78,13 @@ class MenuStatistik extends Component {
             stylestatistikruangan = "menumatkultidakdipilih"
             // stylekonfigurasi = "menumatkultidakdipilih"
         }
-        else if (state.ShowStatistikMatkul){
+        else if (state.ShowStatistikMatkul) {
             stylestatistikmahasiswa = "menumatkultidakdipilih"
             stylestatistikmatkul = "menumatkuldipilih"
             stylestatistikruangan = "menumatkultidakdipilih"
             // stylekonfigurasi = "menumatkultidakdipilih"
         }
-        else if (state.ShowStatistikRuangan){
+        else if (state.ShowStatistikRuangan) {
             stylestatistikmahasiswa = "menumatkultidakdipilih"
             stylestatistikmatkul = "menumatkultidakdipilih"
             stylestatistikruangan = "menumatkuldipilih"

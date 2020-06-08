@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { withRouter } from "react-router-dom";
 import LaporanMahasiswa from './laporan_mahasiswa';
 import LaporanPengajar from './laporan_pengajar';
+import get from './config';
 
 class MenuLaporan extends Component {
     constructor(props) {
@@ -10,6 +11,27 @@ class MenuLaporan extends Component {
             ShowLaporanMahasiswa: true,
             ShowLaporanPengajar: false,
         };
+    }
+    componentDidMount() {
+        fetch(get.deleteduplicatelog, {
+            method: 'delete',
+            headers: {
+                "x-access-token": sessionStorage.name,
+                "Content-Type": "application/json"
+            },
+        })
+            .then(response => response.json())
+            .then(response => {
+                //ga dapet token
+                if ((response.status !== 1) && (response.status !== 0)) {
+                    sessionStorage.removeItem("name")
+                    window.location.reload()
+                }
+            })
+            .catch(error => {
+                sessionStorage.removeItem("name")
+                window.location.reload()
+            })
     }
     ShowLaporanMahasiswaNow() {
         this.setState({
