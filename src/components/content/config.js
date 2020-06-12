@@ -1,4 +1,4 @@
-const url = "http://localhost:3000"
+const url = "https://192.168.1.26:3000"
 const s = {
     //gettoken
     login: url + "/login",
@@ -119,3 +119,32 @@ module.exports = s
 // "kWdmYBbqMYn99CrfGa7B/K2lRsBg5wQZynGHsla508oPJywf2imVczpCoyxPz8yv\n" \
 // "GEeYpl6RNObucMA7IbWz7Xc5p8FWzCXXOLKNv5KuFxza2nI=\n" \
 // "-----END CERTIFICATE-----\n" ;
+
+// "-----BEGIN PRIVATE KEY-----\n" \
+// "MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDMp5NbPOedDj3f\n" \
+// "VvSeA00MHe5LJ6bKg39D1yiANBYIzMHDSQYZt6fpr7yNegH5EzFPLAdXgyrwqbrw\n" \
+// "7n+hZJcze0DVF3PWssEoikrrn+XLvghM06jW/xKrpS8wyV3r9mXWmcnaIt5ZUQeO\n" \
+// "SqoP70bBmFJmZpSX8KFFiAl6/08pbBDryi3jdfY+bPjb39EEGm2b6g6WugcKMAlc\n" \
+// "48xmwVRvjq7WrgC5FCkgYPsqxsUDMbiupVmd9+jtoyJH9irWh+Li7tkI24XhHLuk\n" \
+// "kNg2I5Dg8PHkpyvEGxmz1OZBnl0ecEUiNFUCFNPRIUnfO+WhRCUB1vgbtr8fuAIS\n" \
+// "ZEXiF4qDAgMBAAECggEALy2iZrIPosEZulbNZW/VXym3OVQWuzC9MeJzz7oyKi0p\n" \
+// "rd8zrNINv21nxiWONuEZyOqZdq8iQwCdu9T/TzFlOdT8CSOy7Jegt7vJsa/WxbU1\n" \
+// "LKDOl2GN6EvYKSMCp9bReztQsRzArU5ks4S615mNciuvMzQKpUwvoVvO86/Pi/iX\n" \
+// "mu9ZR9Mj0b28KLVKhTqjd5tBiWbuOjMpAroScMeQInAavkKL9ZZb9qbtDJh27OpW\n" \
+// "Z1nmIcPVJ4+4rJQTa+EJT51IJShVPpH37/4xgo3uQtU3P8lq1LdJ5+U1E/xuAIeW\n" \
+// "Udy/wZFwKbkOLzNoJNQx7iV4nfVniMevxmM94UMwwQKBgQD7xIo9TpiQuimlpkwr\n" \
+// "LCOA26J0StMiSvohgqBCoQm5HBh6CbDWI8qhyxZ7cy9OJWauEVhbF8AR/iCcWAg3\n" \
+// "nfbTGAVH+4OyvS/5GDw85VbVSqiSYxVnTJmFECCLk9XkV4f66oc6BPByuPlMbHHd\n" \
+// "kEaYdlcrEHM2ycbvcL3p2DF82wKBgQDQGEnU8Rq+BUmHSigp+CPIUN+LCP8YyCJD\n" \
+// "Y7wHYrn2qGJlFjxdwPcVYU6Ave/scGCBRCqsUIEPEQuiq5iMiXyShtGTuNCiJ6p/\n" \
+// "af+WODSfpjg02zqx/rBNsGTmsHf8HaMbflE86BxIxqpl0ryfWCb7mC8Y9zwekGFO\n" \
+// "CcZHW43FeQKBgCZwbYLKuzRtl+o4p6x3wrvrzLPgsLetpt7y6LEDkU534azQSfWH\n" \
+// "5WoqbbZPccuGnlS5RTozOBoHKMd2EVscfRDhu/yvg/4IMIjhkGDjywwpp+8hvaTV\n" \
+// "5yKPwchNu/xu+M3wfND47BU39Kgcbo4bdwvUFZ73lf+pcvwfxH8tiPC9AoGACCXL\n" \
+// "TkEacPI4DMoEhJAopoE0H3d8tXWwkb7n78oXyeaR469ZMbqKchXbQwMsz68euDD5\n" \
+// "EsIcK4DZWccqM+Z2MC6DKiuET7UJ4e8+iJ0uwkl5zef/hlSYhpIvgTDLod1vM3Zg\n" \
+// "q+fSo67ToST9KagD7rnoriuP+QpiJPIRB144UNECgYEAge+2DuQ4s5PglWYeUuZz\n" \
+// "mg2l6GzKTH7aEzO8IS8MLEMug3MbgrXRWL6jLXocAag54Uf9WG6/Z7YOzVe4Ap0B\n" \
+// "HV4Z/eW0uCB8vo3adgcyjfyDVJ/R9887OWyqC2CMEAYIh0OZ53AuY2AUl8o8yFe9\n" \
+// "NXTeeBQ8rll37GB6Flpz6Eo=\n" \
+// "-----END PRIVATE KEY-----\n";

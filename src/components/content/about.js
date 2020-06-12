@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import logo from './img/meme.jpg'
+import paktrio from './img/paktrio.jpg'
+import didi from './img/didi.png'
 
 class About extends Component {
     render() {
@@ -15,9 +17,9 @@ class About extends Component {
                         <div style={{ marginBottom: '20px', color: 'rgb(0,0,100)', display: 'block', textAlign: 'center' }}>
                             <h3 style={{ letterSpacing: '2px', fontFamily: 'Times New Roman', fontWeight: '900' }}>DOSEN PEMBIMBING</h3>
                         </div>
-                        <img className="fotoabout" src={logo} alt="mori" />
+                        <img className="fotoabout" src={paktrio} alt="mori" />
                         <div style={{ color: 'rgb(0,0,100)', marginTop: '10px', display: 'block', textAlign: 'center' }}>
-                            <h4>Prof. Trio Adiono ST,MT,Ph.D.</h4>
+                            <h4>Prof. Trio Adiono ST., MT., Ph.D.</h4>
                             <span>19700824 199702 1 001</span>
                         </div>
                     </div>
@@ -44,7 +46,7 @@ class About extends Component {
                                 </div>
                             </div>
                             <div style={{ marginLeft: '100px' }}>
-                                <img className="fotoabout" src={logo} alt="didi" />
+                                <img className="fotoabout" src={didi} alt="didi" />
                                 <div style={{ color: 'rgb(0,0,100)', marginTop: '20px', display: 'block', textAlign: 'center' }}>
                                     <h4>Didi Setiawan</h4>
                                     <span>13216108</span>
